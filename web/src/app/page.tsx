@@ -7,6 +7,7 @@ import Image from "next/image";
 import excelIcon from "$/images/icons/excelIcon.png";
 import Button from "@/components/Button";
 import useResultUrlStore from "@/store/resultStore";
+import isValidFileType from "@/utils/checkFileType";
 
 /**
  * TODO
@@ -39,7 +40,14 @@ export default function Home() {
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
-    setFile(e.target.files[0]);
+
+    const tmpFile = e.target.files[0];
+    if (isValidFileType(tmpFile.type)) {
+      setFile(tmpFile);
+      return;
+    }
+
+    alert("엑셀 형식의 파일만 업로드 가능합니다.");
   };
 
   return isLoading ? (
