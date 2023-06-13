@@ -3,18 +3,15 @@
 import React from "react";
 import Image from "next/image";
 import result1 from "$/images/temp/result1.png";
-import Button, { BUTTON_STYLE } from "@/components/Button";
+import Button from "@/components/Button";
 import { useRouter } from "next/navigation";
 import useResultUrlStore from "@/store/resultStore";
-// import BACKGROUND_COLOR_MAP from "@/lib/const/style";
 
-const BACKGROUND_COLOR_MAP = {
-  green: "bg-green-600",
-  gray: "bg-gray-500",
-};
 export default function Page() {
   const router = useRouter();
   const resultUrl = useResultUrlStore((state) => state.resultUrl);
+
+  console.log("resultPage Url: ", resultUrl);
 
   const handleAgain = () => {
     router.push("/");
@@ -52,11 +49,7 @@ export default function Page() {
         </article>
       </section>
       <section className="flex justify-center gap-x-6">
-        <a
-          href={`${resultUrl}`}
-          download="result.csv"
-          className={`${BUTTON_STYLE} ${BACKGROUND_COLOR_MAP.green}`}
-        >
+        <a href={resultUrl} download className="btn bg-green-600">
           파일 다운
         </a>
         <Button title="다시 제출" onClick={handleAgain} color="gray" />

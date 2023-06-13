@@ -10,13 +10,9 @@ import useResultUrlStore from "@/store/resultStore";
 
 /**
  * TODO
- *  1. handleSelectFile에 useRef를 사용하여 button과 input을 연결하세요.
- *  2. 컴포넌트를 분리하여 관심사를 분리하세요. 추가로, 서버컴포넌트와 클라이언트 컴포넌트를 분리하세요.
- *  3. 가능하면 재사용 가능하도록 컴포넌트를 설계하세요.
- *  4. 전역상태관리를 사용하여 handleSubmit을 구현하세요.
- *  5. 전역상태관리에는 zustand를 사용하세요.
- *  6. 전역상태관리 값으로 selectedFile, isLoading, isError, isSuccess 등을 사용하여 UI를 구현하세요.
- *
+ *  1. 컴포넌트를 분리하여 관심사를 분리하세요. 추가로, 서버컴포넌트와 클라이언트 컴포넌트를 분리하세요.
+ *  2. 가능하면 재사용 가능하도록 컴포넌트를 설계하세요.
+ *  3. 전역상태관리 값으로 selectedFile, isLoading, isError, isSuccess 등을 사용하여 UI를 구현하세요.
  *  */
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +27,7 @@ export default function Home() {
     setIsLoading(true);
 
     if (!file) return;
-    setResultUrl(file);
+    await setResultUrl(file);
 
     router.push("/result");
   };
@@ -65,12 +61,7 @@ export default function Home() {
           <span className="text-xl font-semibold">{file.name}</span>
         </>
       )}
-      <a
-        href="http://localhost:3000/results/result.csv"
-        download="adsfasdfasd.csv"
-      >
-        asdsa
-      </a>
+
       <input ref={inputRef} type="file" hidden onChange={handleChange} />
       <Button onClick={handleSelectFile} title="파일 선택" color="green" />
       {file && <Button onClick={handleSubmit} title="제출" color="green" />}
