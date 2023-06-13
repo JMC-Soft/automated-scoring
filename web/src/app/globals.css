@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* reset css => 브라우저마다 기본 css 달라 */
+
+/* 기본 설정 하는법 */
+/*@layer base {*/
+/*  button {*/
+/*    @apply translate-y-10 rounded-xl border-black px-7 py-2 text-xl text-white;*/
+/*  }*/
+/*  a {*/
+/*    @apply translate-y-10 rounded-xl border-black px-7 py-2 text-xl text-white;*/
+/*  }*/
+/*}*/
+@layer components {
+  .btn {
+    @apply translate-y-10 rounded-xl border-black px-7 py-2 text-xl text-white;
+  }
+}
+
 /*body와 html을 화면 전체*/
 html,
 body {

@@ -1,9 +1,6 @@
 import React from "react";
-// import BACKGROUND_COLOR_MAP from "@/lib/const/style";
-const BACKGROUND_COLOR_MAP = {
-  green: "bg-green-600",
-  gray: "bg-gray-500",
-};
+import clsx from "clsx";
+
 interface Props {
   title: string;
   color: "green" | "gray";
@@ -11,14 +8,15 @@ interface Props {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const BUTTON_STYLE =
-  "translate-y-10 rounded-xl border-black px-7 py-2 text-xl text-white";
-
 function Button({ type = "button", onClick = () => {}, title, color }: Props) {
   return (
     <button
       type={type}
-      className={`${BUTTON_STYLE} ${BACKGROUND_COLOR_MAP[color]}`}
+      className={clsx(
+        `btn`,
+        { "bg-green-600": color === "green" },
+        { "bg-gray-500": color === "gray" }
+      )}
       onClick={onClick}
     >
       {title}
@@ -27,4 +25,3 @@ function Button({ type = "button", onClick = () => {}, title, color }: Props) {
 }
 
 export default Button;
-export { BUTTON_STYLE };
