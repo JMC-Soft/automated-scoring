@@ -7,6 +7,8 @@ import Image from "next/image";
 import excelIcon from "$/images/icons/excelIcon.png";
 import Button from "@/components/Button";
 import useResultUrlStore from "@/store/resultStore";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 /**
  * TODO
@@ -19,13 +21,20 @@ export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const fileRegExp = /(\.csv|\.xlsx|\.xls)$/i;
 
   const setResultUrl = useResultUrlStore((state) => state.setResultUrl);
+
+  const notify = () =>
+    toast.error("엑셀 파일을 제출해 주세요", {
+      position: "top-center",
+      autoClose: 3000,
+      theme: "light",
+    });
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsLoading(true);
-
     if (!file) return;
     await setResultUrl(file);
 
@@ -39,6 +48,11 @@ export default function Home() {
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
+    if (!fileRegExp.test(e.target.files[0].name)) {
+      notify();
+      return;
+    }
+
     setFile(e.target.files[0]);
   };
 
@@ -64,6 +78,7 @@ export default function Home() {
 
       <input ref={inputRef} type="file" hidden onChange={handleChange} />
       <Button onClick={handleSelectFile} title="파일 선택" color="green" />
+      <ToastContainer />
       {file && <Button onClick={handleSubmit} title="제출" color="green" />}
     </main>
   );
