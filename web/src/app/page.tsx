@@ -9,6 +9,7 @@ import Button from "@/components/Button";
 import useResultUrlStore from "@/store/resultStore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import parseSheet from "@/utils/parseSheet";
 
 /**
  * TODO
@@ -25,8 +26,8 @@ export default function Home() {
 
   const setResultUrl = useResultUrlStore((state) => state.setResultUrl);
 
-  const notify = () =>
-    toast.error("엑셀 파일을 제출해 주세요", {
+  const notify = (content: string) =>
+    toast.error(content, {
       position: "top-center",
       autoClose: 3000,
       theme: "light",
@@ -34,11 +35,17 @@ export default function Home() {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setIsLoading(true);
     if (!file) return;
-    await setResultUrl(file);
 
-    router.push("/result");
+    try {
+      await parseSheet(file);
+
+      setIsLoading(true);
+      await setResultUrl(file);
+      router.push("/result");
+    } catch (err: any) {
+      notify(err.message);
+    }
   };
 
   const handleSelectFile = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -46,10 +53,11 @@ export default function Home() {
     if (!inputRef.current) return;
     inputRef.current.click();
   };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     if (!fileRegExp.test(e.target.files[0].name)) {
-      notify();
+      notify("엑셀 형식으로 제출해 주세요");
       return;
     }
 
