@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import uploadFile from '@/lib/firebase/storage/uploadFile';
+import uploadFile from "@/app/api/lib/firebase/storage/uploadFile";
 
 export async function GET(req: NextRequest) {
   // const data = await req.body;
