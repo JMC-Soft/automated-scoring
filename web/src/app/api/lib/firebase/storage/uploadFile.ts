@@ -21,7 +21,7 @@ export default async function uploadFile(file: File) {
         // 이미지 업로드가 얼마나 진행됐는지 알려주는 상태
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
+        console.log(`Upload is ${progress}% done`);
         switch (snapshot.state) {
           case 'paused':
             console.log('Upload is paused');
