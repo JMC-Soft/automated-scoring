@@ -11,7 +11,7 @@ export const login = async (args: LoginRequest): Promise<LoginResult> => {
   // TODO 3-1: POST, '/auth/login' 호출
   // body에는 { username, password }가 들어가야 함
   // 사용하는 기술에 맞추어 적절히 withCredential 설정하기
-  const loginRes = await fetch(`${API_BASE_URL}/auth/login`, {
+  const loginRes = await fetch(`${API_BASE_URL}/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
