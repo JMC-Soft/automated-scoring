@@ -13,7 +13,6 @@
 
 - [동적 클래스](https://tailwindcss.com/docs/content-configuration#dynamic-class-names)
 
-
 ## Commit Convention
 
 ### 1. Commit Message Structure
@@ -42,8 +41,8 @@ footer
 
 - 제목은 50자를 넘기지 않고, 대문자로 작성하고 마침표를 붙이지 않는다.
 - 과거시제를 사용하지 않고 명령어로 작성한다.
-    - "Fixed" --> "Fix"
-    - "Added" --> "Add"
+  - "Fixed" --> "Fix"
+  - "Added" --> "Add"
 
 ### 4. Body
 

@@ -1,25 +1,9 @@
-import React from "react";
-import Image from "next/image";
-import inhaLogo from "$/images/logos/inha.png";
-import skaLogo from "$/images/logos/ska.png";
+import React from 'react';
 
-function Header() {
+export default function Footer() {
   return (
-    <section className="w-2/3 mx-auto justify-between flex border-t-2  border-black">
-      <Image
-        src={inhaLogo}
-        height={100}
-        style={{ objectFit: "contain" }}
-        alt="인하대학교 로고"
-      />
-      <Image
-        src={skaLogo}
-        height={100}
-        style={{ objectFit: "contain" }}
-        alt="세종한국어학당 로고"
-      />
-    </section>
+    <footer className="col-span-2 row-span-1 flex h-20 w-full items-center justify-center border-t">
+      Footer입니다
+    </footer>
   );
 }
-
-export default Header;

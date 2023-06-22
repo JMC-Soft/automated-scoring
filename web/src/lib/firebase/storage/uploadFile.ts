@@ -3,8 +3,8 @@ import {
   getStorage,
   ref,
   uploadBytesResumable,
-} from "@firebase/storage";
-import firebaseApp from "@/lib/firebase/config";
+} from '@firebase/storage';
+import firebaseApp from '@/lib/firebase/config';
 
 const storage = getStorage(firebaseApp);
 
@@ -16,18 +16,18 @@ export default async function uploadFile(file: File) {
 
   return new Promise((resolve, reject) => {
     uploadTask.on(
-      "state_changed",
+      'state_changed',
       (snapshot) => {
         // 이미지 업로드가 얼마나 진행됐는지 알려주는 상태
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
+        console.log('Upload is ' + progress + '% done');
         switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
+          case 'paused':
+            console.log('Upload is paused');
             break;
-          case "running":
-            console.log("Upload is running");
+          case 'running':
+            console.log('Upload is running');
             break;
         }
       },
@@ -41,7 +41,7 @@ export default async function uploadFile(file: File) {
         const url = await getDownloadURL(uploadTask.snapshot.ref);
         const returnObj = { url };
         resolve(returnObj);
-      }
+      },
     );
   });
 }

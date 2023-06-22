@@ -2,35 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* reset css => 브라우저마다 기본 css 달라 */
+@layer base {
+  html {
+    min-height: 100vh;
+  }
 
-/* 기본 설정 하는법 */
-/*@layer base {*/
-/*  button {*/
-/*    @apply translate-y-10 rounded-xl border-black px-7 py-2 text-xl text-white;*/
-/*  }*/
-/*  a {*/
-/*    @apply translate-y-10 rounded-xl border-black px-7 py-2 text-xl text-white;*/
-/*  }*/
-/*}*/
-@layer components {
-  .btn {
-    @apply translate-y-10 rounded-xl border-black px-7 py-2 text-xl text-white;
+  body {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(5%, 120px) 1fr;
+    grid-template-rows: auto 1fr auto;
   }
 }
 
-/*body와 html을 화면 전체*/
-html,
-body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #333;
-  background-color: #fff;
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+@layer components {
 }
