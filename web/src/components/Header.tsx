@@ -7,11 +7,13 @@ import koreaIcon from '$/images/flags/korea.jpg';
 function Header() {
   return (
     <header className="col-span-2 row-span-1 flex h-24 items-center gap-x-8 border-b px-12 py-4 font-bold">
-      <Image
-        src={inhaLogo}
-        alt="인하대학교 로고"
-        style={{ height: '100%', width: 'fit-content', objectFit: 'contain' }}
-      />
+      <Link href="/" className="h-full">
+        <Image
+          src={inhaLogo}
+          alt="인하대학교 로고"
+          style={{ height: '100%', width: 'fit-content', objectFit: 'contain' }}
+        />
+      </Link>
       <span className="text-xl ">한국어 에세이 자동채점</span>
       <Image
         style={{
@@ -31,9 +33,13 @@ function Header() {
       >
         로그인
       </Link>
-      <button className="rounded-lg  p-2 px-6 text-lg" type="button">
+      <Link
+        href="/signup"
+        className="rounded-lg  p-2 px-6 text-lg"
+        type="button"
+      >
         회원가입
-      </button>
+      </Link>
     </header>
   );
 }

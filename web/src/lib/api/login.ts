@@ -7,10 +7,7 @@ export interface LoginRequest {
 
 type LoginResult = 'success' | 'fail';
 
-export const login = async (args: LoginRequest): Promise<LoginResult> => {
-  // TODO 3-1: POST, '/auth/login' 호출
-  // body에는 { username, password }가 들어가야 함
-  // 사용하는 기술에 맞추어 적절히 withCredential 설정하기
+const login = async (args: LoginRequest): Promise<LoginResult> => {
   const loginRes = await fetch(`${API_BASE_URL}/login`, {
     method: 'POST',
     headers: {
@@ -24,3 +21,5 @@ export const login = async (args: LoginRequest): Promise<LoginResult> => {
 
   return loginRes.ok ? 'success' : 'fail';
 };
+
+export default login;
