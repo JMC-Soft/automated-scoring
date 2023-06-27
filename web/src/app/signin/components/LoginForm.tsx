@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
-import { login } from '@/lib/api/login';
+import login from '@/lib/api/login';
+import Form from '@/components/ui/Form';
+import Input from '@/components/ui/Input';
 
 function LoginForm() {
   // const [email, handleEmail] = useInput('');
@@ -18,29 +20,12 @@ function LoginForm() {
   };
 
   return (
-    <form
-      className="flex w-full flex-col items-center gap-y-6"
-      onSubmit={onLogin}
-    >
+    <Form onSubmit={onLogin}>
       <h2 className="py-4 text-4xl font-bold">로그인</h2>
-      <input
-        type="email"
-        name="email"
-        className="w-full border p-4"
-        placeholder="이메일"
-      />
-      <input
-        type="password"
-        name="password"
-        className="w-full border p-4"
-        placeholder="비밀번호"
-      />
-      <input
-        type="submit"
-        className="w-full border bg-secondary-700 p-4 text-white"
-        value="로그인"
-      />
-    </form>
+      <Input type="email" name="email" placeholder="이메일" />
+      <Input type="password" name="password" placeholder="비밀번호" />
+      <Input type="submit" value="로그인" />
+    </Form>
   );
 }
 
