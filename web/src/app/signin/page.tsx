@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import LoginForm from '@/app/signin/components/LoginForm';
+import LoginForm from '@/app/signin/LoginForm';
 
 function Page() {
   return (
