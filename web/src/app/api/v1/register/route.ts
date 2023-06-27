@@ -1,72 +1,37 @@
 import type { NextRequest } from 'next/server';
-import { findUserByEmail, saveUser } from '@/app/api/repository/User';
+import { findUserByEmail, saveUser } from '@/app/api/repository/user';
 import { NextResponse } from 'next/server';
 
-// 존재하는 회원 여부 검증
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const email = searchParams.get('email') || '';
-
-  // 이메일 형식이 올바르지 않음
-  if (!email) {
-    return NextResponse.json(
-      {
-        result: 'error',
-        status: { errCode: 1, msg: '이메일 형식이 올바르지 않습니다.' },
-      },
-      { status: 200 },
-    );
-  }
-
-  const user = await findUserByEmail(email);
-
-  // 회원이 존재함.
-  if (user) {
-    return NextResponse.json(
-      {
-        result: 'error',
-        status: { errCode: 2, msg: '이미 존재하는 회원입니다.' },
-      },
-      { status: 200 },
-    );
-  }
-
-  // 회원이 존재하지 않음.
-  return NextResponse.json(
-    {
-      result: 'success',
-    },
-    { status: 200 },
-  );
-}
-
 // 신규 회원 가입
-export async function POST(req: NextRequest) {
-  const { email, password, nickName } = await req.json();
+export default async function POST(req: NextRequest) {
+  try {
+    const { email, password, nickName } = await req.json();
 
-  const checkUser = await findUserByEmail(email);
-  if (checkUser)
-    return NextResponse.json({
-      result: 'error',
-      status: { errCode: 2, msg: '이미 존재하는 회원입니다.' },
-    });
+    const checkUser = await findUserByEmail(email);
+    if (checkUser) {
+      return NextResponse.json(new Error('이미 존재하는 회원입니다.'), {
+        status: 400,
+      });
+    }
 
-  const user = await saveUser(email, password, nickName);
+    const user = await saveUser(email, password, nickName);
 
-  if (!user) {
+    if (!user) {
+      return NextResponse.json(new Error('회원 가입에 실패했습니다.'), {
+        status: 400,
+      });
+    }
+
     return NextResponse.json(
       {
-        result: 'error',
-        status: { errCode: 4, msg: '회원 가입에 실패했습니다.' },
+        email: user.email,
+        nickName: user.nickName,
       },
       { status: 200 },
     );
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unexpected error';
+    console.log(message);
+    return NextResponse.json(new Error('서버 오류입니다.'), { status: 500 });
   }
-
-  return NextResponse.json(
-    {
-      result: 'success',
-    },
-    { status: 200 },
-  );
 }
