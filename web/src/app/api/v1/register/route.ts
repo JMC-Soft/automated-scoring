@@ -1,6 +1,7 @@
 import type { NextRequest } from 'next/server';
-import { findUserByEmail, saveUser } from '@/app/api/repository/user';
+
 import { NextResponse } from 'next/server';
+import { findUserByEmail, saveUser } from '@/app/api/repository/User';
 
 // 신규 회원 가입
 export async function POST(req: NextRequest) {
