@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import Form from '@/components/ui/Form';
+import Form from '@/components/ui/Form/Form';
 import Input from '@/components/ui/Input';
 import { isEmail } from '@/lib/utils/utils';
 import useAuthStore from '@/store/authStore';

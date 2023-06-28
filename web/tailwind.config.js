@@ -7,6 +7,13 @@ module.exports = {
   ],
   theme: {
     extend: {
+      gridTemplateColumns: {
+        'auto-fit': 'repeat(auto-fit, minmax(0, 1fr))',
+        'main-layout': 'auto 1fr',
+      },
+      gridTemplateRows: {
+        'main-layout': 'minmax(100px, 120px) 1fr minmax(80px, auto)',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
@@ -35,8 +42,19 @@ module.exports = {
           800: '#01324A',
           900: '#012127',
         },
+        complementary: {
+          100: '#FEEFE6',
+          200: '#FDD7C2',
+          300: '#FCBF9E',
+          400: '#FAA77A',
+          500: '#E85C01',
+          600: '#C25101',
+          700: '#9C4601',
+          800: '#763B01',
+          900: '#502F01',
+        },
       },
     },
   },
-  plugins: [],
+  plugins: [require('tailwind-scrollbar-hide')],
 };

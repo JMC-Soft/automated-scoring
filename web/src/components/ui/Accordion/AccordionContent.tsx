@@ -16,14 +16,10 @@ export function AccordionContent({
 
   return (
     <ul
-      className={clsx(
-        'overflow-hidden transition-all duration-500',
-        className,
-        {
-          'max-h-0': !isOpen,
-          'max-h-96': isOpen,
-        },
-      )}
+      className={clsx(className, {
+        'max-h-0': !isOpen,
+        'max-h-96': isOpen,
+      })}
       {...props}
     >
       {children}

@@ -20,7 +20,7 @@ function Button({
     <button
       type={type}
       className={clsx(
-        'flex h-10 w-fit items-center rounded-lg border-2 border-primary-600 px-4 text-xl font-semibold',
+        'flex h-10 items-center rounded-lg border-2 border-primary-600 px-4 text-xl font-semibold',
         className,
       )}
       onClick={onClick}

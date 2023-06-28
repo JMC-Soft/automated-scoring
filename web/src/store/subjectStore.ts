@@ -1,12 +1,25 @@
-import create from 'zustand';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-type State = {
+export type EssayState = {
   topic: string;
+  setTopic: (topic: string) => void;
+  essayText: string;
+  setEssayText: (essayText: string) => void;
 };
 
-const useAuthStore = create<State>((set) => ({
-  topic: '',
-  set,
-}));
+const useEssayStore = create(
+  persist<EssayState>(
+    (set) => ({
+      topic: '',
+      essayText: '',
+      setTopic: (topic: string) => set({ topic }),
+      setEssayText: (essayText: string) => set({ essayText }),
+    }),
+    {
+      name: 'essayStore',
+    },
+  ),
+);
 
-export default useAuthStore;
+export default useEssayStore;

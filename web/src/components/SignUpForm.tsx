@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Form from '@/components/ui/Form';
+import Form from '@/components/ui/Form/Form';
 import Input from '@/components/ui/Input';
 import useAuthStore from '@/store/authStore';
 import useInput from '@/lib/hooks/useInput';
