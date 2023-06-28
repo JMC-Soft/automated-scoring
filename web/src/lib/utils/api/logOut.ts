@@ -1,13 +1,7 @@
 import { API_BASE_URL } from '@/lib/utils/constants';
 
 const logOut = async (): Promise<void> => {
-  const response = await fetch(`${API_BASE_URL}/logout`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    // credentials: 'include', 쿠키 세션인 경우 추가 예정
-  });
+  const response = await fetch(`${API_BASE_URL}/logout`);
 
   if (!response.ok) {
     const errorData = await response.json();
