@@ -18,12 +18,7 @@ export function AccordionTitle({
   const onClick = () => typeof setOpen !== 'undefined' && setOpen();
 
   return (
-    <button
-      className={clsx('flex w-full justify-between', className)}
-      onClick={onClick}
-      type="button"
-      {...props}
-    >
+    <button className={className} onClick={onClick} type="button" {...props}>
       <h2 className="text-xl font-bold">{children}</h2>
       {ArrowIcon && (
         <ArrowIcon

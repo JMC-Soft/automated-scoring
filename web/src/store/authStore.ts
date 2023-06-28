@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { checkDuplicateEmail, signUp } from '@/lib/utils/api/signUp';
 import { handleFetchError } from '@/lib/utils/utils';
 import login from '@/lib/utils/api/login';
