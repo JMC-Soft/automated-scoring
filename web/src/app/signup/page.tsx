@@ -1,6 +1,5 @@
 import React from 'react';
-import Link from 'next/link';
-import SignUpForm from '@/app/signup/components/SignUpForm';
+import SignUpForm from '@/app/signup/SignUpForm';
 
 function Page() {
   return (
