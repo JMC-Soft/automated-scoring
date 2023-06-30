@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import Form from '@/components/ui/Form/Form';
 import Input from '@/components/ui/Input';
 import { isEmail } from '@/lib/utils/utils';
@@ -11,6 +12,8 @@ function LoginForm() {
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
 
+  const router = useRouter();
+
   const logIn = useAuthStore((state) => state.logIn);
 
   const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -20,7 +23,14 @@ function LoginForm() {
       return;
     }
 
-    await logIn({ email, password });
+    try {
+      await logIn({ email, password });
+      router.push('/');
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+    }
   };
 
   return (

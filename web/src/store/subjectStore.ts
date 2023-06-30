@@ -8,8 +8,8 @@ export type EssayState = {
   setEssayText: (essayText: string) => void;
 };
 
-const useEssayStore = create(
-  persist<EssayState>(
+const useEssayStore = create<EssayState>()(
+  persist(
     (set) => ({
       topic: '',
       essayText: '',

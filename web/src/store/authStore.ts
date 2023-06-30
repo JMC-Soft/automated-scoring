@@ -1,42 +1,31 @@
 import { create } from 'zustand';
 import { checkDuplicateEmail, signUp } from '@/lib/utils/api/signUp';
 import { handleFetchError } from '@/lib/utils/utils';
-import login from '@/lib/utils/api/login';
 import logOut from '@/lib/utils/api/logOut';
-
-export interface User {
-  email: string;
-  nickname: string;
-}
-
-export interface SignUpInput {
-  nickname: string;
-  email: string;
-  password: string;
-}
-
-export interface LoginInput {
-  email: string;
-  password: string;
-}
+import login from '@/lib/utils/api/login';
+import { LoginRequest, SignUpRequest, User } from '@/lib/typing';
 
 type State = {
   user: User | null;
   error: string | null;
   isLoggedIn: boolean;
-  logIn: ({ email, password }: LoginInput) => Promise<void>;
-  signUp: ({ nickname, email, password }: SignUpInput) => Promise<void>;
+};
+
+type Actions = {
+  logIn: ({ email, password }: LoginRequest) => Promise<void>;
+  signUp: ({ nickname, email, password }: SignUpRequest) => Promise<void>;
   checkDuplicateEmail: (email: string) => Promise<boolean>;
   logOut: () => void;
 };
 
-const useAuthStore = create<State>((set) => ({
+const useAuthStore = create<State & Actions>()((set) => ({
   user: null,
   error: null,
   isLoggedIn: false,
   logIn: async ({ email, password }) => {
     try {
       const user = await login({ email, password });
+      // const user = { nickname: 'test', email: 'text@test.te' };
       set({ user, isLoggedIn: true });
     } catch (error) {
       handleFetchError(error, set);

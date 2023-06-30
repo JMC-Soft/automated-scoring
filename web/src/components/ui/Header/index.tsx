@@ -12,6 +12,7 @@ export default function Header() {
           src={inhaLogo}
           alt="인하대학교 로고"
           style={{ height: '100%', width: 'fit-content', objectFit: 'contain' }}
+          loading="eager"
         />
       </Link>
       <span className="text-xl ">한국어 에세이 자동채점</span>

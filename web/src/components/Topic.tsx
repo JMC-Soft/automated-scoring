@@ -4,6 +4,7 @@ import React from 'react';
 import clsx from 'clsx';
 import useEssayStore from '@/store/subjectStore';
 import useStore from '@/lib/hooks/useStore';
+import useHydration from '@/lib/hooks/useHydration';
 
 function Topic() {
   const topic = useStore(useEssayStore, (state) => state.topic);

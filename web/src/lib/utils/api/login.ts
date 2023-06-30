@@ -1,10 +1,5 @@
 import { API_BASE_URL } from '@/lib/utils/constants';
-import { User } from '@/store/authStore';
-
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
+import { LoginRequest, User } from '@/lib/typing';
 
 const login = async (args: LoginRequest): Promise<User> => {
   const response = await fetch(`${API_BASE_URL}/login`, {

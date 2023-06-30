@@ -10,4 +10,5 @@ export const handleFetchError = (error: unknown, set: Function) => {
   } else {
     set({ error: '알 수 없는 에러가 발생했습니다.' });
   }
+  throw error;
 };
