@@ -1,11 +1,6 @@
 import { API_BASE_URL } from '@/lib/utils/constants';
-import { User } from '@/store/authStore';
 
-export interface SignUpRequest {
-  nickname: string;
-  email: string;
-  password: string;
-}
+import { SignUpRequest, User } from '@/lib/typing';
 
 export const checkDuplicateEmail = async (email: string): Promise<boolean> => {
   const response = await fetch(`${API_BASE_URL}/register/${email}/check`);

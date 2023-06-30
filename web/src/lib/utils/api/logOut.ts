@@ -7,8 +7,6 @@ const logOut = async (): Promise<void> => {
     const errorData = await response.json();
     throw new Error(errorData.msg || '로그아웃에 실패했습니다.');
   }
-
-  return response.json();
 };
 
 export default logOut;

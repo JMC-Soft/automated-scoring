@@ -11,3 +11,19 @@ export type HeroIconComponent = ForwardRefExoticComponent<
     titleId?: string;
   } & RefAttributes<SVGSVGElement>
 >;
+
+export interface User {
+  email: string;
+  nickname: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface SignUpRequest {
+  nickname: string;
+  email: string;
+  password: string;
+}
