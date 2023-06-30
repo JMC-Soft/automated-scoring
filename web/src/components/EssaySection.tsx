@@ -18,12 +18,13 @@ function EssaySection() {
   useLayoutEffect(() => {
     if (
       (essayText || topic) &&
+      // eslint-disable-next-line no-restricted-globals
       !confirm('저장된 글이 있습니다. 불러오시겠습니까?')
     ) {
       setEssayText('');
       setTopic('');
     }
-  }, [isHydrated]);
+  }, [essayText, isHydrated, setEssayText, setTopic, topic]);
 
   return (
     <>
