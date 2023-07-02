@@ -12,7 +12,7 @@ export async function GET() {
     {
       status: 200,
       headers: {
-        'Set-Cookie': `idToken=;`,
+        'Set-Cookie': `idToken=false;`,
       },
     },
   );

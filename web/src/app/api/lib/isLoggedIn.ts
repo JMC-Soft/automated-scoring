@@ -1,13 +1,14 @@
 import { getAuth } from 'firebase-admin/auth';
-import { firebaseApp } from '@/app/api/lib/firebase/config';
+import { firebaseApp } from '@/app/api/config/firebase';
+import { ID_TOKEN_EXPIRED, INVALID_CREDENTIAL } from '@/app/api/const/errors';
 
 const auth = getAuth(firebaseApp);
 
 const isLoggedIn = async (idToken: string) => {
   const decodedToken = await auth.verifyIdToken(idToken).catch((err) => {
-    if (err.code === 'auth/id-token-expired')
+    if (err.code === ID_TOKEN_EXPIRED)
       throw new Error('토큰이 만료되었습니다.');
-    if (err.code === 'auth/invalid-credential')
+    if (err.code === INVALID_CREDENTIAL)
       throw new Error('토큰 정보가 유효하지 않습니다.');
 
     throw err;

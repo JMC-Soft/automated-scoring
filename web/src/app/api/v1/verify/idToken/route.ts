@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import isLoggedIn from '@/app/api/lib/firebase/authentication/isLoggedIn';
-import findUserByEmail from '@/app/api/lib/firebase/authentication/findUserByEmail';
+import isLoggedIn from '@/app/api/lib/isLoggedIn';
+import findUserByEmail from '@/app/api/repository/users/findUserByEmail';
 
 export async function GET(req: NextRequest) {
   try {

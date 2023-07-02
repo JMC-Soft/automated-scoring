@@ -15,20 +15,15 @@ const clientConfig = {
   appId: process.env.FIREBASE_APP_ID,
   measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 };
-
-export const clientApp =
-  clientGet().length === 0 ? clientInit(clientConfig) : clientGet()[0];
+const firebase = {
+  credential: applicationDefault(),
+};
 
 /**
  * 환경 설정 참고 : https://firebase.google.com/docs/admin/setup?hl=ko#windows
  */
 
-// const serviceAccount =
-//   'C:\\Users\\sgbee\\Desktopauto-scoring-14fee-firebase-adminsdk-ir352-2e0fdf459a.json';
-
-const firebaseConfig = {
-  credential: applicationDefault(),
-};
-
+export const clientApp =
+  clientGet().length === 0 ? clientInit(clientConfig) : clientGet()[0];
 export const firebaseApp =
-  getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+  getApps().length === 0 ? initializeApp(firebase) : getApps()[0];

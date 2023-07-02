@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import findUserByEmailAndPassword from '@/app/api/lib/firebase/authentication/findUserByEmailAndPassword';
+import findUserByEmailAndPassword from '@/app/api/repository/users/findUserByEmailAndPassword';
 
 export async function POST(req: NextRequest) {
   try {

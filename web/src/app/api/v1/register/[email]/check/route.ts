@@ -1,7 +1,7 @@
 // 존재하는 회원 여부 검증
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import findUserByEmail from '@/app/api/lib/firebase/authentication/findUserByEmail';
+import findUserByEmail from '@/app/api/repository/users/findUserByEmail';
 
 export async function GET(
   req: NextRequest,

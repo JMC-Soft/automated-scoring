@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import createUser from '@/app/api/lib/firebase/authentication/createUser';
+import createUser from '@/app/api/repository/users/createUser';
 
 // 신규 회원 가입
 export async function POST(req: NextRequest) {
