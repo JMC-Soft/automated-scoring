@@ -1,6 +1,6 @@
 import { getAuth } from 'firebase-admin/auth';
-import { firebaseApp } from '@/app/api/config/firebase';
 import { ID_TOKEN_EXPIRED, INVALID_CREDENTIAL } from '@/app/api/const/errors';
+import firebaseApp from '@/app/api/config/firebase.admin';
 
 const auth = getAuth(firebaseApp);
 
