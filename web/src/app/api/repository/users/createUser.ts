@@ -1,4 +1,4 @@
-import { RegisterDto } from '@/app/api/types';
+import { RegisterDto } from '@/app/api/lib/dtos';
 import {
   EMAIL_ALREADY_EXISTS,
   INVALID_DISPLAY_NAME,

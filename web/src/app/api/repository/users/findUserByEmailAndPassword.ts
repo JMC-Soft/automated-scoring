@@ -1,5 +1,5 @@
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { LoginDto } from '@/app/api/types';
+import { LoginDto } from '@/app/api/lib/dtos';
 import { USER_NOT_FOUND, WRONG_PASSWORD } from '@/app/api/const/errors';
 import { clientAuth } from '@/app/api/lib/getAuth';
 
