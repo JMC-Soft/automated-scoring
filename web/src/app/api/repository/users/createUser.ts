@@ -8,7 +8,7 @@ import {
 import { auth } from '@/app/api/lib/getAuth';
 
 const createUser = async ({ email, password, nickName }: RegisterDto) => {
-  return auth
+  const user = await auth
     .createUser({
       email,
       password,
@@ -26,6 +26,8 @@ const createUser = async ({ email, password, nickName }: RegisterDto) => {
 
       throw err;
     });
+
+  return user;
 };
 
 export default createUser;

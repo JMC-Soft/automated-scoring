@@ -10,11 +10,11 @@ export async function POST(req: NextRequest) {
     const loginDto = await req.json();
     const user = await findUserByEmailAndPassword(loginDto);
 
-    const { email, displayName } = user;
+    const { email, displayName: nickName } = user;
     const idToken = await user.getIdToken();
 
     return NextResponse.json(
-      { email, nickName: displayName },
+      { email, nickName },
       {
         status: 200,
         headers: {
