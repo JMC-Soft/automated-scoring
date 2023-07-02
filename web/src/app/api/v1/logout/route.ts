@@ -7,15 +7,9 @@ export async function GET() {
    */
 
   // idToken을 헤더에서 삭제하여 반환
-  return NextResponse.json(
-    { msg: 'ok' },
-    {
-      status: 200,
-      headers: {
-        'Set-Cookie': `idToken=false;`,
-      },
-    },
-  );
+  const res = NextResponse.json({ msg: 'ok' }, { status: 200 });
+  res.cookies.delete('idToken');
+  return res;
 }
 
 export async function POST() {
