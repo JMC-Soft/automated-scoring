@@ -13,20 +13,14 @@ const SIDE_BAR_MENU = [
     Icon: PencilSquareIcon,
     href: '/',
   },
-  // {
-  //   id: 2,
-  //   name: '채점내역',
-  //   Icon: ClipboardDocumentListIcon,
-  //   href: '/history',
-  // },
   {
-    id: 3,
+    id: 2,
     name: '내 정보',
     Icon: UserCircleIcon,
     href: '/profile',
   },
   {
-    id: 4,
+    id: 3,
     name: '문의하기',
     Icon: MegaphoneIcon,
     href: 'mailto:jmcsoft.org@gmail.com?subject=한국어 에세이 자동채점 관련 문의입니다.',

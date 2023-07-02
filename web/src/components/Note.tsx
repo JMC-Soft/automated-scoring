@@ -26,7 +26,7 @@ function Note({ text, onTextChange }: Props) {
   return (
     <section
       ref={sectionRef}
-      className="h-full w-3/4 flex-1 basis-0 self-center justify-self-center overflow-y-scroll"
+      className="w-3/4 flex-1 basis-0 self-center justify-self-center overflow-y-scroll"
     >
       <textarea
         ref={textAreaRef}

@@ -11,8 +11,5 @@ export default async function getUser(): Promise<User | null> {
     ? ((await response.json()) as User)
     : { nickname: 'test', email: 'text@test.te' };
 
-  // return { nickname: 'test', email: 'text@test.te' };
-  // return null;
-
   return response.json();
 }
