@@ -1,38 +1,38 @@
 'use client';
 
 import React, { ChangeEvent, useEffect, useRef } from 'react';
-import TextareaAutosize from 'react-textarea-autosize';
-import useEssayStore from '@/store/subjectStore';
-import useStore from '@/lib/hooks/useStore';
 
-function Note() {
-  const essayText = useStore(useEssayStore, (state) => state.essayText);
-  const setEssayText = useEssayStore((state) => state.setEssayText);
-  const textRef = useRef(essayText);
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    textRef.current = e.target.value;
+type Props = {
+  text: string;
+  onTextChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+};
+
+function Note({ text, onTextChange }: Props) {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const resizeTextArea = () => {
+    if (!textAreaRef.current || !sectionRef.current) return;
+
+    const currentScrollTop = sectionRef.current.scrollTop;
+
+    textAreaRef.current.style.height = 'auto';
+    textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+
+    sectionRef.current.scrollTop = currentScrollTop;
   };
 
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      setEssayText(textRef.current || '');
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      setEssayText(textRef.current || '');
-    };
-  }, [setEssayText]);
+  useEffect(resizeTextArea, [text]);
 
   return (
-    <section className="h-[48.5vh] max-h-[48.5vh] min-h-[48.5vh] w-3/4 self-center justify-self-center overflow-y-scroll scrollbar-hide  ">
-      <TextareaAutosize
-        minRows={14}
-        className="bg-note h-full w-full overflow-hidden border-2 border-primary-700 px-1 leading-loose outline-none "
-        defaultValue={essayText}
-        onChange={handleChange}
+    <section
+      ref={sectionRef}
+      className="h-full w-3/4 flex-1 basis-0 self-center justify-self-center overflow-y-scroll"
+    >
+      <textarea
+        ref={textAreaRef}
+        className="bg-note min-h-full w-full resize-none overflow-hidden border-2 border-primary-700 px-1 leading-loose outline-none"
+        defaultValue={text}
+        onChange={onTextChange}
         placeholder="내용을 입력하세요."
       />
     </section>

@@ -4,7 +4,7 @@ import EssaySection from '@/components/EssaySection';
 
 export default function Home() {
   return (
-    <main className="relative grid max-h-full grid-cols-main-layout grid-rows-main-layout overflow-hidden">
+    <main className="relative flex max-h-full overflow-hidden">
       <TopicBar />
       <EssaySection />
     </main>
