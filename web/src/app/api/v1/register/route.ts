@@ -1,6 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import createUser from '@/app/api/repository/users/createUser';
+import findUserByEmailAndPassword from '@/app/api/repository/users/findUserByEmailAndPassword';
 
 // 신규 회원 가입
 export async function POST(req: NextRequest) {
@@ -11,10 +12,16 @@ export async function POST(req: NextRequest) {
      */
     const { email, password, nickName } = await req.json();
 
-    const user = await createUser({ email, password, nickName });
-    const { displayName } = user;
+    await createUser({ email, password, nickName });
+    const userCredential = await findUserByEmailAndPassword({
+      email,
+      password,
+    });
 
-    return NextResponse.json({ email, nickName: displayName }, { status: 200 });
+    const res = NextResponse.json({ email, nickName }, { status: 200 });
+    res.cookies.set('idToken', await userCredential.getIdToken());
+
+    return res;
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unexpected error';
     console.log(message);
