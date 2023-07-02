@@ -4,7 +4,6 @@ import { USER_NOT_FOUND, WRONG_PASSWORD } from '@/app/api/const/errors';
 import { clientAuth } from '@/app/api/lib/getAuth';
 
 const findUserByEmailAndPassword = async ({ email, password }: LoginDto) => {
-  // 오류 목록 참고 : https://firebase.google.com/docs/reference/js/auth?hl=ko#autherrorcodes
   const userCredential = await signInWithEmailAndPassword(
     clientAuth,
     email,
