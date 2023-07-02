@@ -15,10 +15,10 @@ export async function GET(req: NextRequest) {
     if (!email) throw new Error('사용자의 이메일 정보가 존재하지 않습니다.');
 
     const user = await findUserByEmail(email);
-    const { displayName } = user;
+    const { displayName: nickName } = user;
 
     return NextResponse.json(
-      { email, nickName: displayName },
+      { email, nickName },
       {
         status: 200,
       },

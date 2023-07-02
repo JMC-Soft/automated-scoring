@@ -13,15 +13,13 @@ export async function POST(req: NextRequest) {
     const { email, displayName: nickName } = user;
     const idToken = await user.getIdToken();
 
-    return NextResponse.json(
-      { email, nickName },
-      {
-        status: 200,
-        headers: {
-          'Set-Cookie': `idToken=${idToken};`,
-        },
-      },
-    );
+    const res = NextResponse.json({ email, nickName }, { status: 200 });
+    res.cookies.set('idToken', idToken, {
+      httpOnly: true,
+      secure: true,
+    });
+
+    return res;
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unexpected error';
     console.log(message);

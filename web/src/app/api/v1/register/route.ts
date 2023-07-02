@@ -19,7 +19,10 @@ export async function POST(req: NextRequest) {
     });
 
     const res = NextResponse.json({ email, nickName }, { status: 200 });
-    res.cookies.set('idToken', await userCredential.getIdToken());
+    res.cookies.set('idToken', await userCredential.getIdToken(), {
+      httpOnly: true,
+      secure: true,
+    });
 
     return res;
   } catch (err) {
