@@ -19,7 +19,7 @@ export default function TopicBar() {
   return (
     <aside
       className={clsx(
-        'row-span-3 flex h-full flex-col gap-y-4 overflow-hidden pt-24 transition-all duration-500',
+        'flex h-full flex-col gap-y-4 overflow-hidden pt-24 transition-all duration-500',
         {
           'w-[30vw] border-r px-12': isOpen,
           'w-0': !isOpen,

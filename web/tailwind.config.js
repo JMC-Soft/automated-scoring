@@ -8,11 +8,12 @@ module.exports = {
   theme: {
     extend: {
       gridTemplateColumns: {
+        body: 'minmax(5%, 120px) 1fr',
         'auto-fit': 'repeat(auto-fit, minmax(0, 1fr))',
-        'main-layout': 'auto 1fr',
+        main: 'auto 1fr',
       },
       gridTemplateRows: {
-        'main-layout': 'minmax(100px, 120px) 1fr minmax(80px, auto)',
+        body: 'auto 1fr minmax(5%, 120px)',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
