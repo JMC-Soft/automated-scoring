@@ -1,13 +1,15 @@
 'use client';
 
 import React, { ChangeEvent, useEffect, useRef } from 'react';
+import clsx from 'clsx';
 
 type Props = {
   text: string;
   onTextChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  className?: string;
 };
 
-function Note({ text, onTextChange }: Props) {
+function Note({ text, onTextChange, className }: Props) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const resizeTextArea = () => {
@@ -26,7 +28,7 @@ function Note({ text, onTextChange }: Props) {
   return (
     <section
       ref={sectionRef}
-      className="w-3/4 flex-1 basis-0 self-center justify-self-center overflow-y-scroll"
+      className={clsx('flex-1 basis-0 overflow-y-scroll', className)}
     >
       <textarea
         ref={textAreaRef}

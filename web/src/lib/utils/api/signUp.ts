@@ -1,6 +1,6 @@
-import { API_BASE_URL } from '@/lib/utils/constants';
+import { API_BASE_URL } from '@/lib/constants/constants';
 
-import { SignUpRequest, User } from '@/lib/typing';
+import { SignUpRequest, User } from '@/lib/types';
 
 export const checkDuplicateEmail = async (email: string): Promise<boolean> => {
   const response = await fetch(`${API_BASE_URL}/register/${email}/check`);

@@ -1,5 +1,5 @@
-import { API_BASE_URL } from '@/lib/utils/constants';
-import { LoginRequest, User } from '@/lib/typing';
+import { API_BASE_URL } from '@/lib/constants/constants';
+import { LoginRequest, User } from '@/lib/types';
 
 const login = async (args: LoginRequest): Promise<User> => {
   const response = await fetch(`${API_BASE_URL}/login`, {

@@ -3,7 +3,7 @@ import { checkDuplicateEmail, signUp } from '@/lib/utils/api/signUp';
 import { handleFetchError } from '@/lib/utils/utils';
 import logOut from '@/lib/utils/api/logOut';
 import login from '@/lib/utils/api/login';
-import { LoginRequest, SignUpRequest, User } from '@/lib/typing';
+import { LoginRequest, SignUpRequest, User } from '@/lib/types';
 
 type State = {
   user: User | null;

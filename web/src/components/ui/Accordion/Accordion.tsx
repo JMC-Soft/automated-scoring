@@ -16,7 +16,7 @@ import {
   AccordionPanelProps,
 } from '@/components/ui/Accordion/AccordionPanel';
 import { AccordionContent } from '@/components/ui/Accordion/AccordionContent';
-import { HeroIconComponent } from '@/lib/typing';
+import { HeroIconComponent } from '@/lib/types';
 
 export interface AccordionProps
   extends PropsWithChildren<ComponentProps<'div'>> {

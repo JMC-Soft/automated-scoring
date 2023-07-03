@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/lib/utils/constants';
+import { API_BASE_URL } from '@/lib/constants/constants';
 
 const logOut = async (): Promise<void> => {
   const response = await fetch(`${API_BASE_URL}/logout`);

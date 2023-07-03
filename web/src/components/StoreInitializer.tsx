@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import useAuthStore from '@/store/authStore';
-import { User } from '@/lib/typing';
+import { User } from '@/lib/types';
 
 export default function StoreInitializer({
   user,

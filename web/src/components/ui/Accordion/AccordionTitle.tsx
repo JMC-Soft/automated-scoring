@@ -3,7 +3,7 @@
 import type { ComponentProps } from 'react';
 import clsx from 'clsx';
 import { useAccordionContext } from './AccordionPanelContext';
-import { HeroIconComponent } from '@/lib/typing';
+import { HeroIconComponent } from '@/lib/types';
 
 export interface AccordionTitleProps extends ComponentProps<'button'> {
   arrowIcon?: HeroIconComponent;
