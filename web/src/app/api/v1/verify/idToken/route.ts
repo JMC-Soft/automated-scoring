@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import isLoggedIn from '@/app/api/lib/isLoggedIn';
-import findUserByEmail from '@/app/api/repository/users/findUserByEmail';
+import findUserByEmail from '@/app/api/repository/user/findUserByEmail';
 
 export async function GET(req: NextRequest) {
   try {

@@ -1,19 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/app/api/config/firebase.admin';
-
-const docRef = db.collection('data').doc('data');
+import { type NextRequest, NextResponse } from 'next/server';
+import saveEssay from '@/app/api/repository/essay/saveEssay';
 
 /**
  * TODO: 데이터를 받아 DB에 저장 후 해당 데이터를 AI Server로 보내는 로직
  */
 export async function POST(req: NextRequest) {
-  const data = await req.json();
-  console.log(data);
+  const { topic, essayText } = await req.json();
+  await saveEssay({ topic, essayText });
 
-  await docRef.set({
-    data,
-  });
-
+  // AI 서버로 보내 결과를 받아왔다고 가정.
   // const result = await fetch('http://localhost:5000/high', {
   //   method: 'POST',
   // });

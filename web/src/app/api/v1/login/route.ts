@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import findUserByEmailAndPassword from '@/app/api/repository/users/findUserByEmailAndPassword';
+import findUserByEmailAndPassword from '@/app/api/repository/user/findUserByEmailAndPassword';
 
 export async function POST(req: NextRequest) {
   try {
