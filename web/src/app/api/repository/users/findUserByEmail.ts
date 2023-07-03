@@ -1,5 +1,5 @@
 import { USER_NOT_FOUND } from '@/app/api/const/errors';
-import { auth } from '@/app/api/lib/getAuth';
+import auth from '@/app/api/lib/auth';
 
 const findUserByEmail = async (email: string) => {
   const user = await auth.getUserByEmail(email).catch((err) => {

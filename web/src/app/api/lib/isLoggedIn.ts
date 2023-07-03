@@ -1,8 +1,5 @@
-import { getAuth } from 'firebase-admin/auth';
 import { ID_TOKEN_EXPIRED, INVALID_CREDENTIAL } from '@/app/api/const/errors';
-import firebaseApp from '@/app/api/config/firebase.admin';
-
-const auth = getAuth(firebaseApp);
+import auth from '@/app/api/lib/auth';
 
 const isLoggedIn = async (idToken: string) => {
   const decodedToken = await auth.verifyIdToken(idToken).catch((err) => {

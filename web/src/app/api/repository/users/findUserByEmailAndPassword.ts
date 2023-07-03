@@ -1,7 +1,7 @@
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { LoginDto } from '@/app/api/lib/dtos';
+import { LoginDto } from '@/app/api/lib/types';
 import { USER_NOT_FOUND, WRONG_PASSWORD } from '@/app/api/const/errors';
-import { clientAuth } from '@/app/api/lib/getAuth';
+import clientAuth from '@/app/api/lib/clientAuth';
 
 const findUserByEmailAndPassword = async ({ email, password }: LoginDto) => {
   const userCredential = await signInWithEmailAndPassword(
@@ -13,7 +13,7 @@ const findUserByEmailAndPassword = async ({ email, password }: LoginDto) => {
       throw new Error('패스워드가 잘못되었습니다.');
     }
     if (err.code === USER_NOT_FOUND) {
-      throw new Error('유저 정보가 없습니다.');
+      throw new Error('유저 정보를 찾을 수 없습니다.');
     }
     throw err;
   });
