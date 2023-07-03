@@ -16,4 +16,5 @@ const firebaseAdmin = {
 const firebaseApp =
   getApps().length === 0 ? initializeApp(firebaseAdmin) : getApps()[0];
 
+// temp
 export default firebaseApp;
