@@ -1,5 +1,6 @@
 import { initializeApp, getApps } from 'firebase-admin/app';
 import { credential } from 'firebase-admin';
+import { getFirestore } from 'firebase-admin/firestore';
 
 const firebaseAdmin = {
   credential: credential.cert({
@@ -16,5 +17,8 @@ const firebaseAdmin = {
 const firebaseApp =
   getApps().length === 0 ? initializeApp(firebaseAdmin) : getApps()[0];
 
+// https://firebase.google.com/docs/firestore/quickstart?hl=ko 참고
+const db = getFirestore(firebaseApp);
+
 // temp
-export default firebaseApp;
+export { firebaseApp, db };
