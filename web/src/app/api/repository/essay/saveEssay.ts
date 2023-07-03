@@ -1,11 +1,10 @@
 import { EssayDto } from '@/app/api/lib/types';
-import { v4 } from 'uuid';
-import getDocRef from '@/app/api/lib/getDocRef';
+import getColRef from '@/app/api/lib/getColRef';
 
 const saveEssay = async ({ topic, essayText }: EssayDto) => {
-  // reference: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/uuid/uuid-tests.ts
-  const uuid4 = v4();
-  const docRef = getDocRef('Essay', uuid4);
+  // const docRef = getDocRef('Essay');
+  const colRef = await getColRef('Essay');
+  const docRef = colRef.doc();
 
   await docRef.set({
     topic,

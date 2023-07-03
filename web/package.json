@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",
-    "@types/uuid": "^9.0.2",
     "chart.js": "^4.3.0",
     "clsx": "^1.2.1",
     "firebase": "^9.23.0",
