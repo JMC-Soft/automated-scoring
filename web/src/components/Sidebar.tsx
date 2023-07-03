@@ -25,6 +25,12 @@ const SIDE_BAR_MENU = [
     Icon: MegaphoneIcon,
     href: 'mailto:jmcsoft.org@gmail.com?subject=한국어 에세이 자동채점 관련 문의입니다.',
   },
+  {
+    id: 4,
+    name: '결과(임시)',
+    Icon: MegaphoneIcon,
+    href: '/result',
+  },
 ];
 
 export default function Sidebar() {
@@ -32,7 +38,7 @@ export default function Sidebar() {
     <div className="col-span-1 row-span-1 flex flex-1 flex-col border-r py-2 text-secondary-600">
       {SIDE_BAR_MENU.map((menu) => {
         const { id, href, name, Icon } = menu;
-        const Tag = id === 4 ? 'a' : Link;
+        const Tag = href.startsWith('/') ? Link : 'a';
 
         return (
           <div

@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import Button from '@/components/ui/Button';
 import { Accordion } from '@/components/ui/Accordion';
 import useEssayStore from '@/store/subjectStore';
-import { SUBJECTS } from '@/lib/utils/constants';
+import { SUBJECTS } from '@/lib/constants/constants';
 
 export default function TopicBar() {
   const [isOpen, setIsOpen] = useState(true);

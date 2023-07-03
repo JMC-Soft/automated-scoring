@@ -48,7 +48,11 @@ function EssaySection() {
       >
         {textLength} / 1500
       </span>
-      <Note text={essayText || ''} onTextChange={handleChange} />
+      <Note
+        className="w-3/4"
+        text={essayText || ''}
+        onTextChange={handleChange}
+      />
       <Button className="w-fit">제출하기</Button>
     </div>
   );
