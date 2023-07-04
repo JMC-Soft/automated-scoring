@@ -14,7 +14,7 @@ import { EssayResponseDto } from '@/app/api/lib/types';
 import getPercentage from '@/app/api/lib/scoring/getPercentage';
 import getGrade from '@/app/api/lib/scoring/getGrade';
 
-const getEachScore = async (
+const getResultDto = async (
   exp: number[],
   org: number[],
   cont: number[],
@@ -79,4 +79,4 @@ const getEachScore = async (
   };
 };
 
-export default getEachScore;
+export default getResultDto;
