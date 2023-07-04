@@ -1,7 +1,7 @@
-import { EssayDto } from '@/app/api/lib/types';
+import { EssayRequestDto } from '@/app/api/lib/types';
 import getColRef from '@/app/api/lib/getColRef';
 
-const saveEssay = async ({ topic, essayText }: EssayDto) => {
+const saveEssay = async ({ topic, essayText }: EssayRequestDto) => {
   // const docRef = getDocRef('Essay');
   const colRef = await getColRef('Essay');
   const docRef = colRef.doc();
