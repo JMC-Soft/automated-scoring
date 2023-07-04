@@ -17,7 +17,6 @@ const firebaseAdmin = {
 const firebaseApp =
   getApps().length === 0 ? initializeApp(firebaseAdmin) : getApps()[0];
 
-// https://firebase.google.com/docs/firestore/quickstart?hl=ko 참고
 const db = getFirestore(firebaseApp);
 
 // temp
