@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import createUser from '@/app/api/repository/users/createUser';
-import findUserByEmailAndPassword from '@/app/api/repository/users/findUserByEmailAndPassword';
+import createUser from '@/app/api/repository/user/createUser';
+import findUserByEmailAndPassword from '@/app/api/repository/user/findUserByEmailAndPassword';
 
 // 신규 회원 가입
 export async function POST(req: NextRequest) {

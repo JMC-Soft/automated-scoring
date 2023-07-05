@@ -13,3 +13,8 @@ export interface UserInfoDto {
   email: string;
   nickName: string;
 }
+
+export interface EssayDto {
+  topic: string;
+  essayText: string;
+}
