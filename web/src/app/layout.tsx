@@ -4,7 +4,7 @@ import React from 'react';
 import clsx from 'clsx';
 import Header from '@/components/ui/Header';
 import Footer from '@/components/Footer';
-import Sidebar from '@/components/Sidebar';
+import TapBar from '@/components/TapBar';
 // import useAuthStore from '@/store/authStore';
 // import getUser from '@/lib/utils/api/getUser';
 // import StoreInitializer from '@/components/StoreInitializer';
@@ -40,7 +40,7 @@ export default async function RootLayout({
       >
         {/* <StoreInitializer user={user} isLoggedIn={!!user} /> */}
         <Header />
-        <Sidebar />
+        <TapBar />
         {children}
         <Footer />
       </body>

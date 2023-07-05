@@ -33,7 +33,7 @@ const SIDE_BAR_MENU = [
   },
 ];
 
-export default function Sidebar() {
+export default function TapBar() {
   return (
     <div className="col-span-1 row-span-1 flex flex-1 flex-col border-r py-2 text-secondary-600">
       {SIDE_BAR_MENU.map((menu) => {
