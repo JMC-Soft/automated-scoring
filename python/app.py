@@ -17,17 +17,10 @@ pipelines = {name: pipeline("text-classification", model=models[name], tokenizer
 
 label_dict = {"LABEL_0":0,"LABEL_1":1,"LABEL_2":2,"LABEL_3":3}
 
-@app.route("/")
-def test():
-    print("hello cutty") 
-    
-    return "connect is available"  
-
 @app.route("/predict", methods=["POST"])
 def high():
     if request.method == "POST":
-        import datetime
-        start = datetime.datetime.now()
+
         data = request.get_json(force=True)
 
         # Get the input_text from the request
@@ -54,9 +47,16 @@ def high():
             else:
                 resp["org"].append(results[key])
 
-        print(datetime.datetime.now() - start)
+
 
         return jsonify(resp)
+
+@app.route("/")
+def test():
+    print("hello cutty") 
+    
+    return "connect is available"  
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True, threaded=True)
