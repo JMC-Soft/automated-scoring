@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChartOptions, ChartData } from 'chart.js';
+import { ChartOptions, ChartData, Plugin } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import createNormalDistData from '@/lib/utils/chart/createNormalDistData';
 
@@ -12,9 +12,11 @@ type Props = {
   xGrid?: boolean;
   yGrid?: boolean;
   className?: string;
+  innerText?: string;
 };
 
-export default function NormalDistributionGraph({
+function NormalDistributionGraph({
+  innerText,
   rangeStart = 0,
   rangeEnd = 0,
   legend = false,
@@ -24,7 +26,7 @@ export default function NormalDistributionGraph({
   yGrid = false,
   className,
 }: Props) {
-  const dataPoints = createNormalDistData(50, 15, 0, 100);
+  const dataPoints = createNormalDistData(50, 20, 0, 100);
 
   const data: ChartData<'line'> = {
     labels: dataPoints.map((point) => point.x),
@@ -53,6 +55,7 @@ export default function NormalDistributionGraph({
   };
 
   const options: ChartOptions<'line'> = {
+    responsive: true,
     plugins: {
       legend: {
         display: legend,
@@ -74,9 +77,36 @@ export default function NormalDistributionGraph({
     },
   };
 
+  const plugins: Plugin<'line'>[] = [
+    {
+      id: 'normal-distribution-graph',
+      afterDraw: (chart) => {
+        const { ctx } = chart;
+        const xAxis = chart.scales.x;
+        const yAxis = chart.scales.y;
+        const txt = innerText || '';
+        if (ctx) {
+          ctx.save();
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          ctx.fillStyle = '#000';
+          ctx.font = 'bold 20px sans-serif';
+          ctx.fillText(
+            txt,
+            (xAxis.left + xAxis.right) / 2,
+            (yAxis.top + yAxis.bottom) / 1.2,
+          );
+          ctx.restore();
+        }
+      },
+    },
+  ];
+
   return (
     <div className={className}>
-      <Line data={data} options={options} />
+      <Line data={data} options={options} plugins={plugins} />
     </div>
   );
 }
+
+export default React.memo(NormalDistributionGraph);

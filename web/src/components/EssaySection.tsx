@@ -53,7 +53,7 @@ function EssaySection() {
         text={essayText || ''}
         onTextChange={handleChange}
       />
-      <Button className="w-fit">제출하기</Button>
+      <Button className="w-fit rounded-lg px-4">제출하기</Button>
     </div>
   );
 }

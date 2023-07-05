@@ -7,9 +7,10 @@ type Props = {
   text: string;
   onTextChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   className?: string;
+  readonly?: boolean;
 };
 
-function Note({ text, onTextChange, className }: Props) {
+function Note({ text, onTextChange, className, readonly }: Props) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const resizeTextArea = () => {
@@ -36,6 +37,7 @@ function Note({ text, onTextChange, className }: Props) {
         defaultValue={text}
         onChange={onTextChange}
         placeholder="내용을 입력하세요."
+        readOnly={readonly}
       />
     </section>
   );

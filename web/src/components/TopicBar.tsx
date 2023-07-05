@@ -27,18 +27,12 @@ export default function TopicBar() {
       )}
     >
       <Button
-        className={clsx('absolute top-6 ml-6 gap-x-3')}
+        className="absolute top-6 ml-6 gap-x-3 rounded-lg px-4"
         onClick={() => setIsOpen(!isOpen)}
+        Icon={ChevronDoubleRightIcon}
+        iconClassName={clsx({ 'rotate-y-180': isOpen })}
       >
         문항 선택
-        <ChevronDoubleRightIcon
-          className={clsx(
-            'h-6 stroke-2 text-secondary-600 transition-all duration-500',
-            {
-              'rotate-y-180': isOpen,
-            },
-          )}
-        />
       </Button>
 
       <Accordion
