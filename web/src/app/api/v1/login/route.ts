@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import findUserByEmailAndPassword from '@/app/api/repository/user/findUserByEmailAndPassword';
+import ApiError from '@/app/api/lib/class/ApiError';
+import { LoginDto } from '@/app/api/lib/types';
+import getUserToken from '@/app/api/lib/getUserToken';
 
 export async function POST(req: NextRequest) {
   try {
@@ -7,13 +10,20 @@ export async function POST(req: NextRequest) {
      * TODO: 로그인 여부 검증 로직 필요
      * 로그인 되지 않은 상태라고 가정하고 이후 코드 작성.
      */
-    const loginDto = await req.json();
+    const loginDto: LoginDto = await req.json();
     const user = await findUserByEmailAndPassword(loginDto);
 
-    const { email, displayName: nickName } = user;
-    const idToken = await user.getIdToken();
+    const { email, displayName: nickname } = user;
+    if (!email || !nickname) {
+      throw new ApiError(
+        'firebase에서 받아온 User객체에서 email or nickname을 찾지 못하는 에러',
+        500,
+      );
+    }
 
-    const res = NextResponse.json({ email, nickName }, { status: 200 });
+    const idToken = await getUserToken(user);
+
+    const res = NextResponse.json({ email, nickname }, { status: 200 });
     res.cookies.set('idToken', idToken, {
       httpOnly: true,
       secure: true,
@@ -21,15 +31,13 @@ export async function POST(req: NextRequest) {
 
     return res;
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Unexpected error';
-    console.log(message);
-    if (
-      message === '패스워드가 잘못되었습니다.' ||
-      message === '유저 정보가 없습니다.'
-    )
-      return NextResponse.json({ msg: message }, { status: 400 });
+    if (err instanceof ApiError) {
+      return NextResponse.json({ msg: err.message }, { status: err.status });
+    }
 
-    return NextResponse.json({ msg: '서버 오류입니다' }, { status: 500 });
+    console.log('stack: POST /api/v1/login');
+    console.log(err);
+    return NextResponse.json({ msg: '서버 오류입니다.' }, { status: 500 });
   }
 }
 

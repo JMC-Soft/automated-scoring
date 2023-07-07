@@ -2,6 +2,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import findUserByEmail from '@/app/api/repository/user/findUserByEmail';
+import ApiError from '@/app/api/lib/class/ApiError';
 
 export async function GET(
   req: NextRequest,
@@ -23,24 +24,26 @@ export async function GET(
 
     // 회원이 존재함.
     if (user) {
-      throw new Error('이미 존재하는 회원입니다.');
+      throw new ApiError(
+        '이미 존재하는 회원입니다.',
+        400,
+        'register/[email]/check',
+      );
     }
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Unexpected error';
-    console.log(message);
+    if (err instanceof ApiError) {
+      if (err.message === '유저 정보를 찾을 수 없습니다.')
+        return NextResponse.json({ msg: 'ok' }, { status: 200 });
 
-    // 회원이 존재하지 않을 때 200 ok 반환.
-    // 다른 함수들과 반대되는 로직이어서 불가피하게 error 처리 부분에 200 작성.
-    if (message === '유저 정보를 찾을 수 없습니다.')
-      return NextResponse.json({ msg: 'ok' }, { status: 200 });
+      return NextResponse.json({ msg: err.message }, { status: err.status });
+    }
 
-    if (message === '이미 존재하는 회원입니다.')
-      return NextResponse.json({ msg: message }, { status: 400 });
-
-    return NextResponse.json({ msg: '서버 오류입니다' }, { status: 500 });
+    console.log('stack: GET /api/v1/register/[email]/check');
+    console.log(err);
+    return NextResponse.json({ msg: '서버 오류입니다.' }, { status: 500 });
   }
 }
 
 export async function POST() {
-  console.log('POST');
+  return NextResponse.json({ msg: 'Not Found' }, { status: 404 });
 }

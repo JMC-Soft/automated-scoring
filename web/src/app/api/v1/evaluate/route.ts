@@ -1,19 +1,40 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import saveEssay from '@/app/api/repository/essay/saveEssay';
-import getScoringResult from '@/app/api/lib/scoring/getScoringResult';
+import fetchToScoringServer from '@/app/api/lib/scoring/fetchToScoringServer';
+import ApiError from '@/app/api/lib/class/ApiError';
+import { EssayResponse, ScoringResponseDto } from '@/app/api/lib/types';
+import calculateEssayResult from '@/app/api/lib/scoring/calculateEssayResult';
 
 export async function POST(req: NextRequest) {
-  const { topic, essayText } = await req.json();
+  try {
+    const { email, topic, essayText } = await req.json();
 
-  // essay를 db에 저장
-  await saveEssay({ topic, essayText });
+    // 이메일과 토큰값 비교
+    console.log(email);
 
-  // essay를 scoring server에 보내 채점 결과 객체를 반환
-  const scoreResDto = await getScoringResult(essayText);
+    // essay를 db에 저장
+    await saveEssay({ topic, essayText });
 
-  return NextResponse.json(scoreResDto, { status: 200 });
+    // essay를 scoring server에 보내 채점 결과 객체를 반환
+    const scoringRes: ScoringResponseDto = await fetchToScoringServer(
+      essayText,
+    );
+
+    // 채점 결과 객체에서 essayResult 재조합
+    const essayResult: EssayResponse = await calculateEssayResult(scoringRes);
+
+    return NextResponse.json(essayResult, { status: 200 });
+  } catch (err) {
+    if (err instanceof ApiError) {
+      return NextResponse.json(err, { status: err.status });
+    }
+
+    console.log('POST /api/v1/evaluate');
+    console.log(err);
+    return NextResponse.json({ msg: '서버 오류입니다.' }, { status: 500 });
+  }
 }
 
 export async function GET() {
-  console.log('GET');
+  return NextResponse.json({ msg: '잘못된 요청입니다.' }, { status: 404 });
 }

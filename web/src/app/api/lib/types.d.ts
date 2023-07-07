@@ -1,7 +1,7 @@
 interface RegisterDto {
   email: string;
   password: string;
-  nickName: string;
+  nickname: string;
 }
 
 interface LoginDto {
@@ -11,39 +11,33 @@ interface LoginDto {
 
 interface UserInfoDto {
   email: string;
-  nickName: string;
+  nickname: string;
 }
 
 interface EssayRequestDto {
+  email: string | null;
   topic: string;
   essayText: string;
 }
 
-interface EssayResponseDto {
+interface EssaySub {
+  score: number;
+  sub: number[];
+  average: number;
+  grade: 'A' | 'B' | 'C' | 'D' | 'E';
+}
+
+interface EssayResponse {
   candidate: number; // 전체 참여자 수
   total: {
     score: number; // 이사람의 총점
     average: number; // 전체 평균
-    grade: number; // 전체 평균에 대한 이사람의 백분율
+    percentageStart: number; // 이사람의 총점이 몇 %에 해당하는지 시작점
+    percentageEnd: number; // 이사람의 총점이 몇 %에 해당하는지 끝점
   };
-  exp: {
-    score: number; // 이사람의 exp 점수 합
-    sub: number[]; // 이사람의 exp 점수 배열
-    average: number; // 전체 exp 평균
-    grade: number; // 이사람의 exp 등급
-  };
-  org: {
-    score: number; // 이사람의 org 점수 합
-    sub: number[]; // 이사람의 org 점수 배열
-    average: number; // 전체 org 평균
-    grade: number; // 이사람의 org 등급
-  };
-  cont: {
-    score: number; // 이사람의 cont 점수 합
-    sub: number[]; // 이사람의 cont 점수 배열
-    average: number; // 전체 cont 평균
-    grade: number; // 이사람의 cont 등급
-  };
+  exp: EssaySubDto;
+  org: EssaySubDto;
+  cont: EssaySubDto;
 }
 
 interface ScoringRequestDto {
@@ -56,12 +50,20 @@ interface ScoringResponseDto {
   cont: number[];
 }
 
+interface Statistics {
+  average: number;
+  standardDeviation: number;
+  data: { [key: string]: number };
+}
+
 export {
   ScoringRequestDto,
   ScoringResponseDto,
   EssayRequestDto,
-  EssayResponseDto,
+  EssayResponse,
   UserInfoDto,
   LoginDto,
   RegisterDto,
+  EssaySub,
+  Statistics,
 };
