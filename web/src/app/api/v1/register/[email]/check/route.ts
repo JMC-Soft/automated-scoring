@@ -18,7 +18,11 @@ export async function GET(
   try {
     const decodedToken = await getDecodedToken(req);
     if (decodedToken) {
-      throw new ApiError('이미 로그인된 회원입니다.', 401);
+      throw new ApiError(
+        '로그인된 회원이 회원가입 가능 여부 검증을 시도',
+        401,
+        '이미 로그인된 회원입니다.',
+      );
     }
 
     const { email } = params;
@@ -26,10 +30,9 @@ export async function GET(
 
     // 회원이 존재함.
     if (user) {
-      throw new ApiError(
-        '이미 존재하는 회원입니다.',
-        400,
-        'register/[email]/check',
+      return NextResponse.json(
+        { msg: '이미 존재하는 회원입니다.' },
+        { status: 400 },
       );
     }
   } catch (err) {

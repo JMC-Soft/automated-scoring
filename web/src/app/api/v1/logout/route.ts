@@ -6,7 +6,11 @@ export async function GET(req: NextRequest) {
   try {
     const decodedToken = await getDecodedToken(req);
     if (!decodedToken) {
-      throw new ApiError('로그인 되어있지 않습니다', 401);
+      throw new ApiError(
+        '로그인 정보 없이 로그아웃 요청',
+        401,
+        '로그인 되어있지 않습니다',
+      );
     }
 
     // idToken을 헤더에서 삭제하여 반환

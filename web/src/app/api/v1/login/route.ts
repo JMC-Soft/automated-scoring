@@ -9,7 +9,11 @@ export async function POST(req: NextRequest) {
   try {
     const decodedToken = await getDecodedToken(req);
     if (decodedToken) {
-      throw new ApiError('이미 로그인된 회원입니다.', 401);
+      throw new ApiError(
+        '로그인된 상태로 로그인 요청',
+        401,
+        '이미 로그인된 회원입니다.',
+      );
     }
 
     const loginDto: LoginDto = await req.json();

@@ -9,7 +9,10 @@ export async function GET(req: NextRequest) {
     const decodedToken = await getDecodedToken(req);
 
     if (!decodedToken) {
-      throw new ApiError('로그인 되어있지 않습니다', 401);
+      return NextResponse.json(
+        { msg: '로그인 되어있지 않습니다.' },
+        { status: 401 },
+      );
     }
 
     const { email } = decodedToken;
