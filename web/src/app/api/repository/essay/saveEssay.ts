@@ -1,15 +1,23 @@
-import { EssayRequestDto } from '@/app/api/lib/types';
-import getColRef from '@/app/api/lib/getColRef';
+import ApiError from '@/app/api/lib/class/ApiError';
+import { db } from '@/app/api/config/firebase.admin';
 
-const saveEssay = async ({ topic, essayText }: EssayRequestDto) => {
-  // const docRef = getDocRef('Essay');
-  const colRef = await getColRef('Essay');
-  const docRef = colRef.doc();
+const saveEssay = async ({
+  topic,
+  essayText,
+}: {
+  topic: string;
+  essayText: string;
+}) => {
+  try {
+    const doc = db.collection('Essay').doc();
 
-  await docRef.set({
-    topic,
-    essayText,
-  });
+    await doc.set({
+      topic,
+      essayText,
+    });
+  } catch (err) {
+    ApiError.handleError(err);
+  }
 };
 
 export default saveEssay;

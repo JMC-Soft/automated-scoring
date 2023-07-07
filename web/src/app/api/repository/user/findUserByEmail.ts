@@ -1,15 +1,14 @@
-import { USER_NOT_FOUND } from '@/app/api/const/errors';
-import auth from '@/app/api/lib/auth';
+import { auth } from '@/app/api/config/firebase.admin';
+import ApiError from '@/app/api/lib/class/ApiError';
 
 const findUserByEmail = async (email: string) => {
-  const user = await auth.getUserByEmail(email).catch((err) => {
-    if (err.code === USER_NOT_FOUND) {
-      throw new Error('유저 정보를 찾을 수 없습니다.');
-    }
-    throw err;
-  });
+  try {
+    const user = await auth.getUserByEmail(email);
 
-  return user;
+    return user;
+  } catch (err) {
+    throw ApiError.handleError(err);
+  }
 };
 
 export default findUserByEmail;

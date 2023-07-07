@@ -2,6 +2,7 @@ import {
   getApps as clientGet,
   initializeApp as clientInit,
 } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 
 const clientConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -15,5 +16,7 @@ const clientConfig = {
 
 const clientApp =
   clientGet().length === 0 ? clientInit(clientConfig) : clientGet()[0];
+const clientAuth = getAuth(clientApp);
 
+export { clientAuth };
 export default clientApp;
