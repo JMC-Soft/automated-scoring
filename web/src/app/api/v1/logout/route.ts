@@ -1,11 +1,13 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
+import ApiError from '@/app/api/lib/class/ApiError';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    /**
-     * TODO: 로그인 여부 검증 로직 필요
-     * 로그인 된 상태라고 가정하고 이후 코드 작성.
-     */
+    const decodedToken = await getDecodedToken(req);
+    if (!decodedToken) {
+      throw new ApiError('로그인 되어있지 않습니다', 401);
+    }
 
     // idToken을 헤더에서 삭제하여 반환
     const res = NextResponse.json({ msg: 'ok' }, { status: 200 });

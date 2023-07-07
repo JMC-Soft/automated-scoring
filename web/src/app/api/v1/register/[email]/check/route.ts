@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import findUserByEmail from '@/app/api/repository/user/findUserByEmail';
 import ApiError from '@/app/api/lib/class/ApiError';
+import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 
 export async function GET(
   req: NextRequest,
@@ -15,10 +16,11 @@ export async function GET(
   },
 ) {
   try {
-    /**
-     * TODO: 로그인 여부 검증 로직 필요
-     * 로그인 되지 않은 상태라고 가정하고 이후 코드 작성.
-     */
+    const decodedToken = await getDecodedToken(req);
+    if (decodedToken) {
+      throw new ApiError('이미 로그인된 회원입니다.', 401);
+    }
+
     const { email } = params;
     const user = await findUserByEmail(email);
 

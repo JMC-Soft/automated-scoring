@@ -3,13 +3,15 @@ import findUserByEmailAndPassword from '@/app/api/repository/user/findUserByEmai
 import ApiError from '@/app/api/lib/class/ApiError';
 import { LoginDto } from '@/app/api/lib/types';
 import getUserToken from '@/app/api/lib/getUserToken';
+import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 
 export async function POST(req: NextRequest) {
   try {
-    /**
-     * TODO: 로그인 여부 검증 로직 필요
-     * 로그인 되지 않은 상태라고 가정하고 이후 코드 작성.
-     */
+    const decodedToken = await getDecodedToken(req);
+    if (decodedToken) {
+      throw new ApiError('이미 로그인된 회원입니다.', 401);
+    }
+
     const loginDto: LoginDto = await req.json();
     const user = await findUserByEmailAndPassword(loginDto);
 
