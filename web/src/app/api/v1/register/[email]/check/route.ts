@@ -34,10 +34,12 @@ export async function GET(
         { msg: '이미 존재하는 회원입니다.' },
         { status: 400 },
       );
+
+      return NextResponse.json({ msg: 'ok' }, { status: 200 });
     }
   } catch (err) {
     if (err instanceof ApiError) {
-      if (err.message === '유저 정보를 찾을 수 없습니다.')
+      if (err.resMessage === '유저 정보를 찾을 수 없습니다.')
         return NextResponse.json({ msg: 'ok' }, { status: 200 });
 
       return NextResponse.json({ msg: err.resMessage }, { status: err.status });
