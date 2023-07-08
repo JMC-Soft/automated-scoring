@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import {
   MegaphoneIcon,
@@ -5,6 +7,8 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import clsx from 'clsx';
 
 const SIDE_BAR_MENU = [
   {
@@ -34,22 +38,33 @@ const SIDE_BAR_MENU = [
 ];
 
 export default function TapBar() {
+  const pathname = usePathname();
+
   return (
-    <div className="col-span-1 row-span-1 flex flex-1 flex-col border-r py-2 text-secondary-600">
+    <div className="col-span-1 row-span-1 flex flex-col bg-white px-2">
       {SIDE_BAR_MENU.map((menu) => {
         const { id, href, name, Icon } = menu;
         const Tag = href.startsWith('/') ? Link : 'a';
+        const isActive = pathname === href;
 
         return (
-          <div
+          <Tag
+            href={href}
             key={id}
-            className="flex items-center justify-center py-4 hover:scale-105 hover:text-primary-800"
+            className={clsx(
+              'z-10 mt-4 flex aspect-square flex-col items-center justify-center gap-y-2 rounded-full bg-white text-sm transition-transform duration-700 ease-out hover:text-primary-500',
+              {
+                'translate-x-[40%] font-black text-primary-500': isActive,
+              },
+            )}
           >
-            <Tag href={href} className="flex flex-col items-center gap-y-2 ">
-              <Icon className="h-9" />
-              {name}
-            </Tag>
-          </div>
+            <Icon
+              className={clsx('h-8', {
+                'stroke-2': isActive,
+              })}
+            />
+            {name}
+          </Tag>
         );
       })}
     </div>

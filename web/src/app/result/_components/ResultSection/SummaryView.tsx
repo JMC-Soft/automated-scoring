@@ -2,8 +2,16 @@
 
 import React from 'react';
 import TriangleRadarChart from '@/components/ui/Chart/TriangleRadarChart';
+import { SubCategory } from '@/lib/types';
+import { GradeMap } from '@/lib/constants/constants';
 
-function SummaryView() {
+type Props = {
+  exp: SubCategory;
+  org: SubCategory;
+  cont: SubCategory;
+};
+
+function SummaryView({ exp, org, cont }: Props) {
   return (
     <div className="flex h-full w-4/5 flex-col justify-around self-center justify-self-center">
       <span className="result-title flex h-16 items-center text-xl font-semibold text-primary-700">
@@ -13,7 +21,11 @@ function SummaryView() {
         <TriangleRadarChart
           className="flex h-full w-full items-center justify-center"
           labels={['표현', '구성', '문맥']}
-          dataList={[2, 4, 4]}
+          dataList={[
+            GradeMap[exp.grade],
+            GradeMap[org.grade],
+            GradeMap[cont.grade],
+          ]}
         />
         <div className="summary-text-grid items-center justify-items-center pb-6">
           <h5 className="col-span-2">총 응시자</h5>

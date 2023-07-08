@@ -2,44 +2,44 @@
 
 import React from 'react';
 import clsx from 'clsx';
-import { HeroIconComponent } from '@/lib/types';
 
 type ButtonProps = {
   type?: 'button' | 'submit' | 'reset';
   children?: React.ReactNode;
   className?: string;
   onClick?: () => void;
-  iconClassName?: string;
-  Icon?: HeroIconComponent;
+  size?: 'small' | 'medium' | 'large';
+  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger'; // new prop
 };
 
 function Button({
   type = 'button',
   children,
   className,
-  onClick,
-  iconClassName,
-  Icon,
+  onClick = () => {},
+  size = 'medium',
+  variant = 'primary', // set default to 'primary'
 }: ButtonProps) {
   return (
     <button
       type={type}
       className={clsx(
-        'flex h-10 items-center border-2 border-secondary-600 bg-white text-xl font-semibold',
+        'relative flex cursor-pointer touch-manipulation select-none whitespace-nowrap rounded-xl text-white shadow-lg transition-all duration-300 hover:bg-primary-600 hover:opacity-100 hover:shadow-2xl',
         className,
+        { 'px-4 py-1 text-sm': size === 'small' },
+        { 'px-6 py-2': size === 'medium' },
+        { 'px-8 py-3 text-lg': size === 'large' },
+        { 'bg-primary-500 hover:shadow-lg': variant === 'primary' },
+        { 'bg-secondary-500 hover:shadow-lg': variant === 'secondary' },
+        { 'bg-success-500 hover:shadow-lg': variant === 'success' },
+        { 'bg-warning-500 hover:shadow-lg': variant === 'warning' },
+        { 'bg-danger-500 hover:shadow-lg': variant === 'danger' },
       )}
       onClick={onClick}
     >
       {children}
-      {Icon && (
-        <Icon
-          className={clsx(
-            'h-6 stroke-2 text-secondary-600 transition-all duration-500',
-            iconClassName,
-          )}
-        />
-      )}
     </button>
   );
 }
+
 export default Button;

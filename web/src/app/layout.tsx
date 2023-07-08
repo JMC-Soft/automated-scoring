@@ -1,17 +1,18 @@
 import './globals.css';
-import { Nanum_Gothic } from 'next/font/google';
+import { Roboto } from 'next/font/google';
 import React from 'react';
 import clsx from 'clsx';
-import Header from '@/components/ui/Header';
+import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import TapBar from '@/components/TapBar';
-// import useAuthStore from '@/store/authStore';
-// import getUser from '@/lib/utils/api/getUser';
-// import StoreInitializer from '@/components/StoreInitializer';
+import getUser from '@/lib/utils/api/getUser';
+import StoreInitializer from '@/components/StoreInitializer';
 
-const notoSansKR = Nanum_Gothic({
-  weight: ['400', '700', '800'],
+const notoSansKR = Roboto({
+  weight: ['100', '300', '400', '500', '700', '900'],
   subsets: ['latin'],
+  variable: '--font-noto-sans-kr',
+  preload: false,
 });
 
 export const metadata = {
@@ -24,21 +25,17 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // const user = await getUser();
-
-  // if (user) {
-  //   useAuthStore.setState({ user, isLoggedIn: true });
-  // }
+  const user = await getUser();
 
   return (
     <html lang="en" className="min-h-screen">
       <body
         className={clsx(
           'grid min-h-screen grid-cols-body grid-rows-body',
-          notoSansKR.className,
+          notoSansKR.variable,
         )}
       >
-        {/* <StoreInitializer user={user} isLoggedIn={!!user} /> */}
+        <StoreInitializer user={user} isLoggedIn={!!user} />
         <Header />
         <TapBar />
         {children}

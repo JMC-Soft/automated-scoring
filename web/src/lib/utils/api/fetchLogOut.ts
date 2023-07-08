@@ -1,6 +1,6 @@
 import { API_BASE_URL } from '@/lib/constants/constants';
 
-const logOut = async (): Promise<void> => {
+const fetchLogOut = async (): Promise<void> => {
   const response = await fetch(`${API_BASE_URL}/logout`);
 
   if (!response.ok) {
@@ -9,4 +9,4 @@ const logOut = async (): Promise<void> => {
   }
 };
 
-export default logOut;
+export default fetchLogOut;

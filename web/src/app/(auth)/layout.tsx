@@ -1,12 +1,13 @@
 import React from 'react';
-import SignUpForm from '@/components/SignUpForm';
 
-function Page() {
+type Props = {
+  children?: React.ReactNode;
+};
+
+export default async function Layout({ children }: Props) {
   return (
     <div className="flex w-1/3 flex-col self-center justify-self-center text-xl">
-      <SignUpForm />
+      {children}
     </div>
   );
 }
-
-export default Page;
