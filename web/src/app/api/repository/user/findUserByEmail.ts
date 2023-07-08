@@ -1,4 +1,3 @@
-
 import { auth } from '@/app/api/config/firebase.admin';
 import ApiError from '@/app/api/lib/class/ApiError';
 
