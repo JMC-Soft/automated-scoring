@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     return res;
   } catch (err) {
     if (err instanceof ApiError) {
-      return NextResponse.json({ msg: err.message }, { status: err.status });
+      return NextResponse.json({ msg: err.resMessage }, { status: err.status });
     }
 
     console.log('stack: POST /api/v1/register');

@@ -40,7 +40,7 @@ export async function GET(
       if (err.message === '유저 정보를 찾을 수 없습니다.')
         return NextResponse.json({ msg: 'ok' }, { status: 200 });
 
-      return NextResponse.json({ msg: err.message }, { status: err.status });
+      return NextResponse.json({ msg: err.resMessage }, { status: err.status });
     }
 
     console.log('stack: GET /api/v1/register/[email]/check');

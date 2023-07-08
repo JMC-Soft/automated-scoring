@@ -3,8 +3,7 @@ import { db } from '@/app/api/config/firebase.admin';
 
 const countEssay = async () => {
   try {
-    const essayColRef = db.collection('Essay');
-    const snapshot = await essayColRef.get();
+    const snapshot = await db.collection('Essay').get();
 
     return snapshot.size;
   } catch (err) {

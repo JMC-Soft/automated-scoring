@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
     );
   } catch (err) {
     if (err instanceof ApiError) {
-      return NextResponse.json({ msg: err.message }, { status: err.status });
+      return NextResponse.json({ msg: err.resMessage }, { status: err.status });
     }
 
     console.log('stack: GET /api/v1/verify/idToken');

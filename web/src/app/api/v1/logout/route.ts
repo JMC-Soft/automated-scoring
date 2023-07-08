@@ -18,6 +18,10 @@ export async function GET(req: NextRequest) {
     res.cookies.delete('idToken');
     return res;
   } catch (err) {
+    if (err instanceof ApiError) {
+      return NextResponse.json({ msg: err.resMessage }, { status: err.status });
+    }
+
     console.log('stack: GET /api/v1/logout');
     console.log(err);
     return NextResponse.json({ msg: '서버 오류입니다.' }, { status: 500 });

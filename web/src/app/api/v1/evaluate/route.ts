@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(essayResult, { status: 200 });
   } catch (err) {
     if (err instanceof ApiError) {
-      return NextResponse.json(err, { status: err.status });
+      return NextResponse.json({ msg: err.resMessage }, { status: err.status });
     }
 
     console.log('stack: POST /api/v1/evaluate');
