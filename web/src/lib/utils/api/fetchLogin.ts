@@ -1,7 +1,7 @@
 import { API_BASE_URL } from '@/lib/constants/constants';
 import { LoginRequest, User } from '@/lib/types';
 
-const login = async (args: LoginRequest): Promise<User> => {
+const fetchLogin = async (args: LoginRequest): Promise<User> => {
   const response = await fetch(`${API_BASE_URL}/login`, {
     method: 'POST',
     headers: {
@@ -19,4 +19,4 @@ const login = async (args: LoginRequest): Promise<User> => {
   return response.json();
 };
 
-export default login;
+export default fetchLogin;

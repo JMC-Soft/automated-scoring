@@ -1,11 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronDoubleRightIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Button from '@/components/ui/Button';
 import { Accordion } from '@/components/ui/Accordion';
-import useEssayStore from '@/store/subjectStore';
+import useEssayStore from '@/store/essayStore';
 import { SUBJECTS } from '@/lib/constants/constants';
 
 export default function TopicBar() {
@@ -29,8 +28,6 @@ export default function TopicBar() {
       <Button
         className="absolute top-6 ml-6 gap-x-3 rounded-lg px-4"
         onClick={() => setIsOpen(!isOpen)}
-        Icon={ChevronDoubleRightIcon}
-        iconClassName={clsx({ 'rotate-y-180': isOpen })}
       >
         문항 선택
       </Button>

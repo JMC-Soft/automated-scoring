@@ -51,6 +51,7 @@ function DetailView() {
             tableData.subCategory.map((sub, subIdx) => {
               return (
                 <tr
+                  key={sub}
                   className={clsx('h-12 border border-primary-700', {
                     'bg-gray-200': idx % 2 === 1,
                   })}

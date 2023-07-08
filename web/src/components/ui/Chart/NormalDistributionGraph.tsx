@@ -56,6 +56,7 @@ function NormalDistributionGraph({
 
   const options: ChartOptions<'line'> = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: legend,

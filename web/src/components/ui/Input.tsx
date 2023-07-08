@@ -11,6 +11,7 @@ type Props = {
   required?: boolean;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
   [key: string]: any;
 };
 
@@ -20,6 +21,7 @@ function Input({
   placeholder = '',
   className = '',
   required = false,
+  disabled = false,
   ...props
 }: Props) {
   return (
@@ -29,10 +31,13 @@ function Input({
       className={clsx(
         'w-full border p-4',
         {
-          'cursor-pointer bg-secondary-700 text-white': type === 'submit',
+          'bg-secondary-700 text-white': type === 'submit',
+          'cursor-default bg-secondary-700/70': type === 'submit' && disabled,
+          'cursor-pointer bg-secondary-700': type === 'submit' && !disabled,
         },
         className,
       )}
+      disabled={disabled}
       placeholder={placeholder}
       required={required}
       {...props}

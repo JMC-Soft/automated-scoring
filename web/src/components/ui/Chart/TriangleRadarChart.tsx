@@ -2,6 +2,7 @@ import React from 'react';
 import { ChartData, ChartOptions } from 'chart.js';
 import { Radar } from 'react-chartjs-2';
 import merge from 'lodash/merge';
+import { GradeMap } from '@/lib/constants/constants';
 
 type Props<T> = {
   labels: T[];
@@ -43,14 +44,8 @@ export default function TriangleRadarChart<T>({
         callbacks: {
           label(context) {
             const score = context.raw as number;
-            let grade;
-            if (score === 5) grade = 'A';
-            else if (score === 4) grade = 'B';
-            else if (score === 3) grade = 'C';
-            else if (score === 2) grade = 'D';
-            else if (score === 1) grade = 'E';
-            else grade = 'F';
-            return `${grade}`;
+
+            return `${GradeMap[score]}`;
           },
         },
       },

@@ -2,23 +2,17 @@
 
 import React from 'react';
 import clsx from 'clsx';
-import { ChevronDoubleRightIcon } from '@heroicons/react/24/outline';
 import Button from '@/components/ui/Button';
 import Note from '@/components/Note';
-import useStore from '@/lib/hooks/useStore';
-import useEssayStore from '@/store/subjectStore';
+import { EssayResult } from '@/lib/types';
 
 type Props = {
+  data: EssayResult;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function ReviewSection({ isOpen, setIsOpen }: Props) {
-  const [resultTopic, resultText] = useStore(useEssayStore, (state) => [
-    state.resultTopic,
-    state.resultText,
-  ]);
-
+function ReviewSection({ data, isOpen, setIsOpen }: Props) {
   const onClick = () => {
     setIsOpen(!isOpen);
   };
@@ -28,8 +22,6 @@ function ReviewSection({ isOpen, setIsOpen }: Props) {
       <Button
         className="absolute top-6 ml-6 gap-x-3 rounded-lg px-2"
         onClick={onClick}
-        Icon={ChevronDoubleRightIcon}
-        iconClassName={clsx({ 'rotate-y-180': isOpen })}
       />
       <section
         className={clsx(
@@ -40,8 +32,8 @@ function ReviewSection({ isOpen, setIsOpen }: Props) {
           },
         )}
       >
-        <h4>{resultTopic}</h4>
-        <Note text={resultText} className="w-4/5" readonly />
+        <h4>{data.topic}</h4>
+        <Note text={data.essayText} readonly />
       </section>
     </>
   );

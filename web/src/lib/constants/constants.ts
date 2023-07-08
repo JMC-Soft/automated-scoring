@@ -3,7 +3,7 @@ export const API_BASE_URL =
     ? 'https://automated-scoring.vercel.app/api/v1'
     : 'http://localhost:3000/api/v1';
 
-export const EMAIL_REG_EXP = /[a-z0-9]+@[a-z]+.[a-z]{2,3}/;
+export const EMAIL_REG_EXP = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
 
 export const SUBJECTS = [
   {
@@ -37,3 +37,11 @@ export const SUBJECTS = [
     ],
   },
 ];
+
+export enum GradeMap {
+  'E' = 1,
+  'D' = 2,
+  'C' = 3,
+  'B' = 4,
+  'A' = 5,
+}

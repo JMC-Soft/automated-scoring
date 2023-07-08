@@ -1,60 +1,61 @@
 import { create } from 'zustand';
-import { checkDuplicateEmail, signUp } from '@/lib/utils/api/signUp';
-import { handleFetchError } from '@/lib/utils/utils';
-import logOut from '@/lib/utils/api/logOut';
-import login from '@/lib/utils/api/login';
-import { LoginRequest, SignUpRequest, User } from '@/lib/types';
+import { devtools } from 'zustand/middleware';
+import { LoginRequest, User } from '@/lib/types';
+import { API_BASE_URL } from '@/lib/constants/constants';
 
-type State = {
+type AuthState = {
   user: User | null;
-  error: string | null;
   isLoggedIn: boolean;
 };
 
-type Actions = {
-  logIn: ({ email, password }: LoginRequest) => Promise<void>;
-  signUp: ({ nickname, email, password }: SignUpRequest) => Promise<void>;
-  checkDuplicateEmail: (email: string) => Promise<boolean>;
-  logOut: () => void;
+type AuthActions = {
+  setUser: (user: User) => void;
+  login: ({ email, password }: LoginRequest) => Promise<User>;
+  logout: () => void;
 };
 
-const useAuthStore = create<State & Actions>()((set) => ({
-  user: null,
-  error: null,
-  isLoggedIn: false,
-  logIn: async ({ email, password }) => {
-    try {
-      const user = await login({ email, password });
-      // const user = { nickname: 'test', email: 'text@test.te' };
-      set({ user, isLoggedIn: true });
-    } catch (error) {
-      handleFetchError(error, set);
-    }
-  },
-  signUp: async ({ nickname, email, password }) => {
-    try {
-      const user = await signUp({ nickname, email, password });
-      set({ user, isLoggedIn: true });
-    } catch (error) {
-      handleFetchError(error, set);
-    }
-  },
-  checkDuplicateEmail: async (email: string) => {
-    try {
-      return await checkDuplicateEmail(email);
-    } catch (error) {
-      handleFetchError(error, set);
-      return false;
-    }
-  },
-  logOut: async () => {
-    try {
-      await logOut();
-      set({ user: null, isLoggedIn: false });
-    } catch (error) {
-      handleFetchError(error, set);
-    }
-  },
-}));
+const useAuthStore = create<AuthState & AuthActions>()(
+  devtools((set) => ({
+    user: null,
+    isLoggedIn: false,
+    setUser: (user: User) => set({ user, isLoggedIn: true }),
+    login: async ({ email, password }) => {
+      const response = await fetch(`${API_BASE_URL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error('이메일 또는 비밀번호가 일치하지 않습니다.');
+        }
+
+        if (response.status === 404) {
+          throw new Error('존재하지 않는 이메일입니다.');
+        }
+
+        throw new Error('로그인에 실패했습니다.\n다시 시도해 주세요.');
+      }
+
+      const user = await response.json();
+
+      return user;
+    },
+    logout: async () => {
+      const response = await fetch(`${API_BASE_URL}/logout`);
+
+      if (!response.ok) {
+        throw new Error('로그아웃에 실패했습니다.\n다시 시도해 주세요.');
+      } else {
+        set({ user: null, isLoggedIn: false });
+      }
+    },
+  })),
+);
+
+export type AuthStore = AuthState & AuthActions;
 
 export default useAuthStore;
