@@ -1,8 +1,8 @@
-import { Statistics } from '@/app/api/lib/types';
-
+// 총 글 수
 const HIGH_DATA_TOTAL_NUMBER: number = 713;
 
-const TOTAL_STATISTICS: Statistics = {
+// Total 통계 데이터
+const TOTAL_STATISTICS = {
   average: 25.5,
   standardDeviation: 3.45,
   data: {
@@ -22,9 +22,16 @@ const TOTAL_STATISTICS: Statistics = {
     29: 70,
     30: 115,
   },
+
+  min: 17,
+  max: 30,
+  median: 26,
+  Q1: 22,
+  Q3: 29,
 };
 
-const EXP_STATISTICS: Statistics = {
+// EXP 통계 데이터
+const EXP_STATISTICS = {
   average: 7.7,
   standardDeviation: 1.29,
   data: {
@@ -36,9 +43,16 @@ const EXP_STATISTICS: Statistics = {
     8: 139,
     9: 288,
   },
+  subAverage: [2.6, 2.6, 2.4],
+  min: 3,
+  max: 9,
+  median: 8,
+  Q1: 6,
+  Q3: 9,
 };
 
-const ORG_STATISTICS: Statistics = {
+// ORG 통계 데이터
+const ORG_STATISTICS = {
   average: 10.5,
   standardDeviation: 1.62,
   data: {
@@ -50,9 +64,16 @@ const ORG_STATISTICS: Statistics = {
     11: 71,
     12: 327,
   },
+  subAverage: [2.5, 2.6, 2.7, 2.6],
+  min: 7,
+  max: 12,
+  median: 11,
+  Q1: 9,
+  Q3: 12,
 };
 
-const CONT_STATISTICS: Statistics = {
+// CONT 통계 데이터
+const CONT_STATISTICS = {
   average: 7.3,
   standardDeviation: 1.2,
   data: {
@@ -63,6 +84,12 @@ const CONT_STATISTICS: Statistics = {
     8: 177,
     9: 150,
   },
+  subAverage: [2.6, 2.2, 2.6],
+  min: 3,
+  max: 9,
+  median: 7.5,
+  Q1: 6,
+  Q3: 8,
 };
 
 export {

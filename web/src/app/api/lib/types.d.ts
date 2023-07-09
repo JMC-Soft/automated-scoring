@@ -20,36 +20,65 @@ interface EssayRequestDto {
   essayText: string;
 }
 
-interface EssaySub {
-  score: number;
-  sub: number[];
-  average: number;
-  grade: 'A' | 'B' | 'C' | 'D' | 'E';
-}
-
-interface EssayResponse {
-  candidate: number; // 전체 참여자 수
-  total: {
-    score: number; // 이사람의 총점
-    average: number; // 전체 평균
-    percentageStart: number; // 이사람의 총점이 몇 %에 해당하는지 시작점
-    percentageEnd: number; // 이사람의 총점이 몇 %에 해당하는지 끝점
-  };
-  exp: EssaySubDto;
-  org: EssaySubDto;
-  cont: EssaySubDto;
-}
-
 interface ScoringResponseDto {
   exp: number[];
   org: number[];
   cont: number[];
 }
 
-interface Statistics {
+interface EssayResponse {
+  candidate: number; // 전체 참여자 수
+  total: EssayTotal;
+  exp: EssaySub;
+  org: EssaySub;
+  cont: EssaySub;
+}
+
+interface EssayTotal {
+  score: number;
+  average: number;
+  grade: 'A' | 'B' | 'C' | 'D' | 'E';
+  percentage: number;
+  min: number;
+  max: number;
+  median: number;
+  Q1: number;
+  Q3: number;
+}
+
+interface EssaySub {
+  score: number;
+  sub: number[{ score: number; average: number }];
+  average: number;
+  grade: 'A' | 'B' | 'C' | 'D' | 'E';
+  percentage: number;
+  min: number;
+  max: number;
+  median: number;
+  Q1: number;
+  Q3: number;
+}
+
+interface SubStatistics {
   average: number;
   standardDeviation: number;
   data: { [key: string]: number };
+  subAverage: number[];
+  min: number;
+  max: number;
+  median: number;
+  Q1: number;
+  Q3: number;
+}
+interface TotalStatistics {
+  average: number;
+  standardDeviation: number;
+  data: { [key: string]: number };
+  min: number;
+  max: number;
+  median: number;
+  Q1: number;
+  Q3: number;
 }
 
 export {
@@ -60,5 +89,7 @@ export {
   LoginDto,
   RegisterDto,
   EssaySub,
-  Statistics,
+  EssayTotal,
+  SubStatistics,
+  TotalStatistics,
 };
