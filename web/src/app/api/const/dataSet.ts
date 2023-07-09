@@ -1,8 +1,10 @@
+import { SubStatistics, TotalStatistics } from '@/app/api/lib/types';
+
 // 총 글 수
 const HIGH_DATA_TOTAL_NUMBER: number = 713;
 
 // Total 통계 데이터
-const TOTAL_STATISTICS = {
+const TOTAL_STATISTICS: TotalStatistics = {
   average: 25.5,
   standardDeviation: 3.45,
   data: {
@@ -31,7 +33,7 @@ const TOTAL_STATISTICS = {
 };
 
 // EXP 통계 데이터
-const EXP_STATISTICS = {
+const EXP_STATISTICS: SubStatistics = {
   average: 7.7,
   standardDeviation: 1.29,
   data: {
@@ -52,7 +54,7 @@ const EXP_STATISTICS = {
 };
 
 // ORG 통계 데이터
-const ORG_STATISTICS = {
+const ORG_STATISTICS: SubStatistics = {
   average: 10.5,
   standardDeviation: 1.62,
   data: {
@@ -73,7 +75,7 @@ const ORG_STATISTICS = {
 };
 
 // CONT 통계 데이터
-const CONT_STATISTICS = {
+const CONT_STATISTICS: SubStatistics = {
   average: 7.3,
   standardDeviation: 1.2,
   data: {
