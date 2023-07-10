@@ -1,6 +1,6 @@
 import countEssay from '@/app/api/repository/essay/countEssay';
 import {
-  EssayResponse,
+  EssayResponseDto,
   EssaySub,
   EssayTotal,
   ScoringResponseDto,
@@ -20,7 +20,7 @@ const calculateEssayResult = async ({
   exp,
   org,
   cont,
-}: ScoringResponseDto): Promise<EssayResponse> => {
+}: ScoringResponseDto): Promise<EssayResponseDto> => {
   try {
     const expRes: EssaySub = calculateEssaySub(exp, EXP_STATISTICS);
     const orgRes: EssaySub = calculateEssaySub(org, ORG_STATISTICS);
@@ -43,6 +43,8 @@ const calculateEssayResult = async ({
       exp: expRes,
       org: orgRes,
       cont: contRes,
+      countCharacters: 100,
+      countSentences: 10,
     };
   } catch (err) {
     throw ApiError.handleError(err);

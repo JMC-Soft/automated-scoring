@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       throw new ApiError(
         '로그인된 상태로 회원가입 요청',
         401,
-        '이미 로그인된 회원입니다.',
+        '이미 로그인 되어있습니다.',
       );
     }
 
