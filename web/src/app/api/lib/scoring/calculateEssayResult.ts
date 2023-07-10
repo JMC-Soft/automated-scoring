@@ -1,5 +1,10 @@
 import countEssay from '@/app/api/repository/essay/countEssay';
-import { EssayResponse, ScoringResponseDto } from '@/app/api/lib/types';
+import {
+  EssayResponse,
+  EssaySub,
+  EssayTotal,
+  ScoringResponseDto,
+} from '@/app/api/lib/types';
 import ApiError from '@/app/api/lib/class/ApiError';
 import calculateEssaySub from '@/app/api/lib/scoring/calculateEssaySub';
 import {
@@ -7,6 +12,7 @@ import {
   EXP_STATISTICS,
   ORG_STATISTICS,
   CONT_STATISTICS,
+  TOTAL_STATISTICS,
 } from '@/app/api/const/dataSet';
 import calculateEssayTotal from '@/app/api/lib/scoring/calculateEssayTotal';
 
@@ -16,13 +22,16 @@ const calculateEssayResult = async ({
   cont,
 }: ScoringResponseDto): Promise<EssayResponse> => {
   try {
-    const expRes = calculateEssaySub(exp, EXP_STATISTICS);
-    const orgRes = calculateEssaySub(org, ORG_STATISTICS);
-    const contRes = calculateEssaySub(cont, CONT_STATISTICS);
+    const expRes: EssaySub = calculateEssaySub(exp, EXP_STATISTICS);
+    const orgRes: EssaySub = calculateEssaySub(org, ORG_STATISTICS);
+    const contRes: EssaySub = calculateEssaySub(cont, CONT_STATISTICS);
 
     // 총점 계산
     const totalScore = expRes.score + orgRes.score + contRes.score;
-    const totalRes = calculateEssayTotal(totalScore);
+    const totalRes: EssayTotal = calculateEssayTotal(
+      totalScore,
+      TOTAL_STATISTICS,
+    );
 
     // 전체 글쓴이 수
     const highCount = await countEssay();
