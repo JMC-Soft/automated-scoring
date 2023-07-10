@@ -9,6 +9,7 @@ import {
   Title,
   Tooltip,
   ArcElement,
+  LineElement,
 } from 'chart.js';
 
 export { RadarChart } from './RadarChart';
@@ -27,4 +28,5 @@ ChartJS.register(
   Title,
   Tooltip,
   ArcElement,
+  LineElement,
 );

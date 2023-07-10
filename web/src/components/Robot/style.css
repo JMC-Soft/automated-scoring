@@ -1,0 +1,63 @@
+.robot-head {
+  transform-origin: center bottom;
+  animation: ani-head 0.5s infinite alternate
+    cubic-bezier(0.46, 0.18, 0.66, 0.93);
+}
+
+.robot-arm {
+  transform-origin: top right;
+  animation: ani-running-arm 0.5s alternate infinite linear;
+}
+
+.robot-foot-right {
+  transform-origin: right top;
+  animation: ani-running-leg-right 0.5s alternate infinite linear;
+}
+.robot-foot-left {
+  transform-origin: right top;
+  animation: ani-running-leg-left 0.5s alternate infinite linear;
+}
+
+.running {
+  animation: ani-scale-running 5s linear forwards;
+  transform-origin: left bottom;
+}
+
+@keyframes ani-scale-running {
+  0% {
+    transform: scale(0) translateX(-100%);
+  }
+  100% {
+    transform: scale(1) translateX(300%); /* Translating the X after the scale */
+  }
+}
+
+@keyframes ani-head {
+  to {
+    transform: rotateX(-20deg);
+  }
+}
+@keyframes ani-running-leg-right {
+  from {
+    transform: skew(-15deg);
+  }
+  to {
+    transform: skew(15deg);
+  }
+}
+@keyframes ani-running-leg-left {
+  from {
+    transform: skew(15deg);
+  }
+  to {
+    transform: skew(-15deg);
+  }
+}
+@keyframes ani-running-arm {
+  from {
+    transform: skew(-5deg);
+  }
+  to {
+    transform: skew(5deg);
+  }
+}

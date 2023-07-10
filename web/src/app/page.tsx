@@ -1,15 +1,15 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import IconOutline from '@/components/ui/Icon/IconOutline';
+import SymbolOutline from '@/components/ui/Logo/SymbolOutline';
 import Button from '@/components/ui/Button';
 import ResultPageImage from '$/images/result_page.png';
-import RobotImage from '$/images/robot.png';
+import RobotImage from '$/images/robot/robot.png';
 
 export default function Home() {
   return (
     <div className="bg-background-500">
-      <IconOutline className="-translate-y-1/5 fixed bottom-0 right-0 w-1/4 -translate-x-1/2 stroke-white text-sm" />
+      <SymbolOutline className="-translate-y-1/5 fixed bottom-0 right-0 w-1/4 -translate-x-1/2 stroke-white text-sm" />
 
       <main className="relative mx-auto w-4/5">
         <div className="flex flex-col gap-y-6 pt-24">
@@ -45,7 +45,6 @@ export default function Home() {
           <Image
             src={ResultPageImage}
             style={{
-              zIndex: 10,
               margin: '2rem auto',
               boxShadow: '0 0 8px 0 rgba(0, 0, 0, 0.2)',
               borderRadius: '1rem',

@@ -4,7 +4,7 @@ type Props = {
   className?: string;
 };
 
-function IconOutline({ className }: Props) {
+function SymbolOutline({ className }: Props) {
   return (
     <svg
       className={className}
@@ -56,4 +56,4 @@ function IconOutline({ className }: Props) {
   );
 }
 
-export default IconOutline;
+export default SymbolOutline;

@@ -37,6 +37,7 @@ function DetailView({ className }: { className?: string }) {
           <tr className="bg-primary-50">
             <th colSpan={2}>채점 영역</th>
             <th className="h-10 border-l border-white px-1">점수</th>
+            <th className="h-10 border-l border-white px-1">총점</th>
           </tr>
         </thead>
         <tbody className="w-full text-center">
@@ -52,7 +53,15 @@ function DetailView({ className }: { className?: string }) {
                   </td>
                 )}
                 <td className="h-10 whitespace-nowrap border-r">{sub}</td>
-                <td>{tempData[idx * 3 + subIdx]}</td>
+                <td className="border-r">{tempData[idx * 3 + subIdx]}</td>
+                {subIdx === 0 && (
+                  <td
+                    rowSpan={tableData.subCategory.length}
+                    className="whitespace-nowrap text-center"
+                  >
+                    8
+                  </td>
+                )}
               </tr>
             )),
           )}
