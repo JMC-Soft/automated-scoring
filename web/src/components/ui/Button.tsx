@@ -1,3 +1,5 @@
+'use client';
+
 /* eslint-disable react/button-has-type */
 
 import React from 'react';
@@ -9,7 +11,8 @@ type ButtonProps = {
   className?: string;
   onClick?: () => void;
   size?: 'small' | 'medium' | 'large';
-  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger'; // new prop
+  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+  round?: boolean;
 };
 
 function Button({
@@ -19,12 +22,13 @@ function Button({
   onClick = () => {},
   size = 'medium',
   variant = 'primary', // set default to 'primary'
+  round = false,
 }: ButtonProps) {
   return (
     <button
       type={type}
       className={clsx(
-        'relative flex cursor-pointer touch-manipulation select-none whitespace-nowrap rounded-xl text-white shadow-lg transition-all duration-300 hover:bg-primary-600 hover:opacity-100 hover:shadow-2xl',
+        'cursor-pointer touch-manipulation select-none whitespace-nowrap text-white shadow-lg transition-all duration-300 hover:bg-primary-600 hover:opacity-100 hover:shadow-2xl',
         className,
         { 'px-4 py-1 text-sm': size === 'small' },
         { 'px-6 py-2': size === 'medium' },
@@ -34,6 +38,7 @@ function Button({
         { 'bg-success-500 hover:shadow-lg': variant === 'success' },
         { 'bg-warning-500 hover:shadow-lg': variant === 'warning' },
         { 'bg-danger-500 hover:shadow-lg': variant === 'danger' },
+        { rounded: round },
       )}
       onClick={onClick}
     >

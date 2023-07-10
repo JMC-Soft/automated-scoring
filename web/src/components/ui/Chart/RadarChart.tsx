@@ -2,18 +2,21 @@ import React from 'react';
 import { ChartData, ChartOptions } from 'chart.js';
 import { Radar } from 'react-chartjs-2';
 import merge from 'lodash/merge';
-import { GradeMap } from '@/lib/constants/constants';
+import hexToRGBA from '@/lib/utils/colors';
+import COLORS from '@/lib/constants/colors';
 
 type Props<T> = {
   labels: T[];
+  totalDataList: number[];
   dataList: number[];
   className?: string;
   options?: ChartOptions<'radar'>;
   data?: Partial<ChartData<'radar'>>;
 };
 
-export default function TriangleRadarChart<T>({
+export function RadarChart<T>({
   labels,
+  totalDataList,
   dataList,
   className,
   options: customOptions,
@@ -23,14 +26,27 @@ export default function TriangleRadarChart<T>({
     labels,
     datasets: [
       {
+        label: '내 점수',
         data: dataList,
-        backgroundColor: 'rgba(0, 123, 255, 0.2)',
-        borderColor: 'rgb(0, 123, 255)',
-        pointBackgroundColor: 'rgb(0, 123, 255)',
-        pointBorderColor: '#fff',
+        backgroundColor: hexToRGBA(COLORS.primary[500], 0.2),
+        borderColor: COLORS.primary[500],
+        pointBackgroundColor: COLORS.primary[500],
+        pointBorderColor: COLORS.primary[500],
         pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgb(0, 123, 255)',
-        borderWidth: 1,
+        pointHoverBorderColor: COLORS.secondary[500],
+        borderWidth: 2,
+        pointRadius: 3,
+      },
+      {
+        label: '전체 평균',
+        data: totalDataList,
+        backgroundColor: hexToRGBA(COLORS.accent[500], 0.2),
+        borderColor: COLORS.accent[500],
+        pointBackgroundColor: COLORS.accent[500],
+        pointBorderColor: COLORS.accent[500],
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: COLORS.accent[500],
+        borderWidth: 2,
         pointRadius: 3,
       },
     ],
@@ -45,22 +61,20 @@ export default function TriangleRadarChart<T>({
           label(context) {
             const score = context.raw as number;
 
-            return `${GradeMap[score]}`;
+            return score.toFixed(1);
           },
         },
-      },
-      legend: {
-        display: false,
       },
     },
     scales: {
       r: {
         min: 0,
-        max: 5,
+        max: 3,
         pointLabels: {
           font: {
-            size: 16,
-            weight: 'bold',
+            size: 14,
+            weight: '500',
+            family: 'pretendard',
           },
         },
         // 간격
@@ -70,11 +84,11 @@ export default function TriangleRadarChart<T>({
         },
         // 배경 선
         grid: {
-          color: 'rgba(255, 99, 132, 0.2)',
+          color: hexToRGBA(COLORS.primary[500], 0.2),
           lineWidth: 1,
         },
         // 수직 선
-        angleLines: { color: 'rgba(255, 99, 132, 0.2)' },
+        angleLines: { color: hexToRGBA(COLORS.primary[500], 0.2) },
       },
     },
   };
@@ -88,3 +102,5 @@ export default function TriangleRadarChart<T>({
     </div>
   );
 }
+
+export default React.memo(RadarChart);

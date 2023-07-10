@@ -23,6 +23,11 @@
     "react-dom": "18.2.0",
     "sharp": "^0.32.1",
     "tailwind-scrollbar-hide": "^1.1.7",
+    "victory-axis": "^36.6.11",
+    "victory-box-plot": "^36.6.11",
+    "victory-chart": "^36.6.11",
+    "victory-core": "^36.6.11",
+    "victory-scatter": "^36.6.11",
     "zustand": "^4.3.8"
   },
   "devDependencies": {

@@ -10,7 +10,7 @@ type Props = {
   className?: string;
 };
 
-function TwiceBarChart({ dataset1, dataset2, className }: Props) {
+export function TwiceBarChart({ dataset1, dataset2, className }: Props) {
   const data: ChartData<'bar'> = {
     labels: ['Average', 'My Score'],
     datasets: [

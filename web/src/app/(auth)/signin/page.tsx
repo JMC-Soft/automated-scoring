@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import useInput from '@/lib/hooks/useInput';
-import { isEmail } from '@/lib/utils/utils';
+import isEmail from '@/lib/utils/isEmail';
 import Form from '@/components/ui/Form/Form';
 import Input from '@/components/ui/Input';
 import useAuthStore from '@/store/authStore';

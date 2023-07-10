@@ -23,7 +23,7 @@ export default function Header() {
   };
 
   return (
-    <header className="z-10 col-span-2 row-span-1 flex h-20 w-full justify-center bg-white shadow">
+    <header className="sticky top-0 z-10 flex h-16 w-full justify-center bg-white shadow">
       <div className="flex h-full w-4/5 items-center justify-between">
         <Link className="flex h-full items-center gap-x-6" href="/">
           <Image
