@@ -1,19 +1,21 @@
+import COLORS from '@/lib/constants/colors';
+
 const GRADE_MAP = {
   A: {
-    color: '#3399FF',
+    color: COLORS.secondary[500],
   },
   B: {
     // color: '#33CC33',
-    color: '#2673BF',
+    color: COLORS.primary[500],
   },
   C: {
-    color: '#194D7F',
+    color: COLORS.primary[700],
   },
   D: {
-    color: '#0C273F',
+    color: COLORS.warning[300],
   },
   E: {
-    color: '#000000',
+    color: COLORS.error[500],
   },
 };
 

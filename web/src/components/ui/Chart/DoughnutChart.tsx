@@ -28,7 +28,7 @@ export function DoughnutChart({
     datasets: [
       {
         data: [percentage, 100 - percentage],
-        backgroundColor: ['#0066B3', '#F0F8FF'],
+        backgroundColor: [GRADE_MAP[grade].color, '#F0F8FF'],
         borderWidth: 0,
       },
     ],
