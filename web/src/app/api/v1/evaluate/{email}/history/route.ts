@@ -28,6 +28,7 @@ export async function GET(
       );
 
     uid = decodedToken.uid;
+    console.log(uid);
 
     /**
      * TODO: uid를 이용해서 사용자의 평가 기록을 가져온다.
