@@ -18,8 +18,10 @@ const saveEssay = async ({
       essayText,
       uid,
     });
+
+    return doc.id;
   } catch (err) {
-    ApiError.handleError(err);
+    throw ApiError.handleError(err);
   }
 };
 

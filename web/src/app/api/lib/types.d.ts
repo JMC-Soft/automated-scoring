@@ -26,12 +26,14 @@ interface ScoringResponseDto {
   cont: number[];
 }
 
-interface EssayResponse {
+interface EssayResponseDto {
   candidate: number; // 전체 참여자 수
   total: EssayTotal;
   exp: EssaySub;
   org: EssaySub;
   cont: EssaySub;
+  countCharacters: number; // 글자 수
+  countSentences: number; // 문장수
 }
 
 interface EssayTotal {
@@ -81,10 +83,24 @@ interface TotalStatistics {
   Q3: number;
 }
 
+interface ScoringResultEntity {
+  countCharacters: number; // 글자 수
+  countSentences: number; // 문장수
+  createdAt: string; // 생성일
+  essayId: string; // 에세이 ID
+  uid: string | null; // 유저 ID
+  topic: string; // 주제
+  candidate: number; // 전체 참여자 수
+  total: EssayTotal;
+  exp: EssaySub;
+  org: EssaySub;
+  cont: EssaySub;
+}
+
 export {
   ScoringResponseDto,
   EssayRequestDto,
-  EssayResponse,
+  EssayResponseDto,
   UserInfoDto,
   LoginDto,
   RegisterDto,
@@ -92,4 +108,5 @@ export {
   EssayTotal,
   SubStatistics,
   TotalStatistics,
+  ScoringResultEntity,
 };
