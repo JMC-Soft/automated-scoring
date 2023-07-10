@@ -8,9 +8,10 @@ const calculateEssaySub = (
 ): EssaySub => {
   const score = sub.reduce((acc: number, cur: number) => acc + cur, 0);
 
+  // resSub: [{ score: 10, average: 10 }, { score: 10, average: 10 }]
   const resSub = sub.reduce<{ score: number; average: number }[]>(
     (acc, cur, idx) => {
-      acc.push({ score: cur, average: STATISTICS.subAverage[idx] });
+      acc.push({ score: cur, average: STATISTICS.detail[idx] });
       return acc;
     },
     [],

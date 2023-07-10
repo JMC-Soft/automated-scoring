@@ -17,6 +17,7 @@ interface UserInfoDto {
 interface EssayRequestDto {
   email: string | null;
   topic: string;
+  type: string;
   essayText: string;
 }
 
@@ -36,7 +37,8 @@ interface EssayResponseDto {
   countSentences: number; // 문장수
 }
 
-interface EssayTotal {
+// Essay.
+interface Essay {
   score: number;
   average: number;
   grade: 'A' | 'B' | 'C' | 'D' | 'E';
@@ -47,32 +49,13 @@ interface EssayTotal {
   Q1: number;
   Q3: number;
 }
-
-interface EssaySub {
-  score: number;
-  sub: number[{ score: number; average: number }];
-  average: number;
-  grade: 'A' | 'B' | 'C' | 'D' | 'E';
-  percentage: number;
-  min: number;
-  max: number;
-  median: number;
-  Q1: number;
-  Q3: number;
+interface EssayTotal extends Essay {}
+interface EssaySub extends Essay {
+  sub: object[{ score: number; average: number }];
 }
 
-interface SubStatistics {
-  average: number;
-  standardDeviation: number;
-  data: { [key: string]: number };
-  subAverage: number[];
-  min: number;
-  max: number;
-  median: number;
-  Q1: number;
-  Q3: number;
-}
-interface TotalStatistics {
+// Statistics. 채점 결과 결과 통계 interface
+interface Statistics {
   average: number;
   standardDeviation: number;
   data: { [key: string]: number };
@@ -82,7 +65,12 @@ interface TotalStatistics {
   Q1: number;
   Q3: number;
 }
+interface TotalStatistics extends Statistics {}
+interface SubStatistics extends Statistics {
+  detail: number[];
+}
 
+// DB 구조
 interface ScoringResultEntity {
   countCharacters: number; // 글자 수
   countSentences: number; // 문장수
@@ -95,6 +83,12 @@ interface ScoringResultEntity {
   exp: EssaySub;
   org: EssaySub;
   cont: EssaySub;
+}
+interface EssayEntitiy {
+  essayText: string;
+  topic: string;
+  type: string;
+  uid: string | null;
 }
 
 export {
@@ -109,4 +103,6 @@ export {
   SubStatistics,
   TotalStatistics,
   ScoringResultEntity,
+  EssayEntitiy,
+  Statistics,
 };
