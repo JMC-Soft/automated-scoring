@@ -1,28 +1,26 @@
 'use client';
 
 import React, { ChangeEvent, useEffect, useRef } from 'react';
-import noteStyles from '@/lib/styles/note.module.css';
+import clsx from 'clsx';
 
 type Props = {
   text: string;
   onTextChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   readonly?: boolean;
+  title?: string;
+  className?: string;
 };
 
-function Note({ text, onTextChange, readonly }: Props) {
+function Note({ text, onTextChange, readonly, title, className }: Props) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const lineRef = useRef<HTMLDivElement>(null);
   const resizeTextArea = () => {
-    if (!textAreaRef.current || !sectionRef.current || !lineRef.current) return;
+    if (!textAreaRef.current || !sectionRef.current) return;
 
     const currentScrollTop = sectionRef.current.scrollTop;
 
     textAreaRef.current.style.height = '100%';
-    lineRef.current.style.height = '100%';
-    const height = textAreaRef.current.scrollHeight;
-    textAreaRef.current.style.height = `${height}px`;
-    lineRef.current.style.height = `${height}px`;
+    textAreaRef.current.style.height = `${textAreaRef.current}px`;
 
     sectionRef.current.scrollTop = currentScrollTop;
   };
@@ -30,10 +28,16 @@ function Note({ text, onTextChange, readonly }: Props) {
   useEffect(resizeTextArea, [text]);
 
   return (
-    <div className={noteStyles.paper} ref={sectionRef}>
-      <div className={noteStyles.line} ref={lineRef} />
+    <div
+      className={clsx(
+        'flex h-full max-h-full w-full flex-col items-center overflow-y-scroll border shadow-lg scrollbar-hide',
+        className,
+      )}
+      ref={sectionRef}
+    >
+      {title && <h2 className="text-xl font-semibold">{title}</h2>}
       <textarea
-        className={noteStyles.paperContent}
+        className="min-h-full w-full flex-1 resize-none text-lg font-semibold outline-none"
         ref={textAreaRef}
         defaultValue={text}
         onChange={onTextChange}

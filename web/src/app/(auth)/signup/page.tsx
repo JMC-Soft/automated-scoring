@@ -3,7 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import useSignupStore from '@/store/signupStore';
-import { isEmail } from '@/lib/utils/utils';
+import isEmail from '@/lib/utils/isEmail';
 import Form from '@/components/ui/Form/Form';
 import Input from '@/components/ui/Input';
 import useAuthStore from '@/store/authStore';

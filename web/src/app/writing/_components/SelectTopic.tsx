@@ -30,7 +30,7 @@ function SelectTopic() {
           'bottom-0 left-0 right-0 top-0 bg-gray-700/10': isOpen,
         })}
       />
-      <div className="group relative flex w-1/3 cursor-pointer flex-col rounded border-4 border-primary-500 text-lg text-tertiary-700 shadow-primary-300 drop-shadow-lg">
+      <div className="text-tertiary-700 group relative flex w-1/3 cursor-pointer flex-col rounded border-4 border-primary-500 text-lg shadow-primary-300 drop-shadow-lg">
         <div
           role="presentation"
           className="flex h-14 cursor-pointer items-center bg-white px-6 transition-all group-hover:bg-primary-50 group-hover:text-xl group-hover:font-extrabold group-hover:text-primary-500"
@@ -39,7 +39,7 @@ function SelectTopic() {
           {selectedOption || '에세이 주제를 선택해주세요.'}
           <ArrowSmallDownIcon
             className={clsx(
-              'ml-auto h-6 stroke-2 transition-all group-hover:stroke-[4px] group-hover:font-extrabold',
+              'ml-auto h-6 stroke-2 transition-all group-hover:stroke-primary-500 group-hover:stroke-[4px] group-hover:font-extrabold',
               { 'rotate-180': isOpen },
             )}
           />

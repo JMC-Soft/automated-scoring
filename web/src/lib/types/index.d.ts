@@ -43,7 +43,9 @@ export interface SubCategory {
   score: number;
   sub: number[];
   average: number;
-  grade: 'A' | 'B' | 'C' | 'D' | 'E';
+  grade: Grade;
 }
+
+export type Grade = 'A' | 'B' | 'C' | 'D' | 'E';
 
 export type EssayResult = EssayRequest & EssayResponse;
