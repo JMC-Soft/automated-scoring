@@ -40,10 +40,6 @@ interface EssayResponse {
   cont: EssaySubDto;
 }
 
-interface ScoringRequestDto {
-  essayText: string;
-}
-
 interface ScoringResponseDto {
   exp: number[];
   org: number[];
@@ -57,7 +53,6 @@ interface Statistics {
 }
 
 export {
-  ScoringRequestDto,
   ScoringResponseDto,
   EssayRequestDto,
   EssayResponse,

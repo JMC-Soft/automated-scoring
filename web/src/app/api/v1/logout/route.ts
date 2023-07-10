@@ -1,17 +1,27 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
+import ApiError from '@/app/api/lib/class/ApiError';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    /**
-     * TODO: 로그인 여부 검증 로직 필요
-     * 로그인 된 상태라고 가정하고 이후 코드 작성.
-     */
+    const decodedToken = await getDecodedToken(req);
+    if (!decodedToken) {
+      throw new ApiError(
+        '로그인 정보 없이 로그아웃 요청',
+        401,
+        '로그인 되어있지 않습니다',
+      );
+    }
 
     // idToken을 헤더에서 삭제하여 반환
     const res = NextResponse.json({ msg: 'ok' }, { status: 200 });
     res.cookies.delete('idToken');
     return res;
   } catch (err) {
+    if (err instanceof ApiError) {
+      return NextResponse.json({ msg: err.resMessage }, { status: err.status });
+    }
+
     console.log('stack: GET /api/v1/logout');
     console.log(err);
     return NextResponse.json({ msg: '서버 오류입니다.' }, { status: 500 });

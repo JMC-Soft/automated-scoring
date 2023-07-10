@@ -1,12 +1,15 @@
-import { HIGH_DATA_TOTAL_NUMBER, TOTAL_SUM } from '@/app/api/const/dataSet';
+import {
+  HIGH_DATA_TOTAL_NUMBER,
+  TOTAL_STATISTICS,
+} from '@/app/api/const/dataSet';
 import calculateGrade from '@/app/api/lib/scoring/calculateGrade';
 
 const calculateEssayTotal = (totalScore: number) => {
   const totalPercentage = { start: 0, end: 0 };
 
-  const lowerStudents = Object.keys(TOTAL_SUM.data).reduce(
+  const lowerStudents = Object.keys(TOTAL_STATISTICS.data).reduce(
     (acc: number, cur: string) => {
-      return Number(cur) <= totalScore ? acc + TOTAL_SUM.data[cur] : acc;
+      return Number(cur) <= totalScore ? acc + TOTAL_STATISTICS.data[cur] : acc;
     },
     0,
   );
@@ -36,7 +39,7 @@ const calculateEssayTotal = (totalScore: number) => {
 
   return {
     score: totalScore,
-    average: TOTAL_SUM.average,
+    average: TOTAL_STATISTICS.average,
     percentageStart: totalPercentage.start,
     percentageEnd: totalPercentage.end,
   };

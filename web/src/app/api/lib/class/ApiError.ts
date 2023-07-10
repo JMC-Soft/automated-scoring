@@ -1,3 +1,4 @@
+import { FirebaseAuthError } from 'firebase-admin/lib/utils/error';
 import { FirebaseError } from '@firebase/util';
 import {
   EMAIL_ALREADY_EXISTS,
@@ -34,9 +35,9 @@ class ApiError extends Error {
     if (err.code === USER_NOT_FOUND)
       return new ApiError(err.message, 404, '유저 정보를 찾을 수 없습니다.');
     if (err.code === EMAIL_ALREADY_EXISTS)
-      throw new ApiError(err.message, 409, '이미 존재하는 이메일입니다');
+      throw new ApiError(err.message, 409, '이미 존재하는 이메일입니다.');
     if (err.code === INVALID_EMAIL)
-      throw new ApiError(err.message, 422, '유효하지 않은 이메일입니다');
+      throw new ApiError(err.message, 422, '유효하지 않은 이메일입니다.');
     if (err.code === WEAK_PASSWORD)
       throw new ApiError(
         err.message,
@@ -44,7 +45,7 @@ class ApiError extends Error {
         '비밀번호 형식이 올바르지 않습니다.',
       );
     if (err.code === INVALID_DISPLAY_NAME)
-      throw new ApiError(err.message, 422, '유효하지 않은 닉네임입니다');
+      throw new ApiError(err.message, 422, '유효하지 않은 닉네임입니다.');
     if (err.code === ID_TOKEN_EXPIRED)
       return new ApiError(err.message, 401, '토큰이 만료되었습니다.');
     if (err.code === INVALID_CREDENTIAL)
@@ -53,11 +54,17 @@ class ApiError extends Error {
     return new ApiError(err.message, 500, '서버 오류입니다.');
   }
 
+  private static isFirebaseAuthError(err: unknown): err is FirebaseAuthError {
+    return (err as FirebaseAuthError).code.startsWith('auth/');
+  }
+
   public static handleError(err: any) {
-    if (err instanceof FirebaseError) {
+    if (ApiError.isFirebaseAuthError(err)) {
       return ApiError.firebaseError(err);
     }
+
     if (err instanceof Error) {
+      // console.log(err instanceof FirebaseAuthError);
       return new ApiError(err.message, 500);
     }
 

@@ -2,7 +2,7 @@ import { Statistics } from '@/app/api/lib/types';
 
 const HIGH_DATA_TOTAL_NUMBER: number = 713;
 
-const TOTAL_SUM: Statistics = {
+const TOTAL_STATISTICS: Statistics = {
   average: 25.5,
   standardDeviation: 3.45,
   data: {
@@ -67,7 +67,7 @@ const CONT_STATISTICS: Statistics = {
 
 export {
   HIGH_DATA_TOTAL_NUMBER,
-  TOTAL_SUM,
+  TOTAL_STATISTICS,
   EXP_STATISTICS,
   ORG_STATISTICS,
   CONT_STATISTICS,
