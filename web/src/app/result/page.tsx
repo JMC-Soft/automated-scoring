@@ -23,7 +23,7 @@ function Page() {
           median={26}
           q3={29}
           point={25}
-          categoryList={['표현', '구성', '문맥', '총합']}
+          categoryList={['표현', '구성', '내용', '총합']}
         />
         <ReviewNote className="col-start-1 col-end-3 row-start-2 row-end-4 bg-white p-1.5" />
         <SummaryView className="col-start-3 col-end-4" />

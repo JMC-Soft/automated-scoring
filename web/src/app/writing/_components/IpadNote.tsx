@@ -2,15 +2,25 @@
 
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
+import { useRouter } from 'next/navigation';
 import SelectTopic from '@/app/writing/_components/SelectTopic';
 import useStore from '@/lib/hooks/useStore';
 import useEssayStore from '@/store/essayStore';
 import Robot from '@/components/Robot';
 
 function IpadNote() {
-  const [isRunning, setIsRunning] = useState(false);
-  const essayText = useStore(useEssayStore, (state) => state.essayText);
-  const setEssayText = useEssayStore((state) => state.setEssayText);
+  const [isRunning] = useState(false);
+  const [essayText, setEssayText] = useStore(useEssayStore, (state) => [
+    state.essayText,
+    state.setEssayText,
+    state.topic,
+  ]);
+  // const [fetchEvaluateEssay, setResult] = useEssayStore((state) => [
+  //   state.fetchEvaluateEssay,
+  //   state.setResult,
+  // ]);
+  const router = useRouter();
+
   const sectionRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const textLength = essayText?.length || 0;
@@ -32,8 +42,33 @@ function IpadNote() {
     setEssayText(e.target.value);
   };
 
-  const onSubmitClick = () => {
-    setIsRunning(true);
+  const handleEvaluate = async () => {
+    router.push('/result');
+
+    // if (!essayText) {
+    //   alert('에세이를 작성해주세요.');
+    //   return;
+    // }
+    //
+    // if (!topic) {
+    //   alert('주제를 선택해주세요.');
+    //   return;
+    // }
+    //
+    // if (!window.confirm('채점을 시작하시겠습니까?')) {
+    //   return;
+    // }
+    //
+    // try {
+    //   setIsRunning(true);
+    //   const result = await fetchEvaluateEssay({ essayText, topic });
+    //   setResult(result);
+    //   router.push('/result');
+    // } catch (e) {
+    //   if (e instanceof Error) {
+    //     alert(e.message);
+    //   }
+    // }
   };
 
   return (
@@ -64,7 +99,7 @@ function IpadNote() {
         >
           {textLength} / 1500
         </span>
-        <button type="button" onClick={onSubmitClick} className="font-bold">
+        <button type="button" onClick={handleEvaluate} className="font-bold">
           제출하기
         </button>
       </div>

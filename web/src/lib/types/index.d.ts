@@ -28,24 +28,32 @@ export interface EssayRequest {
 
 export interface EssayResponse {
   candidate: number;
-  total: {
-    score: number;
-    average: number;
-    percentageStart: number;
-    percentageEnd: number;
-  };
-  exp: SubCategory;
-  org: SubCategory;
-  cont: SubCategory;
+  countCharacters: number;
+  countSentences: number;
+  total: Category;
+  exp: Category & Detail[];
+  org: Category & Detail[];
+  cont: Category & Detail[];
 }
 
-export interface SubCategory {
+export interface Category {
+  sub: Detail[];
+  min: 0;
+  max: 0;
+  median: 0;
+  Q1: 0;
+  Q3: 0;
   score: number;
-  sub: number[];
   average: number;
   grade: Grade;
+  percentage: number;
 }
 
 export type Grade = 'A' | 'B' | 'C' | 'D' | 'E';
 
 export type EssayResult = EssayRequest & EssayResponse;
+
+export type Detail = {
+  score: number;
+  average: number;
+};

@@ -53,13 +53,20 @@ function DetailView({ className }: { className?: string }) {
                   </td>
                 )}
                 <td className="h-10 whitespace-nowrap border-r">{sub}</td>
-                <td className="border-r">{tempData[idx * 3 + subIdx]}</td>
+                <td className="border-r">
+                  {tempData[idx * 3 + subIdx]}{' '}
+                  <span className="text-sm text-gray-400">/ 3</span>
+                </td>
                 {subIdx === 0 && (
                   <td
                     rowSpan={tableData.subCategory.length}
-                    className="whitespace-nowrap text-center"
+                    className="whitespace-nowrap text-center text-lg"
                   >
                     8
+                    <span className="text-base text-gray-400">
+                      {' '}
+                      / {3 * tableData.subCategory.length}
+                    </span>
                   </td>
                 )}
               </tr>

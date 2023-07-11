@@ -19,7 +19,7 @@
 }
 
 .running {
-  animation: ani-scale-running 5s linear forwards;
+  animation: ani-scale-running 3s linear forwards;
   transform-origin: left bottom;
 }
 

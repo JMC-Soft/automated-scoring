@@ -28,7 +28,7 @@ function RecentHistoryView() {
                   <span className="font-bold">구성 :</span> 10
                 </div>
                 <div>
-                  <span className="font-bold">문맥 :</span> 9
+                  <span className="font-bold">내용 :</span> 9
                 </div>
               </div>
               <div>글자 수 : 1520자</div>
