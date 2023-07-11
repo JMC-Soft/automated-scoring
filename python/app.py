@@ -5,20 +5,22 @@ from transformers import ElectraTokenizer, pipeline
 app = Flask(__name__)
 
 model_names = ["cont0", "cont1",  "cont3","exp0", "exp1", "exp2", "org0", "org1", "org2", "org3"]
-save_directory = "onnx/"
+essay_directory = "onnx_essay/"
 
-models = {
-    name: ORTModelForSequenceClassification.from_pretrained(save_directory + name, file_name="model_quantized.onnx") for
+
+# essay part
+models_essay = {
+    name: ORTModelForSequenceClassification.from_pretrained(essay_directory + name, file_name="model_optimized.onnx") for
     name in model_names}
-tokenizers = {name: ElectraTokenizer.from_pretrained(save_directory + name) for name in model_names}
-#tokenizers = ElectraTokenizer.from_pretrained(tokenizer_file="tokenizer.json")
-pipelines = {name: pipeline("text-classification", model=models[name], tokenizer=tokenizers[name]) for name in
+tokenizers_essay = {name: ElectraTokenizer.from_pretrained(essay_directory + name) for name in model_names}
+pipelines_essay = {name: pipeline("text-classification", model=models_essay[name], tokenizer=tokenizers_essay[name],padding=True, truncation=True) for name in
              model_names}
+
 
 label_dict = {"LABEL_0":0,"LABEL_1":1,"LABEL_2":2,"LABEL_3":3}
 
-@app.route("/predict", methods=["POST"])
-def high():
+@app.route("/predict/essay", methods=["POST"])
+def essay():
     if request.method == "POST":
 
         data = request.get_json(force=True)
@@ -28,13 +30,12 @@ def high():
 
         # Perform inference using all models
 
-        results = {name: label_dict[pipelines[name](input_text)[0]["label"]] for name in model_names}
+        results = {name: label_dict[pipelines_essay[name](input_text)[0]["label"]] for name in model_names}
 
         for key in results:
-            if key == "cont1":
+            if key == "cont1" or "exp2" or "org3":
                 pass
-            elif key == "org1":
-                results[key] += 2
+
             else:
                 results[key] += 1
 
@@ -50,6 +51,7 @@ def high():
 
 
         return jsonify(resp)
+    
 
 @app.route("/")
 def test():
