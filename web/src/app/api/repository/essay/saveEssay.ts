@@ -22,7 +22,7 @@ const saveEssay = async (
 
     await doc.set(essay);
 
-    return doc.id;
+    return { doc, essay };
   } catch (err) {
     throw ApiError.handleError(err);
   }
