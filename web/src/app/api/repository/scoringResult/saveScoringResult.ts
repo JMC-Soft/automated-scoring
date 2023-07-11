@@ -1,6 +1,7 @@
 import ApiError from '@/app/api/lib/class/ApiError';
 import { db } from '@/app/api/config/firebase.admin';
 import { EssayResponseDto, ScoringResultEntity } from '@/app/api/lib/types';
+import makeCreatedAt from '@/app/api/lib/makeCreatedAt';
 
 const saveScoringResult = async (
   essayId: string,
@@ -11,13 +12,10 @@ const saveScoringResult = async (
   try {
     const doc = db.collection('ScoringResult').doc();
 
-    const date = new Date();
-    const createdAt = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-
     const scoringResult: ScoringResultEntity = {
       countCharacters: essayRes.countCharacters,
       countSentences: essayRes.countSentences,
-      createdAt,
+      createdAt: makeCreatedAt(),
       essayId,
       uid,
       topic,

@@ -20,11 +20,11 @@ export async function POST(req: NextRequest) {
     if (email) {
       const decodedToken = await getDecodedToken(req);
       if (!decodedToken) {
-        await saveEssay({ essayText, topic, type, uid });
+        await saveEssay(essayText, topic, type, uid);
         throw new ApiError('토큰이 유효하지 않음', 401, '로그인이 필요합니다.');
       }
       if (decodedToken.email !== email) {
-        await saveEssay({ essayText, topic, type, uid });
+        await saveEssay(essayText, topic, type, uid);
         throw new ApiError(
           '프론트에서 받은 email정보와 토큰의 email 정보가 다름',
           401,
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
       uid = decodedToken.uid;
     }
 
-    const essayId = await saveEssay({ essayText, topic, type, uid });
+    const essayId = await saveEssay(essayText, topic, type, uid);
 
     // essay를 scoring server에 보내 채점 결과 객체를 반환
     const scoringRes: ScoringResponseDto = await fetchToScoringServer(

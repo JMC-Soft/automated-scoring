@@ -89,6 +89,7 @@ interface EssayEntitiy {
   topic: string;
   type: string;
   uid: string | null;
+  createdAt?: string;
 }
 
 export {
