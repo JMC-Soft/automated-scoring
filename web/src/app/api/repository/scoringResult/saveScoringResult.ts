@@ -5,9 +5,10 @@ import { EvaluateResponseDto, ScoringResultEntity } from '@/app/api/lib/types';
 const saveScoringResult = async (
   evaluateRes: EvaluateResponseDto,
   uid: string | null,
+  docId: string,
 ) => {
   try {
-    const doc = db.collection('ScoringResult').doc();
+    const doc = db.collection('ScoringResult').doc(docId);
 
     const scoringResult: ScoringResultEntity = {
       ...evaluateRes,

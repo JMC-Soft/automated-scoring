@@ -11,12 +11,14 @@ const calculateEssayTotal = (
 ): EssayTotal => {
   const lowerStudents = Object.keys(STATISTICS.data).reduce(
     (acc: number, cur: string) => {
-      return Number(cur) < totalScore ? acc + STATISTICS.data[cur] : acc;
+      return Number(cur) <= totalScore ? acc + STATISTICS.data[cur] : acc;
     },
     0,
   );
 
-  const cumulativePercentage = (lowerStudents / HIGH_DATA_TOTAL_NUMBER) * 100;
+  const cumulativePercentage = Math.round(
+    (lowerStudents / HIGH_DATA_TOTAL_NUMBER) * 100,
+  );
 
   return {
     score: totalScore,

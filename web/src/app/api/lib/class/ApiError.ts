@@ -32,7 +32,6 @@ class ApiError extends Error {
     // AuthErrorCode
     // AUTH_ERROR_CODES_MAP_DO_NOT_USE_INTERNALLY
 
-    return new ApiError(err.message, 401, '패스워드가 잘못되었습니다.');
     if (err.code === USER_NOT_FOUND)
       return new ApiError(err.message, 404, '유저 정보를 찾을 수 없습니다.');
     if (err.code === EMAIL_ALREADY_EXISTS)
