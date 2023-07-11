@@ -14,7 +14,7 @@ interface UserInfoDto {
   nickname: string;
 }
 
-interface EssayRequestDto {
+interface EvaluateRequestDto {
   email: string | null;
   topic: string;
   type: string;
@@ -27,14 +27,22 @@ interface ScoringResponseDto {
   cont: number[];
 }
 
-interface EssayResponseDto {
+interface EvaluateResponseDto {
   candidate: number; // 전체 참여자 수
+  countCharacters: number; // 글자 수
+  countSentences: number; // 문장수
+  createdAt: string; // 생성일
+  essayId: string; // essayId
+  essayInfo: {
+    text: string;
+    topic: string;
+    type: string;
+  };
+
   total: EssayTotal;
   exp: EssaySub;
   org: EssaySub;
   cont: EssaySub;
-  countCharacters: number; // 글자 수
-  countSentences: number; // 문장수
 }
 
 // Essay.
@@ -71,30 +79,22 @@ interface SubStatistics extends Statistics {
 }
 
 // DB 구조
-interface ScoringResultEntity {
-  countCharacters: number; // 글자 수
-  countSentences: number; // 문장수
-  createdAt: string; // 생성일
-  essayId: string; // 에세이 ID
+interface ScoringResultEntity extends EvaluateResponseDto {
   uid: string | null; // 유저 ID
-  topic: string; // 주제
-  candidate: number; // 전체 참여자 수
-  total: EssayTotal;
-  exp: EssaySub;
-  org: EssaySub;
-  cont: EssaySub;
 }
+
 interface EssayEntitiy {
   essayText: string;
   topic: string;
   type: string;
   uid: string | null;
+  createdAt?: string;
 }
 
 export {
   ScoringResponseDto,
-  EssayRequestDto,
-  EssayResponseDto,
+  EvaluateRequestDto,
+  EvaluateResponseDto,
   UserInfoDto,
   LoginDto,
   RegisterDto,

@@ -8,7 +8,6 @@ import {
   INVALID_EMAIL,
   USER_NOT_FOUND,
   WEAK_PASSWORD,
-  WRONG_PASSWORD,
 } from '@/app/api/const/errors';
 
 class ApiError extends Error {
@@ -30,8 +29,10 @@ class ApiError extends Error {
   }
 
   public static firebaseError(err: FirebaseError) {
-    if (err.code === WRONG_PASSWORD)
-      return new ApiError(err.message, 401, '패스워드가 잘못되었습니다.');
+    // AuthErrorCode
+    // AUTH_ERROR_CODES_MAP_DO_NOT_USE_INTERNALLY
+
+    return new ApiError(err.message, 401, '패스워드가 잘못되었습니다.');
     if (err.code === USER_NOT_FOUND)
       return new ApiError(err.message, 404, '유저 정보를 찾을 수 없습니다.');
     if (err.code === EMAIL_ALREADY_EXISTS)
@@ -55,16 +56,23 @@ class ApiError extends Error {
   }
 
   private static isFirebaseAuthError(err: unknown): err is FirebaseAuthError {
-    return (err as FirebaseAuthError).code.startsWith('auth/');
+    try {
+      return (err as FirebaseAuthError).code.startsWith('auth/');
+    } catch (error) {
+      return false;
+    }
   }
 
   public static handleError(err: any) {
-    if (ApiError.isFirebaseAuthError(err)) {
+    if (err instanceof FirebaseError || ApiError.isFirebaseAuthError(err)) {
       return ApiError.firebaseError(err);
     }
 
+    if (err instanceof ApiError) {
+      return err;
+    }
+
     if (err instanceof Error) {
-      // console.log(err instanceof FirebaseAuthError);
       return new ApiError(err.message, 500);
     }
 

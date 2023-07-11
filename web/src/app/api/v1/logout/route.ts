@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 import ApiError from '@/app/api/lib/class/ApiError';
 
 export async function GET(req: NextRequest) {
   try {
-    const decodedToken = await getDecodedToken(req);
-    if (!decodedToken) {
-      throw new ApiError(
-        '로그인 정보 없이 로그아웃 요청',
-        401,
-        '로그인 되어있지 않습니다',
+    const idToken = req.cookies.get('idToken');
+    if (!idToken) {
+      return NextResponse.json(
+        { msg: '로그인 되어있지 않습니다' },
+        { status: 401 },
       );
     }
 
