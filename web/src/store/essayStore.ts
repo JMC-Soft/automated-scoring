@@ -1,37 +1,39 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { EssayRequest, EssayResponse, EssayResult } from '@/lib/types';
+import {
+  EvaluateRequest,
+  EvaluateResponse,
+  EssayResult,
+  Topic,
+} from '@/lib/types';
 import { API_BASE_URL } from '@/lib/constants/constants';
 import useAuthStore from '@/store/authStore';
 
-export type EssayState = EssayRequest & {
+export type EssayState = EvaluateRequest & {
   result: EssayResult;
 };
 
 export type EssayActions = {
-  setTopic: (topic: string) => void;
+  setTopic: (topic: Topic) => void;
   setEssayText: (essayText: string) => void;
   fetchEvaluateEssay: ({
     topic,
     essayText,
-  }: EssayRequest) => Promise<EssayResult>;
-  setResult: (result: EssayResult) => void;
+  }: EvaluateRequest) => Promise<EvaluateResponse>;
 };
 
 const useEssayStore = create<EssayState & EssayActions>()(
   devtools(
     persist(
       (set) => ({
-        topic: '',
+        topic: {} as Topic,
         essayText: '',
         result: {} as EssayResult,
-        setTopic: (topic: string) => set({ topic }),
+        setTopic: (topic) => set({ topic }),
         setEssayText: (essayText: string) => set({ essayText }),
         fetchEvaluateEssay: async ({ topic, essayText }) => {
           const email = useAuthStore.getState().user?.email ?? null;
-          const replaceText = essayText
-            .replaceAll('"', "'")
-            .replaceAll('\n', ' ');
+
           const response = await fetch(`${API_BASE_URL}/evaluate`, {
             method: 'POST',
             headers: {
@@ -39,8 +41,9 @@ const useEssayStore = create<EssayState & EssayActions>()(
             },
             body: JSON.stringify({
               email,
-              topic,
-              essayText: replaceText,
+              topic: topic.title,
+              type: topic.type,
+              essayText,
             }),
           });
 
@@ -48,13 +51,10 @@ const useEssayStore = create<EssayState & EssayActions>()(
             throw new Error('에세이 평가에 실패했습니다.\n다시 시도해 주세요.');
           }
 
-          return {
-            topic,
-            essayText,
-            ...((await response.json()) as EssayResponse),
-          };
+          const essayId: EvaluateResponse = await response.json();
+
+          return essayId;
         },
-        setResult: (result: EssayResult) => set({ result }),
       }),
       {
         name: 'essayStore',

@@ -1,29 +1,38 @@
 import React from 'react';
 import clsx from 'clsx';
+import { SubStatistic } from '@/lib/types';
 
-const defaultData = [
-  {
-    mainCategory: '표현',
-    subCategory: ['문법의 적절성', '단어 사용의 적절성', '문장 표현의 적절성'],
+const DETAIL_MAP = {
+  0: {
+    mainTitle: '표현',
+    subTitle: ['문법의 적절성', '단어 사용의 적절성', '문장 표현의 적절성'],
   },
-  {
-    mainCategory: '구성',
-    subCategory: [
+  1: {
+    mainTitle: '구성',
+    subTitle: [
       '문단 내 구조의 적절성',
       '문단 간 구조의 적절성',
       '구조의 일관성',
       '분량의 적절성',
     ],
   },
-  {
-    mainCategory: '내용',
-    subCategory: ['주제의 명료성', '근거의 적절성', '프롬프트 독해력'],
+  2: {
+    mainTitle: '내용',
+    subTitle: ['주제의 명료성', '근거의 적절성', '프롬프트 독해력'],
   },
-];
+};
 
-function DetailView({ className }: { className?: string }) {
-  const tempData = [2, 1, 2, 1, 2, 3, 1, 3, 2, 3];
-
+function DetailView({
+  className,
+  exp,
+  cont,
+  org,
+}: {
+  className?: string;
+  exp: SubStatistic;
+  cont: SubStatistic;
+  org: SubStatistic;
+}) {
   return (
     <div
       className={clsx(
@@ -41,37 +50,40 @@ function DetailView({ className }: { className?: string }) {
           </tr>
         </thead>
         <tbody className="w-full text-center">
-          {defaultData.map((tableData, idx) =>
-            tableData.subCategory.map((sub, subIdx) => (
-              <tr key={sub} className="border-b">
+          {[exp, org, cont].map((statistic, idx) => {
+            const { sub } = statistic;
+            const detail = DETAIL_MAP[idx as keyof typeof DETAIL_MAP];
+
+            return detail.subTitle.map((title, subIdx) => (
+              <tr key={detail.mainTitle} className="border-b">
                 {subIdx === 0 && (
                   <td
-                    rowSpan={tableData.subCategory.length}
+                    rowSpan={detail.subTitle.length}
                     className="whitespace-nowrap border-r text-center"
                   >
-                    {tableData.mainCategory} 영역
+                    {detail.mainTitle} 영역
                   </td>
                 )}
-                <td className="h-10 whitespace-nowrap border-r">{sub}</td>
+                <td className="h-10 whitespace-nowrap border-r">{title}</td>
                 <td className="border-r">
-                  {tempData[idx * 3 + subIdx]}{' '}
+                  {sub[subIdx].score}
                   <span className="text-sm text-gray-400">/ 3</span>
                 </td>
                 {subIdx === 0 && (
                   <td
-                    rowSpan={tableData.subCategory.length}
+                    rowSpan={detail.subTitle.length}
                     className="whitespace-nowrap text-center text-lg"
                   >
-                    8
+                    {statistic.score}
                     <span className="text-base text-gray-400">
                       {' '}
-                      / {3 * tableData.subCategory.length}
+                      / {3 * detail.subTitle.length}
                     </span>
                   </td>
                 )}
               </tr>
-            )),
-          )}
+            ));
+          })}
         </tbody>
       </table>
     </div>

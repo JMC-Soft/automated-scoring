@@ -5,30 +5,31 @@ import { ChartData, ChartOptions, Plugin } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import merge from 'lodash/merge';
 import GRADE_MAP from '@/lib/constants/chart';
-import { Grade } from '@/lib/types';
+import { Statistic } from '@/lib/types';
+import COLORS from '@/lib/constants/colors';
 
 type Props = {
+  title: string;
+  statistics: Statistic;
   className?: string;
   options?: ChartOptions<'doughnut'>;
   data?: Partial<ChartData<'doughnut'>>;
-  percentage?: number;
-  grade?: Grade;
-  title: string;
 };
 
 export function DoughnutChart({
   className,
   options: customOptions,
   data: customData,
-  percentage = 78,
-  grade = 'B',
+  statistics,
   title,
 }: Props) {
+  const { percentage, grade } = statistics;
+
   const defaultData: ChartData<'doughnut'> = {
     datasets: [
       {
         data: [percentage, 100 - percentage],
-        backgroundColor: [GRADE_MAP[grade].color, '#F0F8FF'],
+        backgroundColor: [GRADE_MAP[grade].color, COLORS.background[500]],
         borderWidth: 0,
       },
     ],
