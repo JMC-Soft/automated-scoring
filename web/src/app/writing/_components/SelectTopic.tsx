@@ -8,9 +8,8 @@ import useStore from '@/lib/hooks/useStore';
 
 const options = [
   '나의 위인전',
-  'Godzilla',
-  'Back to the future',
-  'Shutter Island',
+  '혐오시설 건설문제에 대한 본인의 생각',
+  '영화감상문',
 ];
 
 function SelectTopic() {
