@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import SelectTopic from '@/app/writing/_components/SelectTopic';

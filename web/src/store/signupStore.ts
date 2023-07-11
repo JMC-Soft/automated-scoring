@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { ChangeEvent } from 'react';
 import { SignUpRequest, User } from '@/lib/types';
 import { API_BASE_URL } from '@/lib/constants/constants';
 
