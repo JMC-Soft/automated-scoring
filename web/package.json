@@ -12,6 +12,7 @@
     "@firebase/auth": "^1.0.0",
     "@firebase/util": "^1.9.3",
     "@heroicons/react": "^2.0.18",
+    "@sgratzl/chartjs-chart-boxplot": "^4.2.3",
     "chart.js": "^4.3.0",
     "clsx": "^1.2.1",
     "firebase": "^9.23.0",
@@ -21,13 +22,9 @@
     "react": "18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.45.1",
     "sharp": "^0.32.1",
     "tailwind-scrollbar-hide": "^1.1.7",
-    "victory-axis": "^36.6.11",
-    "victory-box-plot": "^36.6.11",
-    "victory-chart": "^36.6.11",
-    "victory-core": "^36.6.11",
-    "victory-scatter": "^36.6.11",
     "zustand": "^4.3.8"
   },
   "devDependencies": {

@@ -1,24 +1,22 @@
 'use client';
 
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import SelectTopic from '@/app/writing/_components/SelectTopic';
 import useStore from '@/lib/hooks/useStore';
 import useEssayStore from '@/store/essayStore';
-import Robot from '@/components/Robot';
 
 function IpadNote() {
-  const [isRunning] = useState(false);
-  const [essayText, setEssayText] = useStore(useEssayStore, (state) => [
+  const [essayText, topic] = useStore(useEssayStore, (state) => [
     state.essayText,
-    state.setEssayText,
     state.topic,
   ]);
-  // const [fetchEvaluateEssay, setResult] = useEssayStore((state) => [
-  //   state.fetchEvaluateEssay,
-  //   state.setResult,
-  // ]);
+  const [fetchEvaluateEssay, setEssayText] = useEssayStore((state) => [
+    state.fetchEvaluateEssay,
+    state.setEssayText,
+  ]);
+
   const router = useRouter();
 
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -43,32 +41,28 @@ function IpadNote() {
   };
 
   const handleEvaluate = async () => {
-    router.push('/result');
+    if (!essayText) {
+      alert('에세이를 작성해주세요.');
+      return;
+    }
 
-    // if (!essayText) {
-    //   alert('에세이를 작성해주세요.');
-    //   return;
-    // }
-    //
-    // if (!topic) {
-    //   alert('주제를 선택해주세요.');
-    //   return;
-    // }
-    //
-    // if (!window.confirm('채점을 시작하시겠습니까?')) {
-    //   return;
-    // }
-    //
-    // try {
-    //   setIsRunning(true);
-    //   const result = await fetchEvaluateEssay({ essayText, topic });
-    //   setResult(result);
-    //   router.push('/result');
-    // } catch (e) {
-    //   if (e instanceof Error) {
-    //     alert(e.message);
-    //   }
-    // }
+    if (!topic) {
+      alert('주제를 선택해주세요.');
+      return;
+    }
+
+    if (!window.confirm('채점을 시작하시겠습니까?')) {
+      return;
+    }
+
+    try {
+      const essayID = await fetchEvaluateEssay({ essayText, topic });
+      router.push(`/result/${essayID}`);
+    } catch (e) {
+      if (e instanceof Error) {
+        alert(e.message);
+      }
+    }
   };
 
   return (
@@ -76,7 +70,6 @@ function IpadNote() {
       className="flex h-full max-h-full w-full flex-col overflow-hidden overflow-y-scroll scrollbar-hide"
       ref={sectionRef}
     >
-      <Robot isRunning={isRunning} />
       <div className="flex items-center">
         <span className="text-xl font-semibold">주제 :</span>
         <SelectTopic />
