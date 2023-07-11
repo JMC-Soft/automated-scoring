@@ -6,20 +6,30 @@ const calculateEssaySub = (
   sub: number[],
   STATISTICS: SubStatistics,
 ): EssaySub => {
-  const score = sub.reduce((acc: number, cur: number) => acc + cur, 0);
+  // // 각 점수의 합
+  // const score = sub.reduce((acc: number, cur: number) => acc + cur, 0);
+  //
+  // // sub: [2, 2, 2]
+  // // resSub: [{ score: 2, average: 2.3 }, { score: 2, average: 2.3 }, { score: 2, average: 2.3 }]
+  // const resSub = sub.reduce<{ score: number; average: number }[]>(
+  //   (acc, cur, idx) => {
+  //     acc.push({ score: cur, average: STATISTICS.detail[idx] });
+  //     return acc;
+  //   },
+  //   [],
+  // );
+  let score = 0;
+  const resSub: { score: number; average: number }[] = [];
 
-  // resSub: [{ score: 10, average: 10 }, { score: 10, average: 10 }]
-  const resSub = sub.reduce<{ score: number; average: number }[]>(
-    (acc, cur, idx) => {
-      acc.push({ score: cur, average: STATISTICS.detail[idx] });
-      return acc;
-    },
-    [],
-  );
+  // resSub: [{ score: 2, average: 2.3 }, { score: 2, average: 2.3 }, { score: 2, average: 2.3 }]
+  sub.forEach((cur, idx) => {
+    score += cur;
+    resSub.push({ score: cur, average: STATISTICS.detail[idx] });
+  });
 
   const lowerStudents = Object.keys(STATISTICS.data).reduce(
     (acc: number, cur: string) => {
-      return Number(cur) <= score ? acc + STATISTICS.data[cur] : acc;
+      return Number(cur) < score ? acc + STATISTICS.data[cur] : acc;
     },
     0,
   );

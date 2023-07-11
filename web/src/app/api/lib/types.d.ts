@@ -59,7 +59,7 @@ interface Essay {
 }
 interface EssayTotal extends Essay {}
 interface EssaySub extends Essay {
-  sub: object[{ score: number; average: number }];
+  sub: { score: number; average: number }[];
 }
 
 // Statistics. 채점 결과 결과 통계 interface
