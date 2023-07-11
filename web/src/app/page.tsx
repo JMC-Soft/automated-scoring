@@ -5,6 +5,7 @@ import SymbolOutline from '@/components/ui/Logo/SymbolOutline';
 import Button from '@/components/ui/Button';
 import ResultPageImage from '$/images/result_page.png';
 import RobotImage from '$/images/robot/robot.png';
+import StartButton from '@/app/_components/StartButton';
 
 export default function Home() {
   return (
@@ -12,7 +13,7 @@ export default function Home() {
       <SymbolOutline className="-translate-y-1/5 fixed bottom-0 right-0 w-1/4 -translate-x-1/2 stroke-white text-sm" />
 
       <main className="relative mx-auto w-4/5">
-        <div className="flex flex-col gap-y-6 pt-24">
+        <div className="flex flex-col gap-y-6 py-24">
           <Image
             style={{
               position: 'absolute',
@@ -39,9 +40,7 @@ export default function Home() {
             답안을 자동으로 평가하고, 학습자의 현재 수준을 파악할 수 있습니다.
             (수정 예정)
           </p>
-          <Link href="/writing" className="mt-6 w-fit">
-            <Button>시작하기</Button>
-          </Link>
+          <StartButton />
           <Image
             src={ResultPageImage}
             style={{

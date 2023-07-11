@@ -4,30 +4,25 @@ import React from 'react';
 import clsx from 'clsx';
 
 type Props = {
-  type?: string;
-  name?: string;
+  type?: 'text' | 'password' | 'submit' | 'email';
   placeholder?: string;
   className?: string;
-  required?: boolean;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
   [key: string]: any;
 };
 
 function Input({
   type = 'text',
-  name = '',
   placeholder = '',
   className = '',
-  required = false,
   disabled = false,
   ...props
 }: Props) {
+  const { register } = props;
+
   return (
     <input
       type={type}
-      name={name}
       className={clsx(
         'w-full border p-4',
         {
@@ -39,7 +34,6 @@ function Input({
       )}
       disabled={disabled}
       placeholder={placeholder}
-      required={required}
       {...props}
     />
   );

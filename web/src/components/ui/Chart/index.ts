@@ -11,11 +11,16 @@ import {
   ArcElement,
   LineElement,
 } from 'chart.js';
+import {
+  BoxPlotController,
+  BoxAndWiskers,
+} from '@sgratzl/chartjs-chart-boxplot';
 
 export { RadarChart } from './RadarChart';
 export { TwiceBarChart } from './TwiceBarChart';
 export { HalfDoughnutChart } from './HalfDoughnutChart';
 export { DoughnutChart } from './DoughnutChart';
+export { BoxPlot } from './BoxPlot';
 
 ChartJS.register(
   RadialLinearScale,
@@ -29,4 +34,6 @@ ChartJS.register(
   Tooltip,
   ArcElement,
   LineElement,
+  BoxPlotController,
+  BoxAndWiskers,
 );

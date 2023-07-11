@@ -1,123 +1,149 @@
 'use client';
 
-import React from 'react';
+/* eslint-disable react/jsx-props-no-spreading */
+
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import clsx from 'clsx';
 import useSignupStore from '@/store/signupStore';
 import isEmail from '@/lib/utils/isEmail';
 import Form from '@/components/ui/Form/Form';
-import Input from '@/components/ui/Input';
 import useAuthStore from '@/store/authStore';
-import useCheckUser from '@/lib/hooks/useCheckUser';
+import { SignUpRequest } from '@/lib/types';
 
 function SignUp() {
-  useCheckUser();
+  const [lastCheckedEmail, setLastCheckedEmail] = useState<string | null>(null);
 
   const {
-    nickname,
-    email,
-    password,
-    isUnique,
-    lastCheckedEmail,
-    status,
-    onChangeEmail,
-    onChangeNickname,
-    onChangePassword,
-    fetchCheckDuplicateEmail,
-    setLastCheckedEmail,
-    fetchSignUp,
-  } = useSignupStore();
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    getValues,
+  } = useForm<SignUpRequest>();
+
+  const { status, fetchCheckDuplicateEmail, fetchSignUp } = useSignupStore();
   const setUser = useAuthStore((state) => state.setUser);
   const router = useRouter();
 
   const handleCheckDuplicateEmail = async (e: React.MouseEvent) => {
     e.preventDefault();
+    const email = getValues('email');
     if (!isEmail(email)) {
-      alert('이메일 형식이 올바르지 않습니다.');
+      setError('email', { message: '이메일 형식이 올바르지 않습니다.' });
       return;
     }
 
     try {
       await fetchCheckDuplicateEmail(email);
-      alert('사용 가능한 이메일입니다.');
+      setLastCheckedEmail(email);
+      setError('email', { message: '' });
     } catch (err) {
       if (err instanceof Error) {
-        alert(err.message);
+        setError('email', { message: err.message });
       }
-    } finally {
-      setLastCheckedEmail(email);
+      setLastCheckedEmail(null);
     }
   };
 
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isUnique || email !== lastCheckedEmail) {
-      alert('중복 확인을 해주세요.');
-      return;
-    }
-
-    if (password.length < 6) {
-      alert('비밀번호는 6자 이상이어야 합니다.');
-      return;
-    }
+  const onSignUp = handleSubmit(async (data) => {
+    const { nickname, email, password } = data;
 
     try {
-      const userResponse = await fetchSignUp({ nickname, email, password });
-      alert(`${userResponse.nickname}님, 회원가입을 축하드립니다!`);
-      setUser(userResponse);
+      const user = await fetchSignUp({ nickname, email, password });
+      alert(`${user.nickname}님, 회원가입을 축하합니다!`);
+      setUser(user);
       router.push('/');
+      return;
     } catch (err) {
       if (err instanceof Error) {
-        alert(err.message);
+        setError('root', { message: err.message });
       }
     }
-  };
+  });
 
   return (
-    <Form onSubmit={handleSignup}>
+    <Form onSubmit={onSignUp}>
       <h2 className="py-4 text-4xl font-bold">회원가입</h2>
-      <Input
-        value={nickname}
-        onChange={onChangeNickname}
-        placeholder="닉네임"
-        required
-      />
-      <div className="w-full">
-        <div className="relative flex w-full items-center">
-          <Input
-            placeholder="이메일"
+      <div className="flex w-full flex-col gap-y-1">
+        <input
+          className="w-full border p-4"
+          type="nickname"
+          {...register('nickname', {
+            required: { value: true, message: '닉네임을 입력해주세요.' },
+          })}
+        />
+        {errors.nickname && (
+          <span className="px-4 text-warning-500">
+            {errors.nickname.message}
+          </span>
+        )}
+      </div>
+      <div className="flex w-full flex-col gap-y-1">
+        <div className="relative w-full">
+          <input
+            className="w-full border p-4"
             type="email"
-            value={email}
-            onChange={onChangeEmail}
-            required
+            {...register('email', {
+              required: { value: true, message: '이메일을 입력해주세요.' },
+              validate: (value) => {
+                if (!isEmail(value)) {
+                  return '이메일 형식이 올바르지 않습니다.';
+                }
+                if (value !== lastCheckedEmail) {
+                  return '이메일 중복 확인을 해주세요.';
+                }
+                return true;
+              },
+            })}
           />
           <button
+            className="absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-primary-500"
             type="button"
-            className="absolute right-5 text-lg font-bold text-secondary-500"
             onClick={handleCheckDuplicateEmail}
           >
             중복 확인
           </button>
         </div>
+
+        {errors.email && (
+          <span className="px-4 text-warning-500">{errors.email.message}</span>
+        )}
       </div>
-      <Input
-        value={password}
-        onChange={onChangePassword}
-        placeholder="비밀번호"
-        type="password"
-        autoComplete="off"
-        required
-      />
-      <Input
-        type="submit"
-        value="회원가입"
-        disabled={
-          !nickname ||
-          !email ||
-          !password ||
-          email !== lastCheckedEmail ||
-          status === 'pending'
-        }
-      />
+      <div className="w-full">
+        <input
+          className="w-full border p-4"
+          type="password"
+          {...register('password', {
+            required: { value: true, message: '비밀번호를 입력해주세요.' },
+            validate: (value) => {
+              if (value.length < 6) {
+                return '비밀번호는 6자 이상이어야 합니다.';
+              }
+              return true;
+            },
+          })}
+        />
+        {errors.password && (
+          <span className="px-4 text-warning-500">
+            {errors.password.message}
+          </span>
+        )}
+      </div>
+      <div className="w-full">
+        <input
+          className={clsx('w-full border p-4 text-white', {
+            'cursor-default bg-secondary-700/70': status === 'pending',
+            'cursor-pointer bg-secondary-700': status !== 'pending',
+          })}
+          type="submit"
+          disabled={status === 'pending'}
+        />
+        {errors.root && (
+          <span className="px-4 text-warning-500">{errors.root.message}</span>
+        )}
+      </div>
     </Form>
   );
 }
