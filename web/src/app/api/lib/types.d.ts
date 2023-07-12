@@ -66,12 +66,13 @@ interface EssaySub extends Essay {
 interface Statistics {
   average: number;
   standardDeviation: number;
-  data: { [key: string]: number };
+  data: { [key: number]: number };
   min: number;
   max: number;
   median: number;
   Q1: number;
   Q3: number;
+  grade: { [key: number]: 'A' | 'B' | 'C' | 'D' | 'E' };
 }
 interface TotalStatistics extends Statistics {}
 interface SubStatistics extends Statistics {
@@ -88,7 +89,7 @@ interface EssayEntitiy {
   topic: string;
   type: string;
   uid: string | null;
-  createdAt?: string;
+  createdAt: string;
 }
 
 export {

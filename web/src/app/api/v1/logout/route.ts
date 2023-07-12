@@ -19,10 +19,13 @@ export async function GET(req: NextRequest) {
     if (err instanceof ApiError) {
       return NextResponse.json({ msg: err.resMessage }, { status: err.status });
     }
-
     console.log('stack: GET /api/v1/logout');
     console.log(err);
-    return NextResponse.json({ msg: '서버 오류입니다.' }, { status: 500 });
+
+    const res = NextResponse.json({ msg: '서버 오류입니다.' }, { status: 500 });
+    res.cookies.delete('idToken');
+
+    return res;
   }
 }
 

@@ -1,24 +1,12 @@
 import ApiError from '@/app/api/lib/class/ApiError';
 import { db } from '@/app/api/config/firebase.admin';
 import { EssayEntitiy } from '@/app/api/lib/types';
-import makeCreatedAt from '@/app/api/lib/makeCreatedAt';
 
-const saveEssay = async (
-  essayText: string,
-  topic: string,
-  type: string,
-  uid: string | null,
-) => {
+const saveEssay = async (essay: EssayEntitiy, docId?: string) => {
   try {
-    const doc = db.collection('Essay').doc();
-
-    const essay: EssayEntitiy = {
-      essayText,
-      topic,
-      type,
-      uid,
-      createdAt: makeCreatedAt(),
-    };
+    const doc = docId
+      ? db.collection('Essay').doc(docId)
+      : db.collection('Essay').doc();
 
     await doc.set(essay);
 

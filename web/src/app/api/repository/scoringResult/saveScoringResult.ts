@@ -1,19 +1,15 @@
 import ApiError from '@/app/api/lib/class/ApiError';
 import { db } from '@/app/api/config/firebase.admin';
-import { EvaluateResponseDto, ScoringResultEntity } from '@/app/api/lib/types';
+import { ScoringResultEntity } from '@/app/api/lib/types';
 
 const saveScoringResult = async (
-  evaluateRes: EvaluateResponseDto,
-  uid: string | null,
-  essayDocId: string,
+  scoringResult: ScoringResultEntity,
+  docId?: string,
 ) => {
   try {
-    const doc = db.collection('ScoringResult').doc(essayDocId);
-
-    const scoringResult: ScoringResultEntity = {
-      ...evaluateRes,
-      uid,
-    };
+    const doc = docId
+      ? db.collection('ScoringResult').doc(docId)
+      : db.collection('ScoringResult').doc();
 
     await doc.set(scoringResult);
 

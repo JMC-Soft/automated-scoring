@@ -20,9 +20,16 @@ export async function POST(req: NextRequest) {
     const user = await findUserByEmailAndPassword(loginDto);
 
     const { email, displayName: nickname } = user;
-    if (!email || !nickname) {
+
+    if (!email) {
       throw new ApiError(
-        'firebase에서 받아온 User객체에서 email or nickname을 찾지 못하는 에러',
+        'firebase에서 받아온 User객체에서 email을 찾지 못하는 에러',
+        500,
+      );
+    }
+    if (!nickname) {
+      throw new ApiError(
+        'firebase에서 받아온 User객체에서 nickname을 찾지 못하는 에러',
         500,
       );
     }

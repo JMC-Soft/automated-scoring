@@ -29,6 +29,23 @@ const TOTAL_STATISTICS: TotalStatistics = {
   median: 26,
   Q1: 22,
   Q3: 29,
+
+  grade: {
+    17: 'E',
+    18: 'E',
+    19: 'D',
+    20: 'D',
+    21: 'D',
+    22: 'C',
+    23: 'C',
+    24: 'C',
+    25: 'C',
+    26: 'B',
+    27: 'B',
+    28: 'B',
+    29: 'A',
+    30: 'A',
+  },
 };
 
 // EXP 통계 데이터
@@ -50,6 +67,15 @@ const EXP_STATISTICS: SubStatistics = {
   median: 8,
   Q1: 6,
   Q3: 9,
+  grade: {
+    3: 'E',
+    4: 'E',
+    5: 'D',
+    6: 'C',
+    7: 'C',
+    8: 'B',
+    9: 'A',
+  },
 };
 
 // ORG 통계 데이터
@@ -70,6 +96,14 @@ const ORG_STATISTICS: SubStatistics = {
   median: 11,
   Q1: 9,
   Q3: 12,
+  grade: {
+    7: 'E',
+    8: 'D',
+    9: 'C',
+    10: 'C',
+    11: 'B',
+    12: 'A',
+  },
 };
 
 // CONT 통계 데이터
@@ -91,6 +125,15 @@ const CONT_STATISTICS: SubStatistics = {
   median: 7.5,
   Q1: 6,
   Q3: 8,
+  grade: {
+    3: 'E',
+    4: 'E',
+    5: 'D',
+    6: 'C',
+    7: 'C',
+    8: 'B',
+    9: 'A',
+  },
 };
 
 export {
