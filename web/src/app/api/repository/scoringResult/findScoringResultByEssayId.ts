@@ -3,8 +3,10 @@ import ApiError from '@/app/api/lib/class/ApiError';
 
 const findScoringResultByEssayId = async (essayId: string) => {
   try {
+    // const doc = db.collection('ScoringResult').where('essayId', '==', essayId);
     const doc = db.collection('ScoringResult').doc(essayId);
 
+    console.log(doc.get());
     const result = await doc.get();
 
     if (!result.exists)
@@ -14,7 +16,7 @@ const findScoringResultByEssayId = async (essayId: string) => {
         '채점 결과가 존재하지 않습니다.',
       );
 
-    return result.data();
+    return result;
   } catch (err) {
     throw ApiError.handleError(err);
   }

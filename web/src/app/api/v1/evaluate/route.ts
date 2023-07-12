@@ -39,8 +39,9 @@ export async function POST(req: NextRequest) {
     const essayDoc = await saveEssay(essayText, topic, type, uid);
 
     // essay를 scoring server에 보내 채점 결과 객체를 반환
+    const replaceText = essayText.replaceAll('"', "'").replaceAll('\n', ' ');
     const scoringRes: ScoringResponseDto = await fetchToScoringServer(
-      essayText,
+      replaceText,
     );
 
     // 채점 결과 객체에서 EvaluateRequestDto 재조합
@@ -51,13 +52,17 @@ export async function POST(req: NextRequest) {
     );
 
     // EssayResultDB에 response 결과 및 essayId 저장
-    const resultDoc = await saveScoringResult(evaluateRes, uid);
+    const resultDoc = await saveScoringResult(
+      evaluateRes,
+      uid,
+      essayDoc.doc.id,
+    );
     const resultId = resultDoc.doc.id;
 
-    return NextResponse.redirect(`/aapi/v1/evluate/${resultId}/result`);
+    // const resultUrl = new URL(`${req.nextUrl.origin}/result/${resultId}`);
+    // return NextResponse.redirect(resultUrl);
 
-    // return resultDoc.doc.id;
-    // return NextResponse.json(evaluateRes, { status: 200 });
+    return new NextResponse(resultId, { status: 200 });
   } catch (err) {
     if (err instanceof ApiError) {
       return NextResponse.json({ msg: err.resMessage }, { status: err.status });
