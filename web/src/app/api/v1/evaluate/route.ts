@@ -36,7 +36,12 @@ export async function POST(req: NextRequest) {
       uid = decodedToken.uid;
     }
 
-    const essayDoc = await saveEssay(essayText, topic, type, uid);
+    const { doc: essayDoc, essay } = await saveEssay(
+      essayText,
+      topic,
+      type,
+      uid,
+    );
 
     // essay를 scoring server에 보내 채점 결과 객체를 반환
     const replaceText = essayText.replaceAll('"', "'").replaceAll('\n', ' ');
@@ -44,24 +49,30 @@ export async function POST(req: NextRequest) {
       replaceText,
     );
 
-    // 채점 결과 객체에서 EvaluateRequestDto 재조합
+    // // dummy data
+    // const scoringRes = {
+    //   exp: [3, 3, 3],
+    //   org: [3, 3, 3, 3],
+    //   cont: [3, 3, 3],
+    // };
+
+    // 채점 결과 객체에서 EvaluateResponseDto 재조합
     const evaluateRes: EvaluateResponseDto = await makeEvaluateResponse(
       scoringRes,
-      essayDoc.doc.id,
-      essayDoc.essay,
+      essayDoc.id,
+      essay,
     );
 
     // EssayResultDB에 response 결과 및 essayId 저장
-    const resultDoc = await saveScoringResult(
+    const { doc: resultDoc } = await saveScoringResult(
       evaluateRes,
       uid,
-      essayDoc.doc.id,
+      essayDoc.id,
     );
-    const resultId = resultDoc.doc.id;
+    const resultId = resultDoc.id;
 
     // const resultUrl = new URL(`${req.nextUrl.origin}/result/${resultId}`);
     // return NextResponse.redirect(resultUrl);
-
     return new NextResponse(resultId, { status: 200 });
   } catch (err) {
     if (err instanceof ApiError) {

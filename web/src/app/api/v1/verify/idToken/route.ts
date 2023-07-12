@@ -32,13 +32,28 @@ export async function GET(req: NextRequest) {
       },
     );
   } catch (err) {
-    if (err instanceof ApiError) {
-      return NextResponse.json({ msg: err.resMessage }, { status: err.status });
-    }
+    // const body = { msg: '서버 오류입니다.' };
+    // const init = { status: 500 };
+
+    // if (err instanceof ApiError) {
+    //   body.msg = err.resMessage;
+    //   init.status = err.status;
+    //   // return NextResponse.json({ msg: err.resMessage }, { status: err.status });
+    // }
+    const isInstanceofApiError = err instanceof ApiError;
+
+    const res = NextResponse.json(
+      { msg: isInstanceofApiError ? err.resMessage : '서버 오류입니다.' },
+      { status: isInstanceofApiError ? err.status : 500 },
+    );
+    res.cookies.delete('idToken');
 
     console.log('stack: GET /api/v1/verify/idToken');
     console.log(err);
-    return NextResponse.json({ msg: '서버 오류입니다.' }, { status: 500 });
+    // return NextResponse.json({ msg: '서버 오류입니다.' }, { status: 500 });
+
+    return res;
+    // return NextResponse.json({ msg: '서버 오류입니다.' }, { status: 500 });
   }
 }
 

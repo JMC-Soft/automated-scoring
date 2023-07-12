@@ -11,7 +11,7 @@ const calculateEssayTotal = (
 ): EssayTotal => {
   const lowerStudents = Object.keys(STATISTICS.data).reduce(
     (acc: number, cur: string) => {
-      return Number(cur) <= totalScore ? acc + STATISTICS.data[cur] : acc;
+      return Number(cur) < totalScore ? acc + STATISTICS.data[cur] : acc;
     },
     0,
   );
