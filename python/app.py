@@ -52,7 +52,7 @@ def essay():
         results = {name: label_dict[pipelines_essay[name](input_text)[0]["label"]] for name in model_names}
 
         plus2_list = ["org0", "org2"]
-        for key in results:
+        for key in results.keys():
             
             if key in plus2_list:
                 results[key] += 2
@@ -62,7 +62,7 @@ def essay():
 
         resp = {"exp":[],"org":[],"cont":[]}
         
-        for key in results:
+        for key in results.keys():
             if "exp" in key:
                 resp["exp"].append(results[key])
             elif "cont" in key:
@@ -88,7 +88,7 @@ def explain():
         results = {name: label_dict[pipelines_explain[name](input_text)[0]["label"]] for name in model_names}
 
         plus0_list = ["cont1","exp2", "org3"]
-        for key in results:
+        for key in results.keys():
             
             if key in plus0_list:
                 pass
@@ -98,7 +98,7 @@ def explain():
 
         resp = {"exp":[],"org":[],"cont":[]}
         
-        for key in results:
+        for key in results.keys():
             if "exp" in key:
                 resp["exp"].append(results[key])
             elif "cont" in key:
@@ -123,7 +123,7 @@ def alternative():
         results = {name: label_dict[pipelines_alternative[name](input_text)[0]["label"]] for name in model_names}
         
         plus2_list = ["cont0", "cont3", "exp0", "org0", "org3"]
-        for key in results:
+        for key in results.keys():
             
             if key in plus2_list:
                 results[key] += 2
@@ -133,7 +133,7 @@ def alternative():
 
         resp = {"exp":[],"org":[],"cont":[]}
         
-        for key in results:
+        for key in results.keys():
             if "exp" in key:
                 resp["exp"].append(results[key])
             elif "cont" in key:
