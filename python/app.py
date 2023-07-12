@@ -85,7 +85,7 @@ def explain():
         input_text = data.get('essayText', None)
 
         # Perform inference using all models
-        results = {name: label_dict[models_explain[name](input_text)[0]["label"]] for name in model_names}
+        results = {name: label_dict[pipelines_explain[name](input_text)[0]["label"]] for name in model_names}
 
         plus0_list = ["cont1","exp2", "org3"]
         for key in results:
