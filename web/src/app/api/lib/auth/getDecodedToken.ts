@@ -15,7 +15,6 @@ const getDecodedToken = async (req: NextRequest) => {
 
     const decodedToken = await auth.verifyIdToken(idToken.value);
 
-
     return decodedToken;
   } catch (err) {
     throw ApiError.handleError(err);

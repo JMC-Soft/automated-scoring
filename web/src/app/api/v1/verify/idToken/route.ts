@@ -1,6 +1,5 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import findUserByEmail from '@/app/api/repository/user/findUserByEmail';
 import ApiError from '@/app/api/lib/class/ApiError';
 import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 
