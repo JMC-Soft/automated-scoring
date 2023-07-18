@@ -14,7 +14,7 @@ import {
   TOTAL_STATISTICS,
 } from '@/app/api/const/dataSet';
 import countEssay from '@/app/api/repository/essay/countEssay';
-import getGrade from '@/app/api/lib/scoring/getGrade';
+import calculateGrade from '@/app/api/lib/scoring/calculateGrade';
 import reduceObject from '@/app/api/lib/utils/reduceObject';
 
 const makeScoringResult = async (
@@ -23,25 +23,27 @@ const makeScoringResult = async (
   essay: EssayEntitiy,
 ): Promise<ScoringResultEntity> => {
   const { exp, org, cont } = subScore;
+  const sentenceRegex = /[.?!]+/g;
+  const characterRegex = /\b\w+\b/g;
 
-  const calculateSum = (arr: ScoringResponseSub[]) =>
-    reduceArray(
-      arr,
-      (acc: number, cur: ScoringResponseSub) => {
-        return acc + cur.score;
-      },
-      0,
-    );
-
-  const expSum = calculateSum(exp);
-  const orgSum = calculateSum(org);
-  const contSum = calculateSum(cont);
+  // sum 계산에 필요한 callback 함수
+  const sumCallback = (acc: number, cur: ScoringResponseSub) => {
+    return acc + cur.score;
+  };
+  const expSum = reduceArray(exp, sumCallback, 0);
+  const orgSum = reduceArray(org, sumCallback, 0);
+  const contSum = reduceArray(cont, sumCallback, 0);
   const totalSum = expSum + orgSum + contSum;
 
-  // TODO: countCharacters, countSentences 계산
+  // 글자수, 문장수 계산
+  const sentences = essay.essayText.match(sentenceRegex);
+  const countSentences = sentences ? sentences.length : 0;
+
+  const characters = essay.essayText.match(characterRegex);
+  const countCharacters = characters ? characters.length : 0;
 
   // percentage 계산에 필요한 callback 함수
-  const callback = (sum: number) => {
+  const percentageCallback = (sum: number) => {
     return (acc: number, value: number, key: number) => {
       if (Number(key) < sum) {
         return acc + value;
@@ -49,13 +51,12 @@ const makeScoringResult = async (
       return acc;
     };
   };
-
   const subResult = (STATISTICS: Statistics, sum: number) => {
     return {
       score: sum,
       average: STATISTICS.average,
-      grade: getGrade(sum, STATISTICS.maxScore),
-      percentage: reduceObject(STATISTICS.data, callback(sum), 0),
+      grade: calculateGrade(sum, STATISTICS.maxScore),
+      percentage: reduceObject(STATISTICS.data, percentageCallback(sum), 0),
       min: STATISTICS.min,
       max: STATISTICS.max,
       median: STATISTICS.median,
@@ -66,8 +67,8 @@ const makeScoringResult = async (
 
   return {
     candidate: HIGH_DATA_TOTAL_NUMBER + (await countEssay()),
-    countCharacters: 10,
-    countSentences: 10,
+    countCharacters,
+    countSentences,
     essayId,
     essayInfo: {
       text: essay.essayText,

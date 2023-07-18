@@ -1,12 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import saveEssay from '@/app/api/repository/essay/saveEssay';
-import fetchToScoringServer from '@/app/api/lib/scoring/fetchToScoringServer';
 import ApiError from '@/app/api/lib/class/ApiError';
-import {
-  EvaluateRequestDto,
-  ScoringResponseDto,
-  ScoringResultEntity,
-} from '@/app/api/lib/types';
+import { EvaluateRequestDto, ScoringResultEntity } from '@/app/api/lib/types';
 import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 import saveScoringResult from '@/app/api/repository/scoringResult/saveScoringResult';
 import makeCreatedAt from '@/app/api/lib/makeCreatedAt';
@@ -71,19 +66,19 @@ export async function POST(req: NextRequest) {
         { title: '문장 표현의 적절성', score: 3, average: 2.4 },
       ],
       org: [
-        { title: '문법의 적절성', score: 3, average: 2.4 },
-        { title: '단어 사용의 적절성', score: 3, average: 2.4 },
-        { title: '문장 표현의 적절성', score: 3, average: 2.4 },
-        { title: '문법의 적절성', score: 3, average: 2.4 },
+        { title: '문법의 적절성2', score: 3, average: 2.4 },
+        { title: '단어 사용의 적절성2', score: 3, average: 2.4 },
+        { title: '문장 표현의 적절성2', score: 3, average: 2.4 },
+        { title: '문법의 적절성2', score: 3, average: 2.4 },
       ],
       cont: [
-        { title: '문법의 적절성', score: 3, average: 2.4 },
-        { title: '단어 사용의 적절성', score: 3, average: 2.4 },
-        { title: '문장 표현의 적절성', score: 3, average: 2.4 },
+        { title: '문법의 적절성3', score: 3, average: 2.4 },
+        { title: '단어 사용의 적절성3', score: 3, average: 2.4 },
+        { title: '문장 표현의 적절성3', score: 3, average: 2.4 },
       ],
     };
 
-    // TODO: 채점 결과 객체에서 ScoringResult 객체 재조합
+    // 채점 결과 객체에서 ScoringResult 객체 재조합
     const scoringResult: ScoringResultEntity = await makeScoringResult(
       subScore,
       essayDoc.id,
