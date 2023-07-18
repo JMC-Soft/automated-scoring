@@ -21,7 +21,7 @@ type Props<T> = {
 
 ChartJS.register(RadialLinearScale);
 
-export function RadarChart<T>({
+function RadarChart<T>({
   labels,
   totalDataList,
   dataList,

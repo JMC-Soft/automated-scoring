@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import HalfDoughnutChart from "@/components/ui/Chart/HalfDoughnutChart";
+import HalfDoughnutChart from '@/components/ui/Chart/HalfDoughnutChart';
 
 function OverallPercentage({ percentage }: { percentage: number }) {
   return (

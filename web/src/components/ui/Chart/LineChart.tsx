@@ -98,7 +98,7 @@ export function DoughnutChart({
     plugins: {
       legend: {
         onClick(e, legendItem, legend) {
-          const datasets = legend.legendItems?.map((dataset, index) => {
+          const datasets = legend.legendItems?.map((dataset) => {
             return dataset.text;
           });
 
@@ -114,7 +114,7 @@ export function DoughnutChart({
           pointStyleWidth: 40,
           generateLabels(chart: Chart): LegendItem[] {
             const visibility: boolean[] = [];
-            for (let i = 0; i < chart.data.datasets.length; i++) {
+            for (let i = 0; i < chart.data.datasets.length; i += 1) {
               if (chart.isDatasetVisible(i)) {
                 visibility.push(false);
               } else {

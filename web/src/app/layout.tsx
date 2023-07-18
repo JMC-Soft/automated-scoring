@@ -1,6 +1,5 @@
 import './globals.css';
 import React from 'react';
-import localFont from 'next/font/local';
 import {
   ArcElement,
   BarElement,
@@ -24,11 +23,6 @@ import Footer from '@/app/_components/Footer';
 import getUser from '@/lib/utils/api/getUser';
 import StoreInitializer from '@/components/StoreInitializer';
 import pretendard from '@/lib/constants/fonts';
-
-// const pretendard = Roboto({
-//   weight: ['100', '300', '400', '500', '700', '900'],
-//   subsets: ['latin'],
-// });
 
 export const metadata = {
   title: '한국어 에세이 자동채점',

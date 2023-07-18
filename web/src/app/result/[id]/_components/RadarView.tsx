@@ -1,6 +1,6 @@
 import React from 'react';
 import { SubStatistic } from '@/lib/types';
-import RadarChart from "@/components/ui/Chart/RadarChart";
+import RadarChart from '@/components/ui/Chart/RadarChart';
 
 export const CATEGORY_LIST = [
   '문법',

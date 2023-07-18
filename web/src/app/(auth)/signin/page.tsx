@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import clsx from 'clsx';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import useAuthStore from '@/store/authStore';
 import { LoginRequest } from '@/lib/types';
 import isEmail from '@/lib/utils/isEmail';

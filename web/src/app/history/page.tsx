@@ -5,7 +5,7 @@ import Image from 'next/image';
 import RecentGradeHistory from '@/app/history/_components/RecentGradeHistory';
 import LineChart from '@/components/ui/Chart/LineChart';
 import RecentHistoryView from '@/app/result/[id]/_components/RecentHistoryView';
-import { RadarChart } from '@/components/ui/Chart/RadarChart';
+import RadarChart from '@/components/ui/Chart/RadarChart';
 import WordTable from '@/app/history/_components/WordTable';
 
 function Page() {

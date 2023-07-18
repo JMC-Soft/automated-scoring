@@ -3,7 +3,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import clsx from 'clsx';
 import useSignupStore from '@/store/signupStore';
@@ -11,7 +10,6 @@ import isEmail from '@/lib/utils/isEmail';
 import Form from '@/components/ui/Form/Form';
 import useAuthStore from '@/store/authStore';
 import { SignUpRequest } from '@/lib/types';
-import useCheckUser from '@/lib/hooks/useCheckUser';
 
 function SignUp() {
   const [lastCheckedEmail, setLastCheckedEmail] = useState<string | null>(null);
@@ -26,7 +24,6 @@ function SignUp() {
 
   const { status, fetchCheckDuplicateEmail, fetchSignUp } = useSignupStore();
   const setUser = useAuthStore((state) => state.setUser);
-  const router = useRouter();
 
   const handleCheckDuplicateEmail = async (e: React.MouseEvent) => {
     e.preventDefault();

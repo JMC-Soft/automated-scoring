@@ -10,7 +10,7 @@ type Props = {
   data?: Partial<ChartData<'doughnut'>>;
 };
 
-export function HalfDoughnutChart({
+function HalfDoughnutChart({
   className,
   options: customOptions,
   data: customData,
