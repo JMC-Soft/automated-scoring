@@ -92,6 +92,7 @@ export interface ScoringResultResponse extends ScoringResult {
     topic: string;
     type: string;
   };
+  resultHistory: ScoringResultEntity[] | null;
 }
 
 export interface EssayEntitiy {

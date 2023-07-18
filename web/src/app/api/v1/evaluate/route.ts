@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
     // 사용자가 로그인이 되어있는 경우
     if (email) {
       const decodedToken = await getDecodedToken(req);
+      // 사용자가 로그인되어있는데 토큰이 유효하지 않은 경우
       if (!decodedToken) {
         await saveEssay({
           essayText,
@@ -28,6 +29,7 @@ export async function POST(req: NextRequest) {
         throw new ApiError('토큰이 유효하지 않음', 401, '로그인이 필요합니다.');
       }
       if (decodedToken.email !== email) {
+        // 사용자의 이메일 정보와 토큰의 이메일 정보가 다른 경우
         await saveEssay({
           essayText,
           topic,

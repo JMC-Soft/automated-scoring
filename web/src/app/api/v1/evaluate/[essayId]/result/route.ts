@@ -2,7 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import ApiError from '@/app/api/lib/class/ApiError';
 import findScoringResultByEssayId from '@/app/api/repository/scoringResult/findScoringResultByEssayId';
 import findEssayById from '@/app/api/repository/essay/findEssayById';
-import { ScoringResultResponse } from '@/app/api/lib/types';
+import {
+  ScoringResultEntity,
+  ScoringResultResponse,
+} from '@/app/api/lib/types';
+import findScoringResultsByUidAndOrderBy from '@/app/api/repository/scoringResult/findScoringResultsByUidAndOrderBy';
 
 export async function GET(
   req: NextRequest,
@@ -15,6 +19,7 @@ export async function GET(
     const { uid, ...remainScoringResult } = await findScoringResultByEssayId(
       essayId,
     );
+
     // EssayId로 Essay를 찾아서 반환
     const {
       essayText: text,
@@ -24,6 +29,19 @@ export async function GET(
     } = await findEssayById(essayId);
 
     // TODO: 사용자 정보로 ScoringResult 세개를 찾아서 반환
+    let resultHistory = null;
+    if (uid) {
+      const docs = await findScoringResultsByUidAndOrderBy(
+        uid,
+        'createdAt',
+        'desc',
+        3,
+      );
+      resultHistory = docs.map((doc) => {
+        const data = doc.data() as ScoringResultEntity;
+        return data;
+      });
+    }
 
     const res: ScoringResultResponse = {
       ...remainScoringResult,
@@ -31,6 +49,7 @@ export async function GET(
         text,
         ...remainEssay,
       },
+      resultHistory,
     };
     return NextResponse.json(res, { status: 200 });
   } catch (err) {
