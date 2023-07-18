@@ -1,5 +1,10 @@
 import React from 'react';
-import { ChartData, ChartOptions } from 'chart.js';
+import {
+  ChartData,
+  ChartOptions,
+  Chart as ChartJS,
+  RadialLinearScale,
+} from 'chart.js';
 import { Radar } from 'react-chartjs-2';
 import merge from 'lodash/merge';
 import hexToRGBA from '@/lib/utils/colors';
@@ -13,6 +18,8 @@ type Props<T> = {
   options?: ChartOptions<'radar'>;
   data?: Partial<ChartData<'radar'>>;
 };
+
+ChartJS.register(RadialLinearScale);
 
 export function RadarChart<T>({
   labels,

@@ -4,9 +4,9 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import clsx from 'clsx';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import useAuthStore from '@/store/authStore';
 import { LoginRequest } from '@/lib/types';
 import isEmail from '@/lib/utils/isEmail';
@@ -15,9 +15,8 @@ function Page() {
   const [loginState, setLoginState] = useState('idle');
   const login = useAuthStore((state) => state.login);
   const setUser = useAuthStore((state) => state.setUser);
-  const searchParams = useSearchParams();
-
   const router = useRouter();
+  const redirect = useSearchParams().get('redirect');
 
   const {
     register,
@@ -31,7 +30,6 @@ function Page() {
       setLoginState('pending');
       const user = await login({ email: data.email, password: data.password });
       setUser(user);
-      const redirect = searchParams.get('redirect');
       router.push(redirect || '/');
     } catch (error) {
       setLoginState('idle');
@@ -42,7 +40,7 @@ function Page() {
   });
 
   return (
-    <>
+    <div>
       <form
         className="flex w-full flex-col items-center gap-y-4"
         onSubmit={onLogin}
@@ -106,7 +104,7 @@ function Page() {
         <Link href="/signup">회원가입</Link>
         <Link href="/findid">아이디 / 비밀번호 찾기</Link>
       </div>
-    </>
+    </div>
   );
 }
 

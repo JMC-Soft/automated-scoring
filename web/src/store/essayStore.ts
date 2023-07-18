@@ -51,7 +51,7 @@ const useEssayStore = create<EssayState & EssayActions>()(
             throw new Error('에세이 평가에 실패했습니다.\n다시 시도해 주세요.');
           }
 
-          const essayId: EvaluateResponse = await response.json();
+          const essayId = (await response.text()) as EvaluateResponse;
 
           return essayId;
         },

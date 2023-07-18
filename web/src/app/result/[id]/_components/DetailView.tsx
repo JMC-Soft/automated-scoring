@@ -40,7 +40,7 @@ function DetailView({
         className,
       )}
     >
-      <h3 className="text-2xl">채점 상세</h3>
+      <h3 className="text-2xl">채점 영역별 점수</h3>
       <table className="w-full flex-1 whitespace-nowrap">
         <thead>
           <tr className="bg-primary-50">

@@ -49,7 +49,6 @@ export function BoxPlot({
   const defaultOptions: ChartOptions<'boxplot'> = {
     responsive: true,
     maintainAspectRatio: false,
-    indexAxis: 'y',
     plugins: {
       legend: {
         display: false,

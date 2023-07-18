@@ -11,6 +11,7 @@ import isEmail from '@/lib/utils/isEmail';
 import Form from '@/components/ui/Form/Form';
 import useAuthStore from '@/store/authStore';
 import { SignUpRequest } from '@/lib/types';
+import useCheckUser from '@/lib/hooks/useCheckUser';
 
 function SignUp() {
   const [lastCheckedEmail, setLastCheckedEmail] = useState<string | null>(null);
@@ -54,8 +55,6 @@ function SignUp() {
       const user = await fetchSignUp({ nickname, email, password });
       alert(`${user.nickname}님, 회원가입을 축하합니다!`);
       setUser(user);
-      router.push('/');
-      return;
     } catch (err) {
       if (err instanceof Error) {
         setError('root', { message: err.message });

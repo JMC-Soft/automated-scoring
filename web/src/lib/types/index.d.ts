@@ -52,11 +52,11 @@ export interface Statistic {
   average: number;
   grade: Grade;
   percentage: number;
-  min: 0;
-  max: 0;
-  median: 0;
-  Q1: 0;
-  Q3: 0;
+  min: number;
+  max: number;
+  median: number;
+  Q1: number;
+  Q3: number;
 }
 
 export interface DetailResult {

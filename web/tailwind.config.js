@@ -7,7 +7,7 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      pretendard: 'var(--font-pretendard)',
+      sans: ['var(--font-pretendard)'],
     },
 
     extend: {
