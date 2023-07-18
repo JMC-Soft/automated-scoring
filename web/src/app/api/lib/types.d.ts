@@ -33,24 +33,6 @@ export interface ScoringResponseDto {
   cont: { title: string; detail: ScoringResponseDetail[] };
 }
 
-// export interface EvaluateResponseDto {
-//   candidate: number; // 전체 참여자 수
-//   countCharacters: number; // 글자 수
-//   countSentences: number; // 문장수
-//   createdAt: string; // 생성일
-//   essayId: string; // essayId
-//   essayInfo: {
-//     text: string;
-//     topic: string;
-//     type: string;
-//   };
-//
-//   total: EssayTotal;
-//   exp: EssaySub;
-//   org: EssaySub;
-//   cont: EssaySub;
-// }
-
 // Statistics. 채점 결과 결과 통계 interface
 export interface Statistics {
   average: number;
@@ -85,24 +67,29 @@ export interface EssaySub extends Essay {
   detail: ScoringResponseDetail[];
 }
 
-// DB 구조
-export interface ScoringResultEntity {
+interface ScoringResult {
   candidate: number; // 전체 참여자 수
   countCharacters: number; // 글자 수
   countSentences: number; // 문장수
   essayId: string; // essayId
+  total: EssayTotal;
+  exp: EssaySub;
+  org: EssaySub;
+  cont: EssaySub;
+  createdAt?: string; // 생성일
+}
+
+// DB 구조
+export interface ScoringResultEntity extends ScoringResult {
+  uid: string | null; // 유저 ID
+}
+
+export interface ScoringResultResponse extends ScoringResult {
   essayInfo: {
     text: string;
     topic: string;
     type: string;
   };
-
-  total: EssayTotal;
-  exp: EssaySub;
-  org: EssaySub;
-  cont: EssaySub;
-  uid: string | null; // 유저 ID
-  createdAt?: string; // 생성일
 }
 
 export interface EssayEntitiy {

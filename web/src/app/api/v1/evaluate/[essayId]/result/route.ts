@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import ApiError from '@/app/api/lib/class/ApiError';
 import findScoringResultByEssayId from '@/app/api/repository/scoringResult/findScoringResultByEssayId';
+import findEssayById from '@/app/api/repository/essay/findEssayById';
+import { ScoringResultResponse } from '@/app/api/lib/types';
 
 export async function GET(
   req: NextRequest,
@@ -8,8 +10,23 @@ export async function GET(
 ) {
   try {
     const { essayId } = params;
-    const res = await findScoringResultByEssayId(essayId);
+    const { uid, ...remainScoringResult } = await findScoringResultByEssayId(
+      essayId,
+    );
+    const {
+      essayText: text,
+      createdAt,
+      uid: essayUid,
+      ...remainEssay
+    } = await findEssayById(essayId);
 
+    const res: ScoringResultResponse = {
+      ...remainScoringResult,
+      essayInfo: {
+        text,
+        ...remainEssay,
+      },
+    };
     return NextResponse.json(res, { status: 200 });
   } catch (err) {
     console.log(err);

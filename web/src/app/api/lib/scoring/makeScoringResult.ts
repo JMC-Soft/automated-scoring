@@ -73,11 +73,6 @@ const makeScoringResult = async (
     countCharacters,
     countSentences,
     essayId,
-    essayInfo: {
-      text: essay.essayText,
-      topic: essay.topic,
-      type: essay.type,
-    },
     uid: essay.uid,
 
     total: {
