@@ -4,9 +4,7 @@ import { EssayEntitiy } from '@/app/api/lib/types';
 
 const saveEssay = async (essay: EssayEntitiy, docId?: string) => {
   try {
-    const doc = docId
-      ? db.collection('Essay').doc(docId)
-      : db.collection('Essay').doc();
+    const doc = db.collection('Essay').doc(docId ?? '');
 
     await doc.set(essay);
 
