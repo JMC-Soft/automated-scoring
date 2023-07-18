@@ -6,7 +6,6 @@ const findScoringResultByEssayId = async (essayId: string) => {
     // const doc = db.collection('ScoringResult').where('essayId', '==', essayId);
     const doc = db.collection('ScoringResult').doc(essayId);
 
-    console.log(doc.get());
     const result = await doc.get();
 
     if (!result.exists)
@@ -16,7 +15,7 @@ const findScoringResultByEssayId = async (essayId: string) => {
         '채점 결과가 존재하지 않습니다.',
       );
 
-    return result;
+    return result.data();
   } catch (err) {
     throw ApiError.handleError(err);
   }

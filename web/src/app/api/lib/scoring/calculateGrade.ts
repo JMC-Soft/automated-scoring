@@ -1,19 +1,12 @@
-import { EssaySub } from '@/app/api/lib/types';
-
-const calculateGrade = (topPercentage: number): EssaySub['grade'] => {
-  if (topPercentage >= 90) {
+const calculateGrade = (score: number, MAX_SCORE: number): 'A' | 'B' | 'C' => {
+  if (score >= MAX_SCORE * 0.9) {
     return 'A';
   }
-  if (topPercentage >= 70) {
+  if (score >= MAX_SCORE * 0.8) {
     return 'B';
   }
-  if (topPercentage >= 30) {
-    return 'C';
-  }
-  if (topPercentage >= 10) {
-    return 'D';
-  }
-  return 'E';
+
+  return 'C';
 };
 
 export default calculateGrade;

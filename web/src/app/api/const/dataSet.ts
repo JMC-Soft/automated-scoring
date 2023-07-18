@@ -5,6 +5,7 @@ const HIGH_DATA_TOTAL_NUMBER: number = 712;
 
 // Total 통계 데이터
 const TOTAL_STATISTICS: TotalStatistics = {
+  maxScore: 30,
   average: 25.5,
   standardDeviation: 3.45,
   data: {
@@ -33,6 +34,7 @@ const TOTAL_STATISTICS: TotalStatistics = {
 
 // EXP 통계 데이터
 const EXP_STATISTICS: SubStatistics = {
+  maxScore: 9,
   average: 7.7,
   standardDeviation: 1.29,
   data: {
@@ -54,6 +56,7 @@ const EXP_STATISTICS: SubStatistics = {
 
 // ORG 통계 데이터
 const ORG_STATISTICS: SubStatistics = {
+  maxScore: 12,
   average: 10.5,
   standardDeviation: 1.62,
   data: {
@@ -74,6 +77,7 @@ const ORG_STATISTICS: SubStatistics = {
 
 // CONT 통계 데이터
 const CONT_STATISTICS: SubStatistics = {
+  maxScore: 9,
   average: 7.3,
   standardDeviation: 1.2,
   data: {

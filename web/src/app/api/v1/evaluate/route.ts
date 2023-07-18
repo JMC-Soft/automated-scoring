@@ -1,19 +1,15 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import saveEssay from '@/app/api/repository/essay/saveEssay';
-import fetchToScoringServer from '@/app/api/lib/scoring/fetchToScoringServer';
 import ApiError from '@/app/api/lib/class/ApiError';
-import {
-  EvaluateRequestDto,
-  EvaluateResponseDto,
-  ScoringResponseDto,
-} from '@/app/api/lib/types';
-import makeEvaluateResponse from '@/app/api/lib/scoring/makeEvaluateResponse';
+import { EvaluateRequestDto, ScoringResultEntity } from '@/app/api/lib/types';
 import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 import saveScoringResult from '@/app/api/repository/scoringResult/saveScoringResult';
+import makeCreatedAt from '@/app/api/lib/makeCreatedAt';
+import makeScoringResult from '@/app/api/lib/scoring/makeScoringResult';
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, topic, type, essayText }: EvaluateRequestDto =
+    const { email, essayText, topic, type }: EvaluateRequestDto =
       await req.json();
     let uid = null;
 
@@ -21,11 +17,23 @@ export async function POST(req: NextRequest) {
     if (email) {
       const decodedToken = await getDecodedToken(req);
       if (!decodedToken) {
-        await saveEssay(essayText, topic, type, uid);
+        await saveEssay({
+          essayText,
+          topic,
+          type,
+          uid,
+          createdAt: makeCreatedAt(),
+        });
         throw new ApiError('토큰이 유효하지 않음', 401, '로그인이 필요합니다.');
       }
       if (decodedToken.email !== email) {
-        await saveEssay(essayText, topic, type, uid);
+        await saveEssay({
+          essayText,
+          topic,
+          type,
+          uid,
+          createdAt: makeCreatedAt(),
+        });
         throw new ApiError(
           '프론트에서 받은 email정보와 토큰의 email 정보가 다름',
           401,
@@ -36,44 +44,54 @@ export async function POST(req: NextRequest) {
       uid = decodedToken.uid;
     }
 
-    const { doc: essayDoc, essay } = await saveEssay(
+    const { doc: essayDoc, essay } = await saveEssay({
       essayText,
       topic,
       type,
       uid,
-    );
+      createdAt: makeCreatedAt(),
+    });
 
     // essay를 scoring server에 보내 채점 결과 객체를 반환
-    const replaceText = essayText.replaceAll('"', "'").replaceAll('\n', ' ');
-    const scoringRes: ScoringResponseDto = await fetchToScoringServer(
-      replaceText,
-    );
+    // const replaceText = essayText.replaceAll('"', "'").replaceAll('\n', ' ');
+    // const subScore: ScoringResponseDto = await fetchToScoringServer(
+    //   replaceText,
+    // );
 
-    // // dummy data
-    // const scoringRes = {
-    //   exp: [3, 3, 3],
-    //   org: [3, 3, 3, 3],
-    //   cont: [3, 3, 3],
-    // };
+    // dummy data
+    const subScore = {
+      exp: [
+        { title: '문법의 적절성', score: 3, average: 2.4 },
+        { title: '단어 사용의 적절성', score: 3, average: 2.4 },
+        { title: '문장 표현의 적절성', score: 3, average: 2.4 },
+      ],
+      org: [
+        { title: '문법의 적절성2', score: 3, average: 2.4 },
+        { title: '단어 사용의 적절성2', score: 3, average: 2.4 },
+        { title: '문장 표현의 적절성2', score: 3, average: 2.4 },
+        { title: '문법의 적절성2', score: 3, average: 2.4 },
+      ],
+      cont: [
+        { title: '문법의 적절성3', score: 3, average: 2.4 },
+        { title: '단어 사용의 적절성3', score: 3, average: 2.4 },
+        { title: '문장 표현의 적절성3', score: 3, average: 2.4 },
+      ],
+    };
 
-    // 채점 결과 객체에서 EvaluateResponseDto 재조합
-    const evaluateRes: EvaluateResponseDto = await makeEvaluateResponse(
-      scoringRes,
+    // 채점 결과 객체에서 ScoringResult 객체 재조합
+    const scoringResult: ScoringResultEntity = await makeScoringResult(
+      subScore,
       essayDoc.id,
       essay,
     );
 
     // EssayResultDB에 response 결과 및 essayId 저장
     const { doc: resultDoc } = await saveScoringResult(
-      evaluateRes,
-      uid,
+      { ...scoringResult, createdAt: makeCreatedAt() },
       essayDoc.id,
     );
-    const resultId = resultDoc.id;
 
-    // const resultUrl = new URL(`${req.nextUrl.origin}/result/${resultId}`);
-    // return NextResponse.redirect(resultUrl);
-    return new NextResponse(resultId, { status: 200 });
+    return new NextResponse(resultDoc.id, { status: 200 });
   } catch (err) {
     if (err instanceof ApiError) {
       return NextResponse.json({ msg: err.resMessage }, { status: err.status });
