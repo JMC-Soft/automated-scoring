@@ -5,7 +5,6 @@ import {
   ScoringResultEntity,
   Statistics,
 } from '@/app/api/lib/types';
-import reduceArray from '@/app/api/lib/utils/reduceArray';
 import {
   CONT_STATISTICS,
   EXP_STATISTICS,
@@ -16,6 +15,7 @@ import {
 import countEssay from '@/app/api/repository/essay/countEssay';
 import calculateGrade from '@/app/api/lib/scoring/calculateGrade';
 import reduceObject from '@/app/api/lib/utils/reduceObject';
+import COUNT_SENTENCES_REGEXP from '@/app/api/const/regExp';
 
 const makeScoringResult = async (
   subScore: ScoringResponseDto,
@@ -23,24 +23,22 @@ const makeScoringResult = async (
   essay: EssayEntitiy,
 ): Promise<ScoringResultEntity> => {
   const { exp, org, cont } = subScore;
-  const sentenceRegex = /[.?!]+/g;
-  const characterRegex = /\b\w+\b/g;
 
   // sum 계산에 필요한 callback 함수
   const sumCallback = (acc: number, cur: ScoringResponseSub) => {
     return acc + cur.score;
   };
-  const expSum = reduceArray(exp, sumCallback, 0);
-  const orgSum = reduceArray(org, sumCallback, 0);
-  const contSum = reduceArray(cont, sumCallback, 0);
+  const expSum = exp.reduce((acc, cur) => sumCallback(acc, cur), 0);
+  const orgSum = org.reduce((acc, cur) => sumCallback(acc, cur), 0);
+  const contSum = cont.reduce((acc, cur) => sumCallback(acc, cur), 0);
   const totalSum = expSum + orgSum + contSum;
 
   // 글자수, 문장수 계산
-  const sentences = essay.essayText.match(sentenceRegex);
+  const sentences = essay.essayText.match(COUNT_SENTENCES_REGEXP);
   const countSentences = sentences ? sentences.length : 0;
 
-  const characters = essay.essayText.match(characterRegex);
-  const countCharacters = characters ? characters.length : 0;
+  // 글자 수 계산
+  const countCharacters = essay.essayText.trim().length;
 
   // percentage 계산에 필요한 callback 함수
   const percentageCallback = (sum: number) => {
