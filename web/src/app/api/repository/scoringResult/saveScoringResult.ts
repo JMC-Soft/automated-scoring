@@ -7,7 +7,9 @@ const saveScoringResult = async (
   docId?: string,
 ) => {
   try {
-    const doc = db.collection('ScoringResult').doc(docId ?? '');
+    const doc = docId
+      ? db.collection('ScoringResult').doc(docId)
+      : db.collection('ScoringResult').doc();
 
     await doc.set(scoringResult);
 
