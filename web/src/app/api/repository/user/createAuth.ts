@@ -1,8 +1,8 @@
-import { RegisterDto } from '@/app/api/lib/types';
+import { UserAuth } from '@/app/api/lib/types';
 import { auth } from '@/app/api/config/firebase.admin';
 import ApiError from '@/app/api/lib/class/ApiError';
 
-const createUser = async ({ email, password, nickname }: RegisterDto) => {
+const createAuth = async ({ email, password, nickname }: UserAuth) => {
   try {
     const user = await auth.createUser({
       email,
@@ -16,4 +16,4 @@ const createUser = async ({ email, password, nickname }: RegisterDto) => {
   }
 };
 
-export default createUser;
+export default createAuth;

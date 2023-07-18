@@ -1,11 +1,9 @@
 import {
   EssayEntitiy,
+  ScoringResponseDetail,
   ScoringResponseDto,
-  ScoringResponseSub,
-  ScoringResultEntity,
   Statistics,
 } from '@/app/api/lib/types';
-import reduceArray from '@/app/api/lib/utils/reduceArray';
 import {
   CONT_STATISTICS,
   EXP_STATISTICS,
@@ -16,31 +14,30 @@ import {
 import countEssay from '@/app/api/repository/essay/countEssay';
 import calculateGrade from '@/app/api/lib/scoring/calculateGrade';
 import reduceObject from '@/app/api/lib/utils/reduceObject';
+import COUNT_SENTENCES_REGEXP from '@/app/api/const/regExp';
 
 const makeScoringResult = async (
   subScore: ScoringResponseDto,
   essayId: string,
   essay: EssayEntitiy,
-): Promise<ScoringResultEntity> => {
+) => {
   const { exp, org, cont } = subScore;
-  const sentenceRegex = /[.?!]+/g;
-  const characterRegex = /\b\w+\b/g;
 
   // sum 계산에 필요한 callback 함수
-  const sumCallback = (acc: number, cur: ScoringResponseSub) => {
+  const sumCallback = (acc: number, cur: ScoringResponseDetail) => {
     return acc + cur.score;
   };
-  const expSum = reduceArray(exp, sumCallback, 0);
-  const orgSum = reduceArray(org, sumCallback, 0);
-  const contSum = reduceArray(cont, sumCallback, 0);
+  const expSum = exp.detail.reduce((acc, cur) => sumCallback(acc, cur), 0);
+  const orgSum = org.detail.reduce((acc, cur) => sumCallback(acc, cur), 0);
+  const contSum = cont.detail.reduce((acc, cur) => sumCallback(acc, cur), 0);
   const totalSum = expSum + orgSum + contSum;
 
   // 글자수, 문장수 계산
-  const sentences = essay.essayText.match(sentenceRegex);
+  const sentences = essay.essayText.match(COUNT_SENTENCES_REGEXP);
   const countSentences = sentences ? sentences.length : 0;
 
-  const characters = essay.essayText.match(characterRegex);
-  const countCharacters = characters ? characters.length : 0;
+  // 글자 수 계산
+  const countCharacters = essay.essayText.trim().length;
 
   // percentage 계산에 필요한 callback 함수
   const percentageCallback = (sum: number) => {
@@ -51,17 +48,23 @@ const makeScoringResult = async (
       return acc;
     };
   };
-  const subResult = (STATISTICS: Statistics, sum: number) => {
+  const subResult = (
+    STATISTICS: Statistics,
+    sum: number,
+    title: string = '종합',
+  ) => {
+    const { data, standardDeviation, ...remainStatistics } = STATISTICS;
+
     return {
       score: sum,
-      average: STATISTICS.average,
-      grade: calculateGrade(sum, STATISTICS.maxScore),
-      percentage: reduceObject(STATISTICS.data, percentageCallback(sum), 0),
-      min: STATISTICS.min,
-      max: STATISTICS.max,
-      median: STATISTICS.median,
-      Q1: STATISTICS.Q1,
-      Q3: STATISTICS.Q3,
+      grade: calculateGrade(sum, STATISTICS.max),
+      title,
+      percentage: Math.round(
+        (reduceObject(STATISTICS.data, percentageCallback(sum), 0) /
+          HIGH_DATA_TOTAL_NUMBER) *
+          100,
+      ),
+      ...remainStatistics,
     };
   };
 
@@ -70,27 +73,22 @@ const makeScoringResult = async (
     countCharacters,
     countSentences,
     essayId,
-    essayInfo: {
-      text: essay.essayText,
-      topic: essay.topic,
-      type: essay.type,
-    },
     uid: essay.uid,
 
     total: {
       ...subResult(TOTAL_STATISTICS, totalSum),
     },
     exp: {
-      ...subResult(EXP_STATISTICS, expSum),
-      detail: exp,
+      ...subResult(EXP_STATISTICS, expSum, exp.title),
+      detail: exp.detail,
     },
     org: {
-      ...subResult(ORG_STATISTICS, expSum),
-      detail: org,
+      ...subResult(ORG_STATISTICS, expSum, org.title),
+      detail: org.detail,
     },
     cont: {
-      ...subResult(CONT_STATISTICS, expSum),
-      detail: cont,
+      ...subResult(CONT_STATISTICS, expSum, cont.title),
+      detail: cont.detail,
     },
   };
 };

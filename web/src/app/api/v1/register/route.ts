@@ -1,10 +1,12 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import createUser from '@/app/api/repository/user/createUser';
+import createAuth from '@/app/api/repository/user/createAuth';
 import findUserByEmailAndPassword from '@/app/api/repository/user/findUserByEmailAndPassword';
 import ApiError from '@/app/api/lib/class/ApiError';
 import getUserToken from '@/app/api/lib/getUserToken';
 import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
+import { RegisterDto } from '@/app/api/lib/types';
+import saveUser from '@/app/api/repository/user/saveUser';
 
 // 신규 회원 가입
 export async function POST(req: NextRequest) {
@@ -18,10 +20,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { email, password, nickname } = await req.json();
+    const { email, password, nickname, gender, schoolName }: RegisterDto =
+      await req.json();
 
-    await createUser({ email, password, nickname });
+    const user = await createAuth({ email, password, nickname });
 
+    // 여기 뭔가 이상하다.. 두개 하나로 합칠 수 있을거 같은데
+    await saveUser({ gender, schoolName }, user.uid);
     const userCredential = await findUserByEmailAndPassword({
       email,
       password,

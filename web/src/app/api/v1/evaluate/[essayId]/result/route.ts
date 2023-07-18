@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import ApiError from '@/app/api/lib/class/ApiError';
 import findScoringResultByEssayId from '@/app/api/repository/scoringResult/findScoringResultByEssayId';
+import findEssayById from '@/app/api/repository/essay/findEssayById';
+import {
+  ScoringResultEntity,
+  ScoringResultResponse,
+} from '@/app/api/lib/types';
+import findScoringResultsByUidAndOrderBy from '@/app/api/repository/scoringResult/findScoringResultsByUidAndOrderBy';
 
 export async function GET(
   req: NextRequest,
@@ -8,8 +14,43 @@ export async function GET(
 ) {
   try {
     const { essayId } = params;
-    const res = await findScoringResultByEssayId(essayId);
 
+    // EssayId로 ScoringResult를 찾아서 반환
+    const { uid, ...remainScoringResult } = await findScoringResultByEssayId(
+      essayId,
+    );
+
+    // EssayId로 Essay를 찾아서 반환
+    const {
+      essayText: text,
+      createdAt,
+      uid: essayUid,
+      ...remainEssay
+    } = await findEssayById(essayId);
+
+    // TODO: 사용자 정보로 ScoringResult 세개를 찾아서 반환
+    let resultHistory = null;
+    if (uid) {
+      const docs = await findScoringResultsByUidAndOrderBy(
+        uid,
+        'createdAt',
+        'desc',
+        3,
+      );
+      resultHistory = docs.map((doc) => {
+        const data = doc.data() as ScoringResultEntity;
+        return data;
+      });
+    }
+
+    const res: ScoringResultResponse = {
+      ...remainScoringResult,
+      essayInfo: {
+        text,
+        ...remainEssay,
+      },
+      resultHistory,
+    };
     return NextResponse.json(res, { status: 200 });
   } catch (err) {
     console.log(err);
