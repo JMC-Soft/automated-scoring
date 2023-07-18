@@ -53,7 +53,7 @@
   }
 
   .grid-cols-result {
-    grid-template-columns: auto 10% 20% 1fr 20%;
+    grid-template-columns: 10% 5% 25% 1fr 20%;
   }
 
   .grid-cols-history {
@@ -71,7 +71,7 @@
   }
 
   .grid-rows-result {
-    grid-template-rows: 25% auto 1fr;
+    grid-template-rows: 25% 25% 1fr;
   }
 
   .grid-rows-history {

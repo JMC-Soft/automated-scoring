@@ -6,7 +6,6 @@ import {
   RadialLinearScale,
 } from 'chart.js';
 import { Radar } from 'react-chartjs-2';
-import merge from 'lodash/merge';
 import hexToRGBA from '@/lib/utils/colors';
 import COLORS from '@/lib/constants/colors';
 
@@ -15,8 +14,6 @@ type Props<T> = {
   totalDataList: number[];
   dataList: number[];
   className?: string;
-  options?: ChartOptions<'radar'>;
-  data?: Partial<ChartData<'radar'>>;
 };
 
 ChartJS.register(RadialLinearScale);
@@ -26,10 +23,8 @@ function RadarChart<T>({
   totalDataList,
   dataList,
   className,
-  options: customOptions,
-  data: customData,
 }: Props<T>) {
-  const defaultData: ChartData<'radar'> = {
+  const data: ChartData<'radar'> = {
     labels,
     datasets: [
       {
@@ -59,7 +54,7 @@ function RadarChart<T>({
     ],
   };
 
-  const defaultOptions: ChartOptions<'radar'> = {
+  const options: ChartOptions<'radar'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -100,9 +95,6 @@ function RadarChart<T>({
     },
   };
 
-  const data = merge({}, defaultData, customData);
-  const options = merge({}, defaultOptions, customOptions);
-
   return (
     <div className={className}>
       <Radar data={data} options={options} />
@@ -110,4 +102,4 @@ function RadarChart<T>({
   );
 }
 
-export default React.memo(RadarChart);
+export default RadarChart;
