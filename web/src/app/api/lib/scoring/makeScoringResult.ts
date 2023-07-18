@@ -1,8 +1,7 @@
 import {
   EssayEntitiy,
+  ScoringResponseDetail,
   ScoringResponseDto,
-  ScoringResponseSub,
-  ScoringResultEntity,
   Statistics,
 } from '@/app/api/lib/types';
 import {
@@ -21,16 +20,16 @@ const makeScoringResult = async (
   subScore: ScoringResponseDto,
   essayId: string,
   essay: EssayEntitiy,
-): Promise<ScoringResultEntity> => {
+) => {
   const { exp, org, cont } = subScore;
 
   // sum 계산에 필요한 callback 함수
-  const sumCallback = (acc: number, cur: ScoringResponseSub) => {
+  const sumCallback = (acc: number, cur: ScoringResponseDetail) => {
     return acc + cur.score;
   };
-  const expSum = exp.reduce((acc, cur) => sumCallback(acc, cur), 0);
-  const orgSum = org.reduce((acc, cur) => sumCallback(acc, cur), 0);
-  const contSum = cont.reduce((acc, cur) => sumCallback(acc, cur), 0);
+  const expSum = exp.detail.reduce((acc, cur) => sumCallback(acc, cur), 0);
+  const orgSum = org.detail.reduce((acc, cur) => sumCallback(acc, cur), 0);
+  const contSum = cont.detail.reduce((acc, cur) => sumCallback(acc, cur), 0);
   const totalSum = expSum + orgSum + contSum;
 
   // 글자수, 문장수 계산
@@ -49,17 +48,23 @@ const makeScoringResult = async (
       return acc;
     };
   };
-  const subResult = (STATISTICS: Statistics, sum: number) => {
+  const subResult = (
+    STATISTICS: Statistics,
+    sum: number,
+    title: string = '종합',
+  ) => {
+    const { data, standardDeviation, ...remainStatistics } = STATISTICS;
+
     return {
       score: sum,
-      average: STATISTICS.average,
-      grade: calculateGrade(sum, STATISTICS.maxScore),
-      percentage: reduceObject(STATISTICS.data, percentageCallback(sum), 0),
-      min: STATISTICS.min,
-      max: STATISTICS.max,
-      median: STATISTICS.median,
-      Q1: STATISTICS.Q1,
-      Q3: STATISTICS.Q3,
+      grade: calculateGrade(sum, STATISTICS.max),
+      title,
+      percentage: Math.round(
+        (reduceObject(STATISTICS.data, percentageCallback(sum), 0) /
+          HIGH_DATA_TOTAL_NUMBER) *
+          100,
+      ),
+      ...remainStatistics,
     };
   };
 
@@ -79,16 +84,16 @@ const makeScoringResult = async (
       ...subResult(TOTAL_STATISTICS, totalSum),
     },
     exp: {
-      ...subResult(EXP_STATISTICS, expSum),
-      detail: exp,
+      ...subResult(EXP_STATISTICS, expSum, exp.title),
+      detail: exp.detail,
     },
     org: {
-      ...subResult(ORG_STATISTICS, expSum),
-      detail: org,
+      ...subResult(ORG_STATISTICS, expSum, org.title),
+      detail: org.detail,
     },
     cont: {
-      ...subResult(CONT_STATISTICS, expSum),
-      detail: cont,
+      ...subResult(CONT_STATISTICS, expSum, cont.title),
+      detail: cont.detail,
     },
   };
 };

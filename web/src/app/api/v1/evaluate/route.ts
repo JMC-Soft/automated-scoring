@@ -6,6 +6,7 @@ import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 import saveScoringResult from '@/app/api/repository/scoringResult/saveScoringResult';
 import makeCreatedAt from '@/app/api/lib/makeCreatedAt';
 import makeScoringResult from '@/app/api/lib/scoring/makeScoringResult';
+import dummyScore from '@/app/api/const/dummyScore';
 
 export async function POST(req: NextRequest) {
   try {
@@ -57,26 +58,7 @@ export async function POST(req: NextRequest) {
     // const subScore: ScoringResponseDto = await fetchToScoringServer(
     //   replaceText,
     // );
-
-    // dummy data
-    const subScore = {
-      exp: [
-        { title: '문법의 적절성', score: 3, average: 2.4 },
-        { title: '단어 사용의 적절성', score: 3, average: 2.4 },
-        { title: '문장 표현의 적절성', score: 3, average: 2.4 },
-      ],
-      org: [
-        { title: '문법의 적절성2', score: 3, average: 2.4 },
-        { title: '단어 사용의 적절성2', score: 3, average: 2.4 },
-        { title: '문장 표현의 적절성2', score: 3, average: 2.4 },
-        { title: '문법의 적절성2', score: 3, average: 2.4 },
-      ],
-      cont: [
-        { title: '문법의 적절성3', score: 3, average: 2.4 },
-        { title: '단어 사용의 적절성3', score: 3, average: 2.4 },
-        { title: '문장 표현의 적절성3', score: 3, average: 2.4 },
-      ],
-    };
+    const subScore = dummyScore;
 
     // 채점 결과 객체에서 ScoringResult 객체 재조합
     const scoringResult: ScoringResultEntity = await makeScoringResult(
