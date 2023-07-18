@@ -14,12 +14,10 @@ import {
   Legend,
   Filler,
   BarElement,
-  Chart,
   LegendItem,
   PointStyle,
 } from 'chart.js';
-import { Line } from 'react-chartjs-2';
-import merge from 'lodash/merge';
+import { Chart } from 'react-chartjs-2';
 import COLORS from '@/lib/constants/colors';
 import hexToRGBA from '@/lib/utils/colors';
 import pretendard from '@/lib/constants/fonts';
@@ -38,18 +36,12 @@ ChartJS.register(
 
 type Props = {
   className?: string;
-  options?: ChartOptions<'line'>;
-  data?: Partial<ChartData<'line'>>;
 };
 
-export function DoughnutChart({
-  className,
-  options: customOptions,
-  data: customData,
-}: Props) {
+export function DoughnutChart({ className }: Props) {
   const labels = ['월', '화', '수', '목', '금', '토', '일', '금', '토', '일'];
 
-  const defaultData: ChartData = {
+  const data: ChartData = {
     labels,
     datasets: [
       {
@@ -92,7 +84,7 @@ export function DoughnutChart({
     ],
   };
 
-  const defaultOptions: ChartOptions = {
+  const options: ChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -112,7 +104,7 @@ export function DoughnutChart({
         labels: {
           usePointStyle: true,
           pointStyleWidth: 40,
-          generateLabels(chart: Chart): LegendItem[] {
+          generateLabels(chart: ChartJS): LegendItem[] {
             const visibility: boolean[] = [];
             for (let i = 0; i < chart.data.datasets.length; i += 1) {
               if (chart.isDatasetVisible(i)) {
@@ -188,12 +180,9 @@ export function DoughnutChart({
     },
   };
 
-  const data = merge({}, defaultData, customData);
-  const options = merge({}, defaultOptions, customOptions);
-
   return (
     <div className={className}>
-      <Line data={data} options={options} />
+      <Chart type="line" data={data} options={options} />
     </div>
   );
 }

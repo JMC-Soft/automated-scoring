@@ -8,7 +8,7 @@ type Props = {
 
 function RecentHistoryView({ className, data }: Props) {
   return (
-    <div
+    <article
       className={clsx('flex flex-col items-center bg-white py-4', className)}
     >
       <h2 className="py-2 text-2xl">최근 3회 점수 이력</h2>
@@ -46,7 +46,7 @@ function RecentHistoryView({ className, data }: Props) {
       <div className="py-1 font-bold text-gray-500 underline underline-offset-4">
         채점 기록 보러가기
       </div>
-    </div>
+    </article>
   );
 }
 

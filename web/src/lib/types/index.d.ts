@@ -33,11 +33,12 @@ export interface EssayResult {
   countCharacters: number;
   countSentences: number;
   createdAt: string;
+  essayId: string;
+  essayInfo: EssayInfo;
   total: Statistic;
   exp: SubStatistic;
   org: SubStatistic;
   cont: SubStatistic;
-  essayInfo: EssayInfo;
 }
 
 export interface EssayInfo {
@@ -48,6 +49,7 @@ export interface EssayInfo {
 
 export type SubStatistic = Statistic & DetailResult;
 export interface Statistic {
+  title: string;
   score: number;
   average: number;
   grade: Grade;
@@ -60,15 +62,16 @@ export interface Statistic {
 }
 
 export interface DetailResult {
-  sub: Detail[];
+  detail: Detail[];
 }
 
 export interface Detail {
+  title: string;
   score: number;
   average: number;
 }
 
-export type Grade = 'A' | 'B' | 'C' | 'D' | 'E';
+export type Grade = 'A' | 'B' | 'C';
 
 export type Topic = {
   title: string;
