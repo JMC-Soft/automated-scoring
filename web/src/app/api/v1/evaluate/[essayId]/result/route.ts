@@ -10,15 +10,20 @@ export async function GET(
 ) {
   try {
     const { essayId } = params;
+
+    // EssayId로 ScoringResult를 찾아서 반환
     const { uid, ...remainScoringResult } = await findScoringResultByEssayId(
       essayId,
     );
+    // EssayId로 Essay를 찾아서 반환
     const {
       essayText: text,
       createdAt,
       uid: essayUid,
       ...remainEssay
     } = await findEssayById(essayId);
+
+    // TODO: 사용자 정보로 ScoringResult 세개를 찾아서 반환
 
     const res: ScoringResultResponse = {
       ...remainScoringResult,

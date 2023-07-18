@@ -1,17 +1,19 @@
-export interface RegisterDto {
+export interface UserAuth {
   email: string;
   password: string;
   nickname: string;
 }
+
+export interface UserAdditionInfo {
+  gender: 'M' | 'F';
+  schoolName: string;
+}
+
+export interface RegisterDto extends UserAuth, UserAdditionInfo {}
 
 export interface LoginDto {
   email: string;
   password: string;
-}
-
-export interface UserInfoDto {
-  email: string;
-  nickname: string;
 }
 
 export interface EvaluateRequestDto {
