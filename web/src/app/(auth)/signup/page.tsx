@@ -3,7 +3,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import clsx from 'clsx';
 import useSignupStore from '@/store/signupStore';
@@ -25,7 +24,6 @@ function SignUp() {
 
   const { status, fetchCheckDuplicateEmail, fetchSignUp } = useSignupStore();
   const setUser = useAuthStore((state) => state.setUser);
-  const router = useRouter();
 
   const handleCheckDuplicateEmail = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -54,8 +52,6 @@ function SignUp() {
       const user = await fetchSignUp({ nickname, email, password });
       alert(`${user.nickname}님, 회원가입을 축하합니다!`);
       setUser(user);
-      router.push('/');
-      return;
     } catch (err) {
       if (err instanceof Error) {
         setError('root', { message: err.message });

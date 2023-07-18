@@ -16,8 +16,8 @@ export default function Home() {
             style={{
               position: 'absolute',
               right: '5%',
-              height: '400px',
-              width: 'fit-content',
+              width: '25vw',
+              height: 'fit-content',
             }}
             src={RobotImage}
             alt="로봇"

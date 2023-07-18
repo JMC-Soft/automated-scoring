@@ -57,7 +57,9 @@ function IpadNote() {
 
     try {
       const essayID = await fetchEvaluateEssay({ essayText, topic });
+      console.log(essayID);
       router.push(`/result/${essayID}`);
+      return;
     } catch (e) {
       if (e instanceof Error) {
         alert(e.message);

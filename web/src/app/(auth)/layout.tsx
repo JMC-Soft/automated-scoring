@@ -1,14 +1,22 @@
 'use client';
 
-import React from 'react';
-import useCheckUser from '@/lib/hooks/useCheckUser';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import useAuthStore from '@/store/authStore';
 
 type Props = {
   children?: React.ReactNode;
 };
 
-export default async function Layout({ children }: Props) {
-  useCheckUser();
+function Layout({ children }: Props) {
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.push('/');
+    }
+  }, [isLoggedIn, router]);
 
   return (
     <div className="flex h-[calc(100vh-4rem)] w-full items-center justify-center bg-background-500">
@@ -18,3 +26,5 @@ export default async function Layout({ children }: Props) {
     </div>
   );
 }
+
+export default Layout;

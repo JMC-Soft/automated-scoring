@@ -4,17 +4,17 @@ import { Doughnut } from 'react-chartjs-2';
 import merge from 'lodash/merge';
 
 type Props = {
+  percentage: number;
   className?: string;
   options?: ChartOptions<'doughnut'>;
   data?: Partial<ChartData<'doughnut'>>;
-  percentage?: number;
 };
 
-export function HalfDoughnutChart({
+function HalfDoughnutChart({
   className,
   options: customOptions,
   data: customData,
-  percentage = 78,
+  percentage,
 }: Props) {
   const defaultData: ChartData<'doughnut'> = {
     datasets: [

@@ -1,20 +1,50 @@
 import './globals.css';
 import React from 'react';
-import localFont from 'next/font/local';
+import {
+  ArcElement,
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  RadialLinearScale,
+  Title,
+  Tooltip,
+} from 'chart.js';
+import {
+  BoxAndWiskers,
+  BoxPlotController,
+} from '@sgratzl/chartjs-chart-boxplot';
 import Header from '@/app/_components/Header';
 import Footer from '@/app/_components/Footer';
 import getUser from '@/lib/utils/api/getUser';
 import StoreInitializer from '@/components/StoreInitializer';
-
-const pretendard = localFont({
-  src: '../../public/fonts/PretendardVariable.woff2',
-  variable: '--font-pretendard',
-});
+import pretendard from '@/lib/constants/fonts';
 
 export const metadata = {
   title: '한국어 에세이 자동채점',
   description: '한국어 에세이 자동채점 프로그램',
 };
+
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  Filler,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  ArcElement,
+  LineElement,
+  BoxPlotController,
+  BoxAndWiskers,
+  BarElement,
+);
 
 export default async function RootLayout({
   children,
@@ -26,7 +56,7 @@ export default async function RootLayout({
   return (
     <html lang="ko">
       <body className={pretendard.variable}>
-        <StoreInitializer user={user} isLoggedIn={!!user} />
+        <StoreInitializer user={user} />
         <Header />
         {children}
         <Footer />

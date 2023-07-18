@@ -9,7 +9,7 @@ type AuthState = {
 };
 
 type AuthActions = {
-  setUser: (user: User) => void;
+  setUser: (user: User | null) => void;
   login: ({ email, password }: LoginRequest) => Promise<User>;
   logout: () => void;
 };
@@ -18,7 +18,7 @@ const useAuthStore = create<AuthState & AuthActions>()(
   devtools((set) => ({
     user: null,
     isLoggedIn: false,
-    setUser: (user: User) => set({ user, isLoggedIn: true }),
+    setUser: (user) => set({ user, isLoggedIn: !!user }),
     login: async ({ email, password }) => {
       const response = await fetch(`${API_BASE_URL}/login`, {
         method: 'POST',
@@ -49,9 +49,9 @@ const useAuthStore = create<AuthState & AuthActions>()(
 
       if (!response.ok) {
         throw new Error('로그아웃에 실패했습니다.\n다시 시도해 주세요.');
-      } else {
-        set({ user: null, isLoggedIn: false });
       }
+
+      set({ user: null, isLoggedIn: false });
     },
   })),
 );

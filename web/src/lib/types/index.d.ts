@@ -21,39 +21,58 @@ export interface SignUpRequest {
   password: string;
 }
 
-export interface EssayRequest {
-  topic: string;
+export interface EvaluateRequest {
+  topic: Topic;
   essayText: string;
 }
 
-export interface EssayResponse {
+export type EvaluateResponse = string;
+
+export interface EssayResult {
   candidate: number;
   countCharacters: number;
   countSentences: number;
-  total: Category;
-  exp: Category & Detail[];
-  org: Category & Detail[];
-  cont: Category & Detail[];
+  createdAt: string;
+  total: Statistic;
+  exp: SubStatistic;
+  org: SubStatistic;
+  cont: SubStatistic;
+  essayInfo: EssayInfo;
 }
 
-export interface Category {
-  sub: Detail[];
-  min: 0;
-  max: 0;
-  median: 0;
-  Q1: 0;
-  Q3: 0;
+export interface EssayInfo {
+  text: string;
+  topic: string;
+  type: TopicType;
+}
+
+export type SubStatistic = Statistic & DetailResult;
+export interface Statistic {
   score: number;
   average: number;
   grade: Grade;
   percentage: number;
+  min: number;
+  max: number;
+  median: number;
+  Q1: number;
+  Q3: number;
+}
+
+export interface DetailResult {
+  sub: Detail[];
+}
+
+export interface Detail {
+  score: number;
+  average: number;
 }
 
 export type Grade = 'A' | 'B' | 'C' | 'D' | 'E';
 
-export type EssayResult = EssayRequest & EssayResponse;
-
-export type Detail = {
-  score: number;
-  average: number;
+export type Topic = {
+  title: string;
+  type: TopicType;
 };
+
+export type TopicType = '글짓기' | '대안 제시' | '설명문';
