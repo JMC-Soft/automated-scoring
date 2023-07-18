@@ -46,10 +46,16 @@ function SignUp() {
   };
 
   const onSignUp = handleSubmit(async (data) => {
-    const { nickname, email, password } = data;
+    const { nickname, email, password, gender, schoolName } = data;
 
     try {
-      const user = await fetchSignUp({ nickname, email, password });
+      const user = await fetchSignUp({
+        nickname,
+        email,
+        password,
+        gender,
+        schoolName,
+      });
       alert(`${user.nickname}님, 회원가입을 축하합니다!`);
       setUser(user);
     } catch (err) {
@@ -127,6 +133,53 @@ function SignUp() {
           </span>
         )}
       </div>
+      <div className="flex w-full items-center gap-x-4">
+        <span className="text-lg font-semibold">학교 : </span>
+        <label htmlFor="schoolName" className="flex-1 border">
+          <input
+            {...register('schoolName', {
+              required: { value: true, message: '학교를 입력해주세요.' },
+            })}
+            type="text"
+            name="schoolName"
+            className="h-full w-full p-4"
+          />
+        </label>
+        {errors.schoolName && (
+          <span className="px-4 text-warning-500">
+            {errors.schoolName.message}
+          </span>
+        )}
+      </div>
+      <div className="flex w-full items-center gap-x-4">
+        <span className="text-lg font-semibold">성별 : </span>
+        <label htmlFor="남자" className="flex items-center gap-x-2">
+          <input
+            {...register('gender', {
+              required: { value: true, message: '성별을 선택해주세요.' },
+            })}
+            type="radio"
+            value="M"
+            name="남자"
+          />
+          남자
+        </label>{' '}
+        <label htmlFor="여자" className="flex items-center gap-x-2">
+          <input
+            {...register('gender', {
+              required: { value: true, message: '성별을 선택해주세요.' },
+            })}
+            type="radio"
+            value="F"
+            name="여자"
+          />
+          여자
+        </label>
+        {errors.gender && (
+          <span className="px-4 text-warning-500">{errors.gender.message}</span>
+        )}
+      </div>
+
       <div className="w-full">
         <input
           className={clsx('w-full border p-4 text-white', {

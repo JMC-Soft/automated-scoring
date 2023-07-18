@@ -19,6 +19,8 @@ export interface SignUpRequest {
   nickname: string;
   email: string;
   password: string;
+  gender: 'F' | 'M';
+  schoolName: string;
 }
 
 export interface EvaluateRequest {
