@@ -1,17 +1,12 @@
 import { db } from '@/app/api/config/firebase.admin';
 import ApiError from '@/app/api/lib/class/ApiError';
-import { EssayEntitiy } from '@/app/api/lib/types';
+import { EssayEntity } from '@/app/api/lib/types';
 
-const findEssayById = async (essayId: string): Promise<EssayEntitiy> => {
+const findEssayById = async (essayId: string): Promise<EssayEntity> => {
   try {
     const doc = db.collection('Essay').doc(essayId);
-    const subDoc = db
-      .collection('Essay')
-      .doc(essayId)
-      .collection('ScoringResult')
-      .doc('total');
     const result = await doc.get();
-    const res = result.data() as EssayEntitiy;
+    const res = result.data() as EssayEntity;
 
     if (!res) {
       throw new ApiError(

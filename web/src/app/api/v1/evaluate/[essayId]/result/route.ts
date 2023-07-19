@@ -1,13 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import ApiError from '@/app/api/lib/class/ApiError';
-import findScoringResultByEssayId from '@/app/api/repository/scoringResult/findScoringResultByEssayId';
 import findEssayById from '@/app/api/repository/essay/findEssayById';
 import {
-  ScoringResult,
-  ScoringResultEntity,
-  ScoringResultResponse,
+  EssayEntity,
+  EssayResponseDto,
+  ScoringResponseDto,
+  Statistics,
 } from '@/app/api/lib/types';
-import findScoringResultsByUidAndOrderBy from '@/app/api/repository/scoringResult/findScoringResultsByUidAndOrderBy';
+import findEssayByUidAndOrderBy from '@/app/api/repository/essay/findEssayByUidAndOrderBy';
+import {
+  CONT_STATISTICS,
+  EXP_STATISTICS,
+  HIGH_DATA_TOTAL_NUMBER,
+  ORG_STATISTICS,
+  TOTAL_STATISTICS,
+} from '@/app/api/const/dataSet';
+import reduceObject from '@/app/api/lib/utils/reduceObject';
+import calculateGrade from '@/app/api/lib/scoring/calculateGrade';
 
 export async function GET(
   req: NextRequest,
@@ -16,43 +25,91 @@ export async function GET(
   try {
     const { essayId } = params;
 
-    // EssayId로 ScoringResult를 찾아서 반환
-    const { uid: scoringResultUid, ...remainScoringResult } =
-      await findScoringResultByEssayId(essayId);
-
-    // EssayId로 Essay를 찾아서 반환
-    const {
-      essayText: text,
-      createdAt,
-      uid: essayUid,
-      ...remainEssay
-    } = await findEssayById(essayId);
+    // EssayId로 EssayEntity를 찾아서 반환
+    const essayEntity: EssayEntity = await findEssayById(essayId);
 
     // 사용자 정보로 ScoringResult 세개를 찾아서 반환
     let resultHistory = null;
-    if (scoringResultUid) {
-      const docs = await findScoringResultsByUidAndOrderBy({
-        uid: scoringResultUid,
+    if (essayEntity.uid) {
+      const docs = await findEssayByUidAndOrderBy({
+        uid: essayEntity.uid,
         orderBy: 'createdAt',
         orderType: 'desc',
         N: 3,
       });
 
       resultHistory = docs.map((doc) => {
-        const { uid: resultUid, ...remain } = doc.data() as ScoringResultEntity;
-        const data: ScoringResult = remain;
-        return data;
+        const { uid: essayUid, ...remainEssay } = doc.data() as EssayEntity;
+        const res: EssayResponseDto & { essayId: string } = {
+          ...remainEssay,
+          essayId: doc.id,
+        };
+        return res;
       });
     }
+    const sr = essayEntity.scoringResult;
+    if (!sr) {
+      throw new ApiError('채점 결과가 없습니다.', 404, '채점 결과가 없습니다.');
+    }
 
-    const res: ScoringResultResponse = {
-      ...remainScoringResult,
-      essayInfo: {
-        text,
-        ...remainEssay,
+    // essayEntity 중에서 필요한 것만 추출하고, scoringResult 에서 결과값을 재조합하여 반환한다.
+    const { countCharacters, countSentences, total, exp, org, cont } = sr;
+
+    const percentageCallback = (sum: number) => {
+      return (acc: number, value: number, key: number) => {
+        if (Number(key) < sum) {
+          return acc + value;
+        }
+        return acc;
+      };
+    };
+
+    const subResult = (
+      STATISTICS: Statistics,
+      sum: number,
+      title: string = '종합',
+    ) => {
+      const { data, standardDeviation, ...remainStatistics } = STATISTICS;
+
+      return {
+        score: sum,
+        grade: calculateGrade(sum, STATISTICS.max),
+        title,
+        percentage: Math.round(
+          (reduceObject(STATISTICS.data, percentageCallback(sum), 0) /
+            HIGH_DATA_TOTAL_NUMBER) *
+            100,
+        ),
+        ...remainStatistics,
+      };
+    };
+    const res: ScoringResponseDto = {
+      countCharacters, // 글자수
+      countSentences, // 문장수
+      text: essayEntity.essayText,
+      topic: essayEntity.topic,
+      type: essayEntity.type,
+      createdAt: essayEntity.createdAt,
+
+      total: {
+        ...subResult(TOTAL_STATISTICS, total.score),
       },
+      exp: {
+        ...subResult(EXP_STATISTICS, exp.score, exp.title),
+        detail: exp.detail,
+      },
+      org: {
+        ...subResult(ORG_STATISTICS, org.score, org.title),
+        detail: org.detail,
+      },
+      cont: {
+        ...subResult(CONT_STATISTICS, cont.score, cont.title),
+        detail: cont.detail,
+      },
+
       resultHistory,
     };
+
     return NextResponse.json(res, { status: 200 });
   } catch (err) {
     console.log(err);

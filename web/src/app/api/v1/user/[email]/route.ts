@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 import ApiError from '@/app/api/lib/class/ApiError';
 import findUserInfoByEmail from '@/app/api/repository/userInfo/findUserInfoByEmail';
-import { UserInfo } from '@/app/api/lib/types';
+import { UserInfoDto, UserInfoEntity } from '@/app/api/lib/types';
 
 export async function GET(
   req: NextRequest,
@@ -29,9 +29,10 @@ export async function GET(
     }
 
     const docs = await findUserInfoByEmail(email);
-    const { uid, ...remain } = docs.data() as UserInfo;
+    const { uid, ...remain } = docs.data() as UserInfoEntity;
+    const res: UserInfoDto = remain;
 
-    return NextResponse.json(remain, { status: 200 });
+    return NextResponse.json(res, { status: 200 });
   } catch (err) {
     if (err instanceof ApiError) {
       return NextResponse.json({ msg: err.resMessage }, { status: err.status });

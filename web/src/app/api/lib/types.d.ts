@@ -47,40 +47,62 @@ export interface SubStatistics extends Statistics {
 }
 
 /**
- * 반환할 채점 결과 interface
+ * 통신에 필요한 Essay 및 채점결과 interface
  */
+export interface EssayRequestDto {
+  email: string;
+  essayText: string;
+  topic: string;
+  type: string;
+}
+export interface EssayResponseDto {
+  essayText: string;
+  topic: string;
+  type: string;
+  createdAt: string;
 
-// Essay.
-// export interface Essay {
-//   score: number;
-//   average: number;
-//   grade: 'A' | 'B' | 'C';
-//   percentage: number;
-//   min: number;
-//   max: number;
-//   median: number;
-//   Q1: number;
-//   Q3: number;
-//   title: string;
-// }
-// export interface EssayTotal extends Essay {}
-// export interface EssaySub extends Essay {
-//   detail: ScoringResponseDetail[];
-// }
-//
-// export interface ScoringResultResponse extends ScoringResult {
-//   essayInfo: {
-//     text: string;
-//     topic: string;
-//     type: string;
-//   };
-//   resultHistory: ScoringResult[] | null;
-// }
+  scoringResult: ScoringResultField | null;
+}
+
+export interface Score {
+  score: number;
+  average: number;
+  grade: 'A' | 'B' | 'C';
+  percentage: number;
+  min: number;
+  max: number;
+  median: number;
+  Q1: number;
+  Q3: number;
+  title: string;
+}
+
+// omit 문법 ref: https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys
+type ResultHistory = (Omit<EssayEntity, 'uid'> & { essayId: string })[] | null;
+
+export interface ScoringResponseDto {
+  countCharacters: number; // 글자 수
+  countSentences: number; // 문장수
+  text: string;
+  topic: string;
+  type: string;
+  createdAt: string;
+
+  total: {
+    title: string;
+  } & Score;
+  exp: ScoredEssay.exp & Score;
+  org: ScoredEssay.org & Score;
+  cont: ScoredEssay.cont & Score;
+
+  resultHistory: ResultHistory;
+}
 
 /**
  * DB에 저장할 Essay 및 채점 결과 interface
  */
-export interface ScoringResponse {
+
+export interface ScoredEssay {
   exp: {
     title: string;
     detail: { title: string; score: number; average: number }[];
@@ -95,21 +117,21 @@ export interface ScoringResponse {
   };
 }
 
-export interface ScoringResult {
+export interface ScoringResultField {
   countCharacters: number; // 글자 수
   countSentences: number; // 문장수
   total: { title: '종합'; score: number };
-  exp: { score: number } & ScoringResponse.exp;
-  org: { score: number } & ScoringResponse.org;
-  cont: { score: number } & ScoringResponse.cont;
+  exp: ScoredEssay.exp & { score: number };
+  org: ScoredEssay.org & { score: number };
+  cont: ScoredEssay.cont & { score: number };
 }
 
-export interface EssayEntitiy {
+export interface EssayEntity {
   essayText: string;
   topic: string;
   type: string;
   uid: string | null;
   createdAt: string;
 
-  scoringResult: ScoringResult;
+  scoringResult: ScoringResultField | null;
 }

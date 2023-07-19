@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 import ApiError from '@/app/api/lib/class/ApiError';
-import findScoringResultsByUidAndOrderBy from '@/app/api/repository/scoringResult/findScoringResultsByUidAndOrderBy';
-import { ScoringResult, ScoringResultEntity } from '@/app/api/lib/types';
+import findEssayByUidAndOrderBy from '@/app/api/repository/essay/findEssayByUidAndOrderBy';
+import { EssayEntity, EssayResponseDto } from '@/app/api/lib/types';
 
 export async function GET(
   req: NextRequest,
@@ -33,19 +33,22 @@ export async function GET(
 
     // uid 를 이용해 평가 기록 리스트를 가져옴
     const { uid } = decodedToken;
-    const docs = await findScoringResultsByUidAndOrderBy({
+    const docs = await findEssayByUidAndOrderBy({
       uid,
       orderBy: 'createdAt',
       orderType: 'desc',
     });
 
-    const res: ScoringResult[] = docs.map((doc) => {
-      const { uid: scoringResultUid, ...remain } =
-        doc.data() as ScoringResultEntity;
-      return remain;
+    const history: EssayResponseDto[] = docs.map((doc) => {
+      const { uid: essayEntityUid, ...remainEssay } = doc.data() as EssayEntity;
+      const res: EssayResponseDto & { essayId: string } = {
+        ...remainEssay,
+        essayId: doc.id,
+      };
+      return res;
     });
 
-    return NextResponse.json(res, { status: 200 });
+    return NextResponse.json(history, { status: 200 });
   } catch (err) {
     console.log(err);
     if (err instanceof ApiError) {

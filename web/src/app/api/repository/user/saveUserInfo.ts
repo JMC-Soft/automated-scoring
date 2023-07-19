@@ -1,6 +1,6 @@
-import { UserInfo } from '@/app/api/lib/types';
 import { db } from '@/app/api/config/firebase.admin';
 import ApiError from '@/app/api/lib/class/ApiError';
+import { UserInfoEntity } from '@/app/api/lib/types';
 
 const saveUserInfo = async ({
   uid,
@@ -9,7 +9,7 @@ const saveUserInfo = async ({
   gender,
   schoolName,
   createdAt,
-}: UserInfo) => {
+}: UserInfoEntity) => {
   try {
     const doc = db.collection('UserInfo').doc(uid);
 
