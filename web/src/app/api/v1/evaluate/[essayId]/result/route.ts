@@ -28,7 +28,7 @@ export async function GET(
       ...remainEssay
     } = await findEssayById(essayId);
 
-    // TODO: 사용자 정보로 ScoringResult 세개를 찾아서 반환
+    // 사용자 정보로 ScoringResult 세개를 찾아서 반환
     let resultHistory = null;
     if (scoringResultUid) {
       const docs = await findScoringResultsByUidAndOrderBy({
