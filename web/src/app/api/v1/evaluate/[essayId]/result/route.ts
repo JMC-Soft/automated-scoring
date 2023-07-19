@@ -3,6 +3,7 @@ import ApiError from '@/app/api/lib/class/ApiError';
 import findScoringResultByEssayId from '@/app/api/repository/scoringResult/findScoringResultByEssayId';
 import findEssayById from '@/app/api/repository/essay/findEssayById';
 import {
+  ScoringResult,
   ScoringResultEntity,
   ScoringResultResponse,
 } from '@/app/api/lib/types';
@@ -16,9 +17,8 @@ export async function GET(
     const { essayId } = params;
 
     // EssayId로 ScoringResult를 찾아서 반환
-    const { uid, ...remainScoringResult } = await findScoringResultByEssayId(
-      essayId,
-    );
+    const { uid: scoringResultUid, ...remainScoringResult } =
+      await findScoringResultByEssayId(essayId);
 
     // EssayId로 Essay를 찾아서 반환
     const {
@@ -30,15 +30,17 @@ export async function GET(
 
     // TODO: 사용자 정보로 ScoringResult 세개를 찾아서 반환
     let resultHistory = null;
-    if (uid) {
-      const docs = await findScoringResultsByUidAndOrderBy(
-        uid,
-        'createdAt',
-        'desc',
-        3,
-      );
+    if (scoringResultUid) {
+      const docs = await findScoringResultsByUidAndOrderBy({
+        uid: scoringResultUid,
+        orderBy: 'createdAt',
+        orderType: 'desc',
+        N: 3,
+      });
+
       resultHistory = docs.map((doc) => {
-        const data = doc.data() as ScoringResultEntity;
+        const { uid: resultUid, ...remain } = doc.data() as ScoringResultEntity;
+        const data: ScoringResult = remain;
         return data;
       });
     }

@@ -5,7 +5,10 @@ const saveUser = async (
   { gender, schoolName }: UserAdditionInfo,
   uid?: string,
 ) => {
-  const doc = db.collection('User').doc(uid ?? '');
+  const doc = uid
+    ? db.collection('User').doc(uid)
+    : db.collection('User').doc();
+
   await doc.set({ gender, schoolName, uid });
 
   return { doc };
