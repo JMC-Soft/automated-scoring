@@ -1,3 +1,6 @@
+/**
+ * 로그인 or 회원가입 interface
+ */
 export interface UserAuth {
   email: string;
   password: string;
@@ -11,7 +14,7 @@ export interface UserInfoDto {
   schoolName: string;
   createdAt?: string;
 }
-export interface UserInfo extends UserInfoDto {
+export interface UserInfoEntity extends UserInfoDto {
   uid: string;
 }
 
@@ -25,26 +28,9 @@ export interface LoginDto {
   password: string;
 }
 
-export interface EvaluateRequestDto {
-  email: string | null;
-  topic: string;
-  type: string;
-  essayText: string;
-}
-
-export interface ScoringResponseDetail {
-  title: string;
-  score: number;
-  average: number;
-}
-
-export interface ScoringResponseDto {
-  exp: { title: string; detail: ScoringResponseDetail[] };
-  org: { title: string; detail: ScoringResponseDetail[] };
-  cont: { title: string; detail: ScoringResponseDetail[] };
-}
-
-// Statistics. 채점 결과 결과 통계 interface
+/**
+ * 통계 interface
+ */
 export interface Statistics {
   average: number;
   standardDeviation: number;
@@ -57,53 +43,65 @@ export interface Statistics {
 }
 export interface TotalStatistics extends Statistics {}
 export interface SubStatistics extends Statistics {
-  detail: number[];
+  subAverage: number[];
 }
+
+/**
+ * 반환할 채점 결과 interface
+ */
 
 // Essay.
-export interface Essay {
-  score: number;
-  average: number;
-  grade: 'A' | 'B' | 'C';
-  percentage: number;
-  min: number;
-  max: number;
-  median: number;
-  Q1: number;
-  Q3: number;
-  title: string;
-}
-export interface EssayTotal extends Essay {}
-export interface EssaySub extends Essay {
-  detail: ScoringResponseDetail[];
+// export interface Essay {
+//   score: number;
+//   average: number;
+//   grade: 'A' | 'B' | 'C';
+//   percentage: number;
+//   min: number;
+//   max: number;
+//   median: number;
+//   Q1: number;
+//   Q3: number;
+//   title: string;
+// }
+// export interface EssayTotal extends Essay {}
+// export interface EssaySub extends Essay {
+//   detail: ScoringResponseDetail[];
+// }
+//
+// export interface ScoringResultResponse extends ScoringResult {
+//   essayInfo: {
+//     text: string;
+//     topic: string;
+//     type: string;
+//   };
+//   resultHistory: ScoringResult[] | null;
+// }
+
+/**
+ * DB에 저장할 Essay 및 채점 결과 interface
+ */
+export interface ScoringResponse {
+  exp: {
+    title: string;
+    detail: { title: string; score: number; average: number }[];
+  };
+  org: {
+    title: string;
+    detail: { title: string; score: number; average: number }[];
+  };
+  cont: {
+    title: string;
+    detail: { title: string; score: number; average: number }[];
+  };
 }
 
-interface ScoringResult {
-  candidate: number; // 전체 참여자 수
+export interface ScoringResult {
   countCharacters: number; // 글자 수
   countSentences: number; // 문장수
-  essayId: string; // essayId
-  topic: string; // 주제
-  type: string; // 유형
-  total: EssayTotal;
-  exp: EssaySub;
-  org: EssaySub;
-  cont: EssaySub;
-  createdAt?: string; // 생성일
-}
-
-// DB 구조
-export interface ScoringResultEntity extends ScoringResult {
-  uid: string | null; // 유저 ID
-}
-
-export interface ScoringResultResponse extends ScoringResult {
-  essayInfo: {
-    text: string;
-    topic: string;
-    type: string;
-  };
-  resultHistory: ScoringResult[] | null;
+  total: { title: '종합'; score: number };
+  exp: { score: number } & ScoringResponse.exp;
+  org: { score: number } & ScoringResponse.org;
+  cont: { score: number } & ScoringResponse.cont;
 }
 
 export interface EssayEntitiy {
@@ -112,4 +110,6 @@ export interface EssayEntitiy {
   type: string;
   uid: string | null;
   createdAt: string;
+
+  scoringResult: ScoringResult;
 }

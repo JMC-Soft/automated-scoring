@@ -5,6 +5,11 @@ import { EssayEntitiy } from '@/app/api/lib/types';
 const findEssayById = async (essayId: string): Promise<EssayEntitiy> => {
   try {
     const doc = db.collection('Essay').doc(essayId);
+    const subDoc = db
+      .collection('Essay')
+      .doc(essayId)
+      .collection('ScoringResult')
+      .doc('total');
     const result = await doc.get();
     const res = result.data() as EssayEntitiy;
 
