@@ -4,12 +4,19 @@ export interface UserAuth {
   nickname: string;
 }
 
-export interface UserAdditionInfo {
+export interface UserInfo {
+  uid: string;
+  email: string;
+  nickname: string;
+  gender: 'M' | 'F';
+  schoolName: string;
+  createdAt?: string;
+}
+
+export interface RegisterDto extends UserAuth {
   gender: 'M' | 'F';
   schoolName: string;
 }
-
-export interface RegisterDto extends UserAuth, UserAdditionInfo {}
 
 export interface LoginDto {
   email: string;
@@ -92,7 +99,7 @@ export interface ScoringResultResponse extends ScoringResult {
     topic: string;
     type: string;
   };
-  resultHistory: ScoringResultEntity[] | null;
+  resultHistory: ScoringResult[] | null;
 }
 
 export interface EssayEntitiy {
