@@ -1,3 +1,5 @@
+import React from 'react';
+
 export type HeroIconComponent = React.ForwardRefExoticComponent<
   React.PropsWithoutRef<React.SVGProps<SVGSVGElement>> & {
     title?: string;
@@ -10,44 +12,24 @@ export interface User {
   nickname: string;
 }
 
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-export interface SignUpRequest {
-  nickname: string;
-  email: string;
-  password: string;
-  gender: 'F' | 'M';
-  schoolName: string;
-}
-
-export interface EvaluateRequest {
-  topic: Topic;
-  essayText: string;
-}
-
-export type EvaluateResponse = string;
-
-export interface EssayResult {
+export interface Essay {
   candidate: number;
   countCharacters: number;
   countSentences: number;
   createdAt: string;
   essayId: string;
-  essayInfo: EssayInfo;
   total: Statistic;
   exp: SubStatistic;
   org: SubStatistic;
   cont: SubStatistic;
+  text: string;
+  type: string;
+  topic: string;
 }
 
-export interface EssayInfo {
-  text: string;
-  topic: string;
-  type: TopicType;
-}
+export type Result = {
+  resultHistory: Essay[];
+} & Essay;
 
 export type SubStatistic = Statistic & DetailResult;
 export interface Statistic {
@@ -76,8 +58,15 @@ export interface Detail {
 export type Grade = 'A' | 'B' | 'C';
 
 export type Topic = {
-  title: string;
-  type: TopicType;
+  title: TopicTitle;
+  type: EssayType;
 };
 
-export type TopicType = '글짓기' | '대안 제시' | '설명문';
+export type TopicTitle =
+  | '나의 위인전'
+  | '혐오시설 건설문제에 대한 본인의 생각'
+  | '영화감상문';
+
+export type EssayType = '글짓기' | '대안 제시' | '설명문';
+
+export type Status = 'idle' | 'pending' | 'success' | 'error';

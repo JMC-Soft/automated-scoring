@@ -1,6 +1,4 @@
 import React from 'react';
-import { API_BASE_URL } from '@/lib/constants/constants';
-import { EssayResult } from '@/lib/types';
 import OverallPercentage from '@/app/result/[id]/_components/OverallPercentage';
 import Progress from '@/app/result/[id]/_components/Progress';
 import BoxPlotView from '@/app/result/[id]/_components/BoxPlotView';
@@ -10,10 +8,10 @@ import CategoryList from '@/app/result/[id]/_components/CategoryList';
 import ReviewNote from '@/app/result/[id]/_components/ReviewNote';
 import Summary from '@/app/result/[id]/_components/Summary';
 import DetailsView from '@/app/result/[id]/_components/DetailsView';
+import fetchResult from '@/lib/utils/api/essay/fetchResult';
 
 async function Page({ params }: { params: { id: string } }) {
-  const res = await fetch(`${API_BASE_URL}/evaluate/${params.id}/result`);
-  const data: EssayResult = await res.json();
+  const result = await fetchResult(params.id);
 
   const {
     exp,
@@ -23,10 +21,9 @@ async function Page({ params }: { params: { id: string } }) {
     total,
     cont,
     createdAt,
-    essayInfo,
-  } = data;
-
-  const { text, topic } = essayInfo;
+    text,
+    topic,
+  } = result;
 
   return (
     <div className="h-[calc(100vh-4rem)] p-4">

@@ -14,18 +14,19 @@ const topics: Topic[] = [
 ];
 
 function SelectTopic() {
-  const [topic, setTopic] = useStore(useEssayStore, (state) => [
-    state.topic,
-    state.setTopic,
-  ]);
+  const topicTitle = useStore(useEssayStore, (state) => state.title);
+  const setTopic = useEssayStore((state) => state.setTopic);
+
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
-  const handleSelect = (value: Topic) => () => {
-    setTopic(value);
-    setIsOpen(false);
-  };
+  const handleSelect =
+    ({ title, type }: Topic) =>
+    () => {
+      setTopic({ title, type });
+      setIsOpen(false);
+    };
 
   return (
     <>
@@ -40,7 +41,7 @@ function SelectTopic() {
           className="flex h-14 cursor-pointer items-center bg-white px-6 transition-all group-hover:text-xl group-hover:font-extrabold group-hover:text-primary-500"
           onClick={toggleDropdown}
         >
-          {topic?.title || '에세이 주제를 선택해주세요.'}
+          {topicTitle || '에세이 주제를 선택해주세요.'}
           <ChevronDownIcon
             className={clsx(
               'ml-auto h-6 stroke-gray-500 stroke-2 transition-all group-hover:stroke-primary-500 group-hover:stroke-[4px] group-hover:font-extrabold',

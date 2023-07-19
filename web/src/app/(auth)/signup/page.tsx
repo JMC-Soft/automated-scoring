@@ -5,14 +5,19 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import clsx from 'clsx';
-import useSignupStore from '@/store/signupStore';
 import isEmail from '@/lib/utils/isEmail';
 import Form from '@/components/ui/Form/Form';
 import useAuthStore from '@/store/authStore';
-import { SignUpRequest } from '@/lib/types';
+
+import { SignUpRequest } from '@/lib/types/request';
+import fetchCheckDuplicateEmail from '@/lib/utils/api/auth/fetchCheckDuplicateEmail';
+import fetchSignUp from '@/lib/utils/api/auth/fetchSignUp';
+import { Status } from '@/lib/types';
 
 function SignUp() {
   const [lastCheckedEmail, setLastCheckedEmail] = useState<string | null>(null);
+  const [signUpStatus, setSignUpStatus] = useState<Status>('idle');
+  const setUser = useAuthStore((state) => state.setUser);
 
   const {
     register,
@@ -22,11 +27,9 @@ function SignUp() {
     getValues,
   } = useForm<SignUpRequest>();
 
-  const { fetchCheckDuplicateEmail, fetchSignUp } = useSignupStore();
-  const setUser = useAuthStore((state) => state.setUser);
-
   const handleCheckDuplicateEmail = async (e: React.MouseEvent) => {
     e.preventDefault();
+
     const email = getValues('email');
     if (!isEmail(email)) {
       setError('email', { message: '이메일 형식이 올바르지 않습니다.' });
@@ -37,6 +40,7 @@ function SignUp() {
       await fetchCheckDuplicateEmail(email);
       setLastCheckedEmail(email);
       setError('email', { message: '' });
+      alert('사용 가능한 이메일입니다.');
     } catch (err) {
       if (err instanceof Error) {
         setError('email', { message: err.message });
@@ -46,23 +50,17 @@ function SignUp() {
   };
 
   const onSignUp = handleSubmit(async (data) => {
-    const { nickname, email, password, gender, schoolName } = data;
-    console.log({ nickname, email, password, gender, schoolName });
-
     try {
-      const user = await fetchSignUp({
-        nickname,
-        email,
-        password,
-        gender,
-        schoolName,
-      });
+      setSignUpStatus('pending');
+      const user = await fetchSignUp(data);
       alert(`${user.nickname}님, 회원가입을 축하합니다!`);
       setUser(user);
+      setSignUpStatus('success');
     } catch (err) {
       if (err instanceof Error) {
         setError('root', { message: err.message });
       }
+      setSignUpStatus('error');
     }
   });
 
@@ -184,11 +182,11 @@ function SignUp() {
       <div className="w-full">
         <input
           className={clsx('w-full border p-4 text-white', {
-            'cursor-default bg-secondary-700/70': status === 'pending',
-            'cursor-pointer bg-secondary-700': status !== 'pending',
+            'cursor-default bg-secondary-700/70': signUpStatus === 'pending',
+            'cursor-pointer bg-secondary-700': signUpStatus !== 'pending',
           })}
           type="submit"
-          disabled={status === 'pending'}
+          disabled={signUpStatus === 'pending'}
         />
         {errors.root && (
           <span className="px-4 text-warning-500">{errors.root.message}</span>

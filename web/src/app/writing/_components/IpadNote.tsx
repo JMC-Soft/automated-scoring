@@ -6,23 +6,22 @@ import { useRouter } from 'next/navigation';
 import SelectTopic from '@/app/writing/_components/SelectTopic';
 import useStore from '@/lib/hooks/useStore';
 import useEssayStore from '@/store/essayStore';
+import fetchEvaluateEssay from '@/lib/utils/api/essay/fetchEvaluateEssay';
+import useAuthStore from '@/store/authStore';
 
 function IpadNote() {
-  const [essayText, topic] = useStore(useEssayStore, (state) => [
-    state.essayText,
-    state.topic,
+  const essayText = useStore(useEssayStore, (state) => state.essayText);
+  const [title, type] = useStore(useEssayStore, (state) => [
+    state.title,
+    state.type,
   ]);
-  const [fetchEvaluateEssay, setEssayText] = useEssayStore((state) => [
-    state.fetchEvaluateEssay,
-    state.setEssayText,
-  ]);
-
+  const user = useStore(useAuthStore, (state) => state.user);
+  const setEssayText = useEssayStore((state) => state.setEssayText);
   const router = useRouter();
+  const textLength = essayText?.length || 0;
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const textLength = essayText?.length || 0;
-
   const resizeTextArea = () => {
     if (!textAreaRef.current || !sectionRef.current) return;
 
@@ -46,7 +45,7 @@ function IpadNote() {
       return;
     }
 
-    if (!topic) {
+    if (!title || !type) {
       alert('주제를 선택해주세요.');
       return;
     }
@@ -56,8 +55,12 @@ function IpadNote() {
     }
 
     try {
-      const essayID = await fetchEvaluateEssay({ essayText, topic });
-      console.log(essayID);
+      const essayID = await fetchEvaluateEssay({
+        essayText,
+        topic: title,
+        type,
+        email: user?.email ?? null,
+      });
       router.push(`/result/${essayID}`);
       return;
     } catch (e) {

@@ -7,14 +7,14 @@ import koreaIcon from '$/images/flags/korea.svg';
 import useAuthStore from '@/store/authStore';
 import EBALogo from '$/images/logos/logo/logo(H)_text_tag(KR)_2.svg';
 import Button from '@/components/ui/Button';
+import fetchSignOut from '@/lib/utils/api/auth/fetchSignOut';
 
 export default function Header() {
   const user = useAuthStore((state) => state.user);
-  const logout = useAuthStore((state) => state.logout);
 
   const onClickLogout = async () => {
     try {
-      await logout();
+      await fetchSignOut();
     } catch (e) {
       if (e instanceof Error) {
         alert(e.message);

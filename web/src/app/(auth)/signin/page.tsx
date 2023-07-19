@@ -8,12 +8,14 @@ import { useForm } from 'react-hook-form';
 import clsx from 'clsx';
 import { useRouter, useSearchParams } from 'next/navigation';
 import useAuthStore from '@/store/authStore';
-import { LoginRequest } from '@/lib/types';
 import isEmail from '@/lib/utils/isEmail';
 
+import { SignInRequest } from '@/lib/types/request';
+import fetchSignIn from '@/lib/utils/api/auth/fetchSignIn';
+import { Status } from '@/lib/types';
+
 function Page() {
-  const [loginState, setLoginState] = useState('idle');
-  const login = useAuthStore((state) => state.login);
+  const [signInStatus, setSignInStatus] = useState<Status>('idle');
   const setUser = useAuthStore((state) => state.setUser);
   const router = useRouter();
   const redirect = useSearchParams().get('redirect');
@@ -23,19 +25,20 @@ function Page() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<LoginRequest>();
+  } = useForm<SignInRequest>();
 
   const onLogin = handleSubmit(async (data) => {
     try {
-      setLoginState('pending');
-      const user = await login({ email: data.email, password: data.password });
+      setSignInStatus('pending');
+      const user = await fetchSignIn(data);
       setUser(user);
       router.push(redirect || '/');
+      setSignInStatus('success');
     } catch (error) {
-      setLoginState('idle');
       if (error instanceof Error) {
         setError('root', { message: error.message });
       }
+      setSignInStatus('error');
     }
   });
 
@@ -89,11 +92,11 @@ function Page() {
         <div className="w-full">
           <input
             className={clsx('w-full border p-4 text-white', {
-              'cursor-default bg-secondary-700/70': loginState === 'pending',
-              'cursor-pointer bg-secondary-700': loginState !== 'pending',
+              'cursor-default bg-secondary-700/70': signInStatus === 'pending',
+              'cursor-pointer bg-secondary-700': signInStatus !== 'pending',
             })}
             type="submit"
-            disabled={loginState === 'pending'}
+            disabled={signInStatus === 'pending'}
           />
           {errors.root && (
             <span className="px-4 text-warning-500">{errors.root.message}</span>
