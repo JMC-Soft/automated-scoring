@@ -23,7 +23,7 @@ const findScoringResultsByUidAndOrderBy = async ({
   const res = result.docs;
   if (!res) {
     throw new ApiError(
-      `${uid}에 해당하는 결과가 존재하지 않음`,
+      `uid: ${uid}에 해당하는 결과가 존재하지 않음`,
       404,
       '채점 결과가 존재하지 않습니다.',
     );

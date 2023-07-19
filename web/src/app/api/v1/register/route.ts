@@ -7,10 +7,12 @@ import getUserToken from '@/app/api/lib/getUserToken';
 import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 import { RegisterDto } from '@/app/api/lib/types';
 import saveUser from '@/app/api/repository/user/saveUser';
+import makeCreatedAt from '@/app/api/lib/makeCreatedAt';
 
 // 신규 회원 가입
 export async function POST(req: NextRequest) {
   try {
+    // 이미 로그인된 상태이면 에러처리
     const decodedToken = await getDecodedToken(req);
     if (decodedToken) {
       throw new ApiError(
@@ -23,16 +25,27 @@ export async function POST(req: NextRequest) {
     const { email, password, nickname, gender, schoolName }: RegisterDto =
       await req.json();
 
+    // auth 생성
     const user = await createAuth({ email, password, nickname });
 
-    // 여기 뭔가 이상하다.. 두개 하나로 합칠 수 있을거 같은데
-    await saveUser({ gender, schoolName }, user.uid);
+    // User 추가정보 db에 저장
+    await saveUser({
+      uid: user.uid,
+      email,
+      nickname,
+      gender,
+      schoolName,
+      createdAt: makeCreatedAt(),
+    });
+
+    // 회원가입과 동시에 로그인 처리
     const userCredential = await findUserByEmailAndPassword({
       email,
       password,
     });
     const idToken = await getUserToken(userCredential);
 
+    // 토큰값 세팅
     const res = NextResponse.json({ email, nickname }, { status: 200 });
     res.cookies.set('idToken', idToken, {
       httpOnly: true,
