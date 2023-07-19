@@ -22,7 +22,7 @@ function SignUp() {
     getValues,
   } = useForm<SignUpRequest>();
 
-  const { status, fetchCheckDuplicateEmail, fetchSignUp } = useSignupStore();
+  const { fetchCheckDuplicateEmail, fetchSignUp } = useSignupStore();
   const setUser = useAuthStore((state) => state.setUser);
 
   const handleCheckDuplicateEmail = async (e: React.MouseEvent) => {
@@ -47,6 +47,7 @@ function SignUp() {
 
   const onSignUp = handleSubmit(async (data) => {
     const { nickname, email, password, gender, schoolName } = data;
+    console.log({ nickname, email, password, gender, schoolName });
 
     try {
       const user = await fetchSignUp({
@@ -153,25 +154,25 @@ function SignUp() {
       </div>
       <div className="flex w-full items-center gap-x-4">
         <span className="text-lg font-semibold">성별 : </span>
-        <label htmlFor="남자" className="flex items-center gap-x-2">
+        <label htmlFor="male" className="flex items-center gap-x-2">
           <input
             {...register('gender', {
               required: { value: true, message: '성별을 선택해주세요.' },
             })}
             type="radio"
             value="M"
-            name="남자"
+            id="male"
           />
           남자
         </label>{' '}
-        <label htmlFor="여자" className="flex items-center gap-x-2">
+        <label htmlFor="female" className="flex items-center gap-x-2">
           <input
             {...register('gender', {
               required: { value: true, message: '성별을 선택해주세요.' },
             })}
             type="radio"
             value="F"
-            name="여자"
+            id="female"
           />
           여자
         </label>

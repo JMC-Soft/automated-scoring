@@ -2,17 +2,20 @@ import { create } from 'zustand';
 import { SignUpRequest, User } from '@/lib/types';
 import { API_BASE_URL } from '@/lib/constants/constants';
 
-type State = {
-  status: 'idle' | 'pending' | 'success' | 'error';
-};
+type State = {};
 
 type Actions = {
   fetchCheckDuplicateEmail: (email: string) => Promise<void>;
-  fetchSignUp: ({ nickname, email, password }: SignUpRequest) => Promise<User>;
+  fetchSignUp: ({
+    nickname,
+    email,
+    password,
+    gender,
+    schoolName,
+  }: SignUpRequest) => Promise<User>;
 };
 
-const useSignupStore = create<State & Actions>()((set) => ({
-  status: 'idle',
+const useSignupStore = create<State & Actions>()(() => ({
   fetchCheckDuplicateEmail: async (email: string) => {
     const response = await fetch(`${API_BASE_URL}/register/${email}/check`);
 
@@ -25,14 +28,22 @@ const useSignupStore = create<State & Actions>()((set) => ({
       throw new Error(errorData.msg || '알 수 없는 에러가 발생하였습니다.');
     }
   },
-  fetchSignUp: async ({ nickname, email, password }): Promise<User> => {
-    set({ status: 'pending' });
+  fetchSignUp: async ({
+    nickname,
+    email,
+    password,
+    gender,
+    schoolName,
+  }): Promise<User> => {
+    console.log(
+      JSON.stringify({ nickname, email, password, gender, schoolName }),
+    );
     const response = await fetch(`${API_BASE_URL}/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ nickname, email, password }),
+      body: JSON.stringify({ nickname, email, password, gender, schoolName }),
     });
 
     if (!response.ok) {
