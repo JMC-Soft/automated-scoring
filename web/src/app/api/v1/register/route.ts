@@ -24,6 +24,13 @@ export async function POST(req: NextRequest) {
 
     const { email, password, nickname, gender, schoolName }: RegisterDto =
       await req.json();
+    if (!email || !password || !nickname || !gender || !schoolName) {
+      throw new ApiError(
+        '회원가입 요청 시 필요한 정보가 부족합니다.',
+        400,
+        '필수 정보를 모두 입력해주세요.',
+      );
+    }
 
     // auth 생성
     const user = await createAuth({ email, password, nickname });
