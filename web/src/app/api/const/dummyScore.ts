@@ -18,20 +18,20 @@ const dummyScore = {
   org: {
     title: '구성',
     detail: [
-      { title: '문단 내 구조의 적절성', score: 3, average: 2.4 },
+      { title: '문단 내 구조의 적절성', score: 2, average: 2.4 },
       {
         title: '문단 간 구조의 적절성',
-        score: 3,
+        score: 2,
         average: 2.4,
       },
       {
         title: '구조의 일관성',
-        score: 3,
+        score: 2,
         average: 2.4,
       },
       {
         title: '분량의 적절성',
-        score: 3,
+        score: 2,
         average: 2.4,
       },
     ],

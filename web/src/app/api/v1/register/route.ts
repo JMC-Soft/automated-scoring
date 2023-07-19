@@ -6,7 +6,7 @@ import ApiError from '@/app/api/lib/class/ApiError';
 import getUserToken from '@/app/api/lib/getUserToken';
 import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 import { RegisterDto } from '@/app/api/lib/types';
-import saveUser from '@/app/api/repository/user/saveUser';
+import saveUserInfo from '@/app/api/repository/user/saveUserInfo';
 import makeCreatedAt from '@/app/api/lib/makeCreatedAt';
 
 // 신규 회원 가입
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     const user = await createAuth({ email, password, nickname });
 
     // User 추가정보 db에 저장
-    await saveUser({
+    await saveUserInfo({
       uid: user.uid,
       email,
       nickname,

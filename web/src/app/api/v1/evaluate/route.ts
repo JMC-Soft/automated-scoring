@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
           createdAt: makeCreatedAt(),
         });
         throw new ApiError(
-          '프론트에서 받은 email정보와 토큰의 email 정보가 다름',
+          '토큰 정보가 유효하지 않습니다.',
           401,
           '로그인된 회원과 요청된 회원이 다릅니다.',
         );

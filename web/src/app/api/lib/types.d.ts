@@ -4,13 +4,15 @@ export interface UserAuth {
   nickname: string;
 }
 
-export interface UserInfo {
-  uid: string;
+export interface UserInfoDto {
   email: string;
   nickname: string;
   gender: 'M' | 'F';
   schoolName: string;
   createdAt?: string;
+}
+export interface UserInfo extends UserInfoDto {
+  uid: string;
 }
 
 export interface RegisterDto extends UserAuth {
