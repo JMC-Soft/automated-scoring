@@ -83,6 +83,8 @@ interface ScoringResult {
   countCharacters: number; // 글자 수
   countSentences: number; // 문장수
   essayId: string; // essayId
+  topic: string; // 주제
+  type: string; // 유형
   total: EssayTotal;
   exp: EssaySub;
   org: EssaySub;

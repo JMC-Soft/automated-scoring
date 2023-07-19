@@ -74,6 +74,8 @@ const makeScoringResult = async (
     countSentences,
     essayId,
     uid: essay.uid,
+    topic: essay.topic,
+    type: essay.type,
 
     total: {
       ...subResult(TOTAL_STATISTICS, totalSum),
