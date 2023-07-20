@@ -60,6 +60,7 @@ export interface EssayResponseDto {
   topic: string;
   type: string;
   createdAt: string;
+  essayId: string;
 
   scoringResult: ScoringResultField | null;
 }
@@ -74,7 +75,6 @@ export interface Score {
   median: number;
   Q1: number;
   Q3: number;
-  title: string;
 }
 
 // omit 문법 ref: https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys

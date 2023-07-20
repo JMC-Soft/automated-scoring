@@ -51,7 +51,7 @@ export async function GET(
 
       resultHistory = docs.map((doc) => {
         const { uid: essayUid, ...remainEssay } = doc.data() as EssayEntity;
-        const res: EssayResponseDto & { essayId: string } = {
+        const res: EssayResponseDto = {
           ...remainEssay,
           essayId: doc.id,
         };
