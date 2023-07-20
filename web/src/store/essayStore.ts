@@ -1,60 +1,27 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import {
-  EvaluateRequest,
-  EvaluateResponse,
-  EssayResult,
-  Topic,
-} from '@/lib/types';
-import { API_BASE_URL } from '@/lib/constants/constants';
-import useAuthStore from '@/store/authStore';
+import { TopicTitle, EssayType, Topic } from '@/lib/types';
 
-export type EssayState = EvaluateRequest & {
-  result: EssayResult;
+export type EssayState = {
+  title: TopicTitle | null;
+  type: EssayType | null;
+  essayText: string;
 };
 
 export type EssayActions = {
-  setTopic: (topic: Topic) => void;
+  setTopic: ({ title, type }: Topic) => void;
   setEssayText: (essayText: string) => void;
-  fetchEvaluateEssay: ({
-    topic,
-    essayText,
-  }: EvaluateRequest) => Promise<EvaluateResponse>;
 };
 
 const useEssayStore = create<EssayState & EssayActions>()(
   devtools(
     persist(
       (set) => ({
-        topic: {} as Topic,
+        title: null,
+        type: null,
         essayText: '',
-        result: {} as EssayResult,
-        setTopic: (topic) => set({ topic }),
+        setTopic: ({ title, type }) => set({ title, type }),
         setEssayText: (essayText: string) => set({ essayText }),
-        fetchEvaluateEssay: async ({ topic, essayText }) => {
-          const email = useAuthStore.getState().user?.email ?? null;
-
-          const response = await fetch(`${API_BASE_URL}/evaluate`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email,
-              topic: topic.title,
-              type: topic.type,
-              essayText,
-            }),
-          });
-
-          if (!response.ok) {
-            throw new Error('에세이 평가에 실패했습니다.\n다시 시도해 주세요.');
-          }
-
-          const essayId = (await response.text()) as EvaluateResponse;
-
-          return essayId;
-        },
       }),
       {
         name: 'essayStore',
