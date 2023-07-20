@@ -13,13 +13,11 @@ const findEssayByUidAndOrderBy = async ({
   N?: number;
 }) => {
   try {
-    /**
-     * todo: .where('scoringResult', '!=', null) 구문 실행 여부 확인
-     */
     const query = db
       .collection('Essay')
       .where('uid', '==', uid)
       .where('scoringResult', '!=', null)
+      .orderBy('scoringResult', orderType)
       .orderBy(orderBy, orderType);
 
     const doc = N ? query.limit(N) : query;

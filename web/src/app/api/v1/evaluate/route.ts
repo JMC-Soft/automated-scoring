@@ -62,10 +62,6 @@ export async function POST(req: NextRequest) {
       scoringResult,
     };
 
-    /**
-     * EssayEntity를 먼저 저장할 경우, scoring server에 fetch 하는 과정에서 문제가 발생하면
-     * scoringResult가 null로 저장된다.
-     */
     const { doc: essayDoc, essay } = await saveEssay(essayEntity);
 
     // // essay를 scoring server에 보내 채점 결과 객체를 반환
@@ -84,9 +80,9 @@ export async function POST(req: NextRequest) {
 
     // EssayEntity에 scoringResult를 추가하여 저장
     const sr: ScoringResultField = {
-      countCharacters:
+      countCharacters: essay.essayText.trim().length,
+      countSentences:
         essay.essayText.match(COUNT_SENTENCES_REGEXP)?.length ?? 0,
-      countSentences: essay.essayText.trim().length,
       total: { title: '종합', score: totalSum },
       exp: { ...exp, score: expSum },
       org: { ...org, score: orgSum },
