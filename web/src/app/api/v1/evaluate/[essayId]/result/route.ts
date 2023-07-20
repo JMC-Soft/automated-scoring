@@ -16,6 +16,7 @@ import {
 import makeSubScoring from '@/app/api/lib/makeSubScoring';
 import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 
+// TODO: 관리자 접근 상태일 때, 다른 유저의 채점 결과 페이지로 접근 가능하게 하기
 export async function GET(
   req: NextRequest,
   { params }: { params: { essayId: string } },
