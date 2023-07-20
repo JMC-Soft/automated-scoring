@@ -14,17 +14,30 @@ import {
   TOTAL_STATISTICS,
 } from '@/app/api/const/dataSet';
 import makeSubScoring from '@/app/api/lib/makeSubScoring';
+import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { essayId: string } },
 ) {
+  const decodedToken = await getDecodedToken(req);
+  const checkUid = decodedToken?.uid || null;
+
   try {
     const { essayId: rawEssayId } = params;
     const essayId = rawEssayId.replace(/"/g, '');
 
     // EssayId로 EssayEntity를 찾아서 반환
     const essayEntity: EssayEntity = await findEssayById(essayId);
+
+    // essayEntity.uid와 checkUid 모두 null 값이면 접근 가능해짐
+    if (essayEntity.uid !== checkUid) {
+      throw new ApiError(
+        '해당 사용자가 다른 유저의 채점 결과 페이지로 접근시도',
+        401,
+        '열람 권한이 없습니다.',
+      );
+    }
 
     // 사용자 정보로 ScoringResult 세개를 찾아서 반환
     let resultHistory = null;
