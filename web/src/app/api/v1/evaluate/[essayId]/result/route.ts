@@ -5,18 +5,15 @@ import {
   EssayEntity,
   EssayResponseDto,
   ScoringResponseDto,
-  Statistics,
 } from '@/app/api/lib/types';
 import findEssayByUidAndOrderBy from '@/app/api/repository/essay/findEssayByUidAndOrderBy';
 import {
   CONT_STATISTICS,
   EXP_STATISTICS,
-  HIGH_DATA_TOTAL_NUMBER,
   ORG_STATISTICS,
   TOTAL_STATISTICS,
 } from '@/app/api/const/dataSet';
-import reduceObject from '@/app/api/lib/utils/reduceObject';
-import calculateGrade from '@/app/api/lib/scoring/calculateGrade';
+import makeSubScoring from '@/app/api/lib/makeSubScoring';
 
 export async function GET(
   req: NextRequest,
@@ -48,63 +45,34 @@ export async function GET(
         return res;
       });
     }
-    const sr = essayEntity.scoringResult;
-    if (!sr) {
+
+    // essayEntity 중에서 필요한 것만 추출.
+    const { essayText: text, uid, scoringResult, ...remainEssay } = essayEntity;
+    if (!scoringResult) {
       throw new ApiError('채점 결과가 없습니다.', 404, '채점 결과가 없습니다.');
     }
 
-    // essayEntity 중에서 필요한 것만 추출하고, scoringResult 에서 결과값을 재조합하여 반환한다.
-    const { countCharacters, countSentences, total, exp, org, cont } = sr;
+    // scoringResult 를 재조합하여 반환.
+    const { total, exp, org, cont, ...remainScoringResult } = scoringResult;
 
-    const percentageCallback = (sum: number) => {
-      return (acc: number, value: number, key: number) => {
-        if (Number(key) < sum) {
-          return acc + value;
-        }
-        return acc;
-      };
-    };
-
-    const subResult = (
-      STATISTICS: Statistics,
-      sum: number,
-      title: string = '종합',
-    ) => {
-      const { data, standardDeviation, ...remainStatistics } = STATISTICS;
-
-      return {
-        score: sum,
-        grade: calculateGrade(sum, STATISTICS.max),
-        title,
-        percentage: Math.round(
-          (reduceObject(STATISTICS.data, percentageCallback(sum), 0) /
-            HIGH_DATA_TOTAL_NUMBER) *
-            100,
-        ),
-        ...remainStatistics,
-      };
-    };
     const res: ScoringResponseDto = {
-      countCharacters, // 글자수
-      countSentences, // 문장수
-      text: essayEntity.essayText,
-      topic: essayEntity.topic,
-      type: essayEntity.type,
-      createdAt: essayEntity.createdAt,
+      text,
+      ...remainEssay,
+      ...remainScoringResult,
 
       total: {
-        ...subResult(TOTAL_STATISTICS, total.score),
+        ...makeSubScoring(TOTAL_STATISTICS, total.score, total.title),
       },
       exp: {
-        ...subResult(EXP_STATISTICS, exp.score, exp.title),
+        ...makeSubScoring(EXP_STATISTICS, exp.score, exp.title),
         detail: exp.detail,
       },
       org: {
-        ...subResult(ORG_STATISTICS, org.score, org.title),
+        ...makeSubScoring(ORG_STATISTICS, org.score, org.title),
         detail: org.detail,
       },
       cont: {
-        ...subResult(CONT_STATISTICS, cont.score, cont.title),
+        ...makeSubScoring(CONT_STATISTICS, cont.score, cont.title),
         detail: cont.detail,
       },
 
