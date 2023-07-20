@@ -23,7 +23,8 @@ export async function GET(
   { params }: { params: { essayId: string } },
 ) {
   try {
-    const { essayId } = params;
+    const { essayId: rawEssayId } = params;
+    const essayId = rawEssayId.replace(/"/g, '');
 
     // EssayId로 EssayEntity를 찾아서 반환
     const essayEntity: EssayEntity = await findEssayById(essayId);
@@ -112,7 +113,6 @@ export async function GET(
 
     return NextResponse.json(res, { status: 200 });
   } catch (err) {
-    console.log(err);
     if (err instanceof ApiError) {
       return NextResponse.json({ msg: err.resMessage }, { status: err.status });
     }

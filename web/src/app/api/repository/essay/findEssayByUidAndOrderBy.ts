@@ -12,28 +12,33 @@ const findEssayByUidAndOrderBy = async ({
   orderType: 'asc' | 'desc';
   N?: number;
 }) => {
-  /**
-   * todo: .where('scoringResult', '!=', null) 구문 실행 여부 확인
-   */
-  const query = db
-    .collection('Essay')
-    .where('uid', '==', uid)
-    .where('scoringResult', '!=', null)
-    .orderBy(orderBy, orderType);
+  try {
+    /**
+     * todo: .where('scoringResult', '!=', null) 구문 실행 여부 확인
+     */
+    const query = db
+      .collection('Essay')
+      .where('uid', '==', uid)
+      .where('scoringResult', '!=', null)
+      .orderBy(orderBy, orderType);
 
-  const doc = N ? query.limit(N) : query;
-  const result = await doc.get();
-  const res = result.docs;
+    const doc = N ? query.limit(N) : query;
+    const result = await doc.get();
+    const res = result.docs;
 
-  if (!res) {
-    throw new ApiError(
-      `uid: ${uid}에 해당하는 결과가 존재하지 않음`,
-      404,
-      '채점 결과가 존재하지 않습니다.',
-    );
+    if (!res) {
+      throw new ApiError(
+        `uid: ${uid}에 해당하는 결과가 존재하지 않음`,
+        404,
+        '채점 결과가 존재하지 않습니다.',
+      );
+    }
+
+    console.log(res);
+    return res;
+  } catch (err) {
+    throw ApiError.handleError(err);
   }
-
-  return res;
 };
 
 export default findEssayByUidAndOrderBy;
