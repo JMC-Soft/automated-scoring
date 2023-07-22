@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    if (decodedToken.email !== process.env.ADMIN_EMAIL) {
+    if (decodedToken.uid !== process.env.ADMIN_UID) {
       throw new ApiError(
         '관리자 토큰의 정보와 관리자 이메일이 일치하지 않음',
         401,

@@ -25,9 +25,10 @@ export async function GET(
         401,
         '토큰 정보가 유효하지 않습니다.',
       );
+
     if (
       decodedToken.email !== email &&
-      decodedToken.email !== process.env.ADMIN_EMAIL
+      decodedToken.uid !== process.env.ADMIN_UID
     )
       throw new ApiError(
         '사용자에게 받은 email과 token 정보가 일치하지 않음',
@@ -37,7 +38,7 @@ export async function GET(
 
     // 관리자 접근 상태이면 email 의 uid 를 가져옴
     const { uid } =
-      decodedToken.email === process.env.ADMIN_EMAIL
+      decodedToken.uid === process.env.ADMIN_UID
         ? await findUserByEmail(email)
         : decodedToken;
 

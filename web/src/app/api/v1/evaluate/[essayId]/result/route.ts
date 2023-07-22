@@ -16,15 +16,14 @@ import {
 import makeSubScoring from '@/app/api/lib/makeSubScoring';
 import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 
-// TODO: 관리자 접근 상태일 때, 다른 유저의 채점 결과 페이지로 접근 가능하게 하기
 export async function GET(
   req: NextRequest,
   { params }: { params: { essayId: string } },
 ) {
-  const decodedToken = await getDecodedToken(req);
-  const checkUid = decodedToken?.uid || null;
-
   try {
+    const decodedToken = await getDecodedToken(req);
+    const checkUid = decodedToken?.uid || null;
+
     const { essayId: rawEssayId } = params;
     const essayId = rawEssayId.replace(/"/g, '');
 
@@ -32,7 +31,7 @@ export async function GET(
     const essayEntity: EssayEntity = await findEssayById(essayId);
 
     // essayEntity.uid와 checkUid 모두 null 값이면 접근 가능해짐
-    if (essayEntity.uid !== checkUid) {
+    if (checkUid !== process.env.ADMIN_UID && checkUid !== essayEntity.uid) {
       throw new ApiError(
         '해당 사용자가 다른 유저의 채점 결과 페이지로 접근시도',
         401,
