@@ -7,14 +7,15 @@ import {
   ScoringResponseDto,
 } from '@/app/api/lib/types';
 import findEssayByUidAndOrderBy from '@/app/api/repository/essay/findEssayByUidAndOrderBy';
+
+import makeSubScoring from '@/app/api/lib/makeSubScoring';
+import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 import {
   CONT_STATISTICS,
   EXP_STATISTICS,
   ORG_STATISTICS,
   TOTAL_STATISTICS,
 } from '@/app/api/const/dataSet/expression';
-import makeSubScoring from '@/app/api/lib/makeSubScoring';
-import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 
 export async function GET(
   req: NextRequest,
