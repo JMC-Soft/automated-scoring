@@ -1,8 +1,14 @@
+import { cookies } from 'next/headers';
 import { API_BASE_URL } from '@/lib/constants/constants';
 import { Result } from '@/lib/types';
 
 export default async function fetchResult(essayId: string): Promise<Result> {
-  const res = await fetch(`${API_BASE_URL}/evaluate/${essayId}/result`);
+  const res = await fetch(`${API_BASE_URL}/evaluate/${essayId}/result`, {
+    method: 'GET',
+    headers: {
+      cookie: cookies().toString(),
+    },
+  });
 
   if (!res.ok) {
     throw new Error(

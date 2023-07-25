@@ -32,7 +32,6 @@ const findEssayByUidAndOrderBy = async ({
       );
     }
 
-    console.log(res);
     return res;
   } catch (err) {
     throw ApiError.handleError(err);

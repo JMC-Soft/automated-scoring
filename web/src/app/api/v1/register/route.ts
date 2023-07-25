@@ -3,7 +3,6 @@ import { NextResponse } from 'next/server';
 import createAuth from '@/app/api/repository/user/createAuth';
 import findUserByEmailAndPassword from '@/app/api/repository/user/findUserByEmailAndPassword';
 import ApiError from '@/app/api/lib/class/ApiError';
-import getUserToken from '@/app/api/lib/getUserToken';
 import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 import { RegisterDto } from '@/app/api/lib/types';
 import saveUserInfo from '@/app/api/repository/user/saveUserInfo';
@@ -50,7 +49,8 @@ export async function POST(req: NextRequest) {
       email,
       password,
     });
-    const idToken = await getUserToken(userCredential);
+
+    const idToken = await userCredential.getIdToken();
 
     // 토큰값 세팅
     const res = NextResponse.json({ email, nickname }, { status: 200 });
