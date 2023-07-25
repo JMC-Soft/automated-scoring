@@ -1,17 +1,17 @@
-import { UserInfo } from '@/app/api/lib/types';
 import { db } from '@/app/api/config/firebase.admin';
 import ApiError from '@/app/api/lib/class/ApiError';
+import { UserInfoEntity } from '@/app/api/lib/types';
 
-const saveUser = async ({
+const saveUserInfo = async ({
   uid,
   email,
   nickname,
   gender,
   schoolName,
   createdAt,
-}: UserInfo) => {
+}: UserInfoEntity) => {
   try {
-    const doc = db.collection('User').doc(uid);
+    const doc = db.collection('UserInfo').doc(uid);
 
     await doc.set({ uid, email, nickname, gender, schoolName, createdAt });
 
@@ -21,4 +21,4 @@ const saveUser = async ({
   }
 };
 
-export default saveUser;
+export default saveUserInfo;

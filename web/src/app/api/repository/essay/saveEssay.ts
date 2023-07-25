@@ -1,8 +1,8 @@
 import ApiError from '@/app/api/lib/class/ApiError';
 import { db } from '@/app/api/config/firebase.admin';
-import { EssayEntitiy } from '@/app/api/lib/types';
+import { EssayEntity } from '@/app/api/lib/types';
 
-const saveEssay = async (essay: EssayEntitiy, docId?: string) => {
+const saveEssay = async (essay: EssayEntity, docId?: string) => {
   try {
     const doc = docId
       ? db.collection('Essay').doc(docId)

@@ -1,61 +1,99 @@
 import { NextRequest, NextResponse } from 'next/server';
 import ApiError from '@/app/api/lib/class/ApiError';
-import findScoringResultByEssayId from '@/app/api/repository/scoringResult/findScoringResultByEssayId';
 import findEssayById from '@/app/api/repository/essay/findEssayById';
 import {
-  ScoringResult,
-  ScoringResultEntity,
-  ScoringResultResponse,
+  EssayEntity,
+  EssayResponseDto,
+  ScoringResponseDto,
 } from '@/app/api/lib/types';
-import findScoringResultsByUidAndOrderBy from '@/app/api/repository/scoringResult/findScoringResultsByUidAndOrderBy';
+import findEssayByUidAndOrderBy from '@/app/api/repository/essay/findEssayByUidAndOrderBy';
+import {
+  CONT_STATISTICS,
+  EXP_STATISTICS,
+  ORG_STATISTICS,
+  TOTAL_STATISTICS,
+} from '@/app/api/const/dataSet';
+import makeSubScoring from '@/app/api/lib/makeSubScoring';
+import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { essayId: string } },
 ) {
+  const decodedToken = await getDecodedToken(req);
+  const checkUid = decodedToken?.uid || null;
+
   try {
-    const { essayId } = params;
+    const { essayId: rawEssayId } = params;
+    const essayId = rawEssayId.replace(/"/g, '');
 
-    // EssayId로 ScoringResult를 찾아서 반환
-    const { uid: scoringResultUid, ...remainScoringResult } =
-      await findScoringResultByEssayId(essayId);
+    // EssayId로 EssayEntity를 찾아서 반환
+    const essayEntity: EssayEntity = await findEssayById(essayId);
 
-    // EssayId로 Essay를 찾아서 반환
-    const {
-      essayText: text,
-      createdAt,
-      uid: essayUid,
-      ...remainEssay
-    } = await findEssayById(essayId);
+    // essayEntity.uid와 checkUid 모두 null 값이면 접근 가능해짐
+    if (essayEntity.uid !== checkUid) {
+      throw new ApiError(
+        '해당 사용자가 다른 유저의 채점 결과 페이지로 접근시도',
+        401,
+        '열람 권한이 없습니다.',
+      );
+    }
 
-    // TODO: 사용자 정보로 ScoringResult 세개를 찾아서 반환
+    // 사용자 정보로 ScoringResult 세개를 찾아서 반환
     let resultHistory = null;
-    if (scoringResultUid) {
-      const docs = await findScoringResultsByUidAndOrderBy({
-        uid: scoringResultUid,
+    if (essayEntity.uid) {
+      const docs = await findEssayByUidAndOrderBy({
+        uid: essayEntity.uid,
         orderBy: 'createdAt',
         orderType: 'desc',
         N: 3,
       });
 
       resultHistory = docs.map((doc) => {
-        const { uid: resultUid, ...remain } = doc.data() as ScoringResultEntity;
-        const data: ScoringResult = remain;
-        return data;
+        const { uid: essayUid, ...remainEssay } = doc.data() as EssayEntity;
+        const res: EssayResponseDto = {
+          ...remainEssay,
+          essayId: doc.id,
+        };
+        return res;
       });
     }
 
-    const res: ScoringResultResponse = {
+    // essayEntity 중에서 필요한 것만 추출.
+    const { essayText: text, uid, scoringResult, ...remainEssay } = essayEntity;
+    if (!scoringResult) {
+      throw new ApiError('채점 결과가 없습니다.', 404, '채점 결과가 없습니다.');
+    }
+
+    // scoringResult 를 재조합하여 반환.
+    const { total, exp, org, cont, ...remainScoringResult } = scoringResult;
+
+    const res: ScoringResponseDto = {
+      text,
+      ...remainEssay,
       ...remainScoringResult,
-      essayInfo: {
-        text,
-        ...remainEssay,
+
+      total: {
+        ...makeSubScoring(TOTAL_STATISTICS, total.score, total.title),
       },
+      exp: {
+        ...makeSubScoring(EXP_STATISTICS, exp.score, exp.title),
+        detail: exp.detail,
+      },
+      org: {
+        ...makeSubScoring(ORG_STATISTICS, org.score, org.title),
+        detail: org.detail,
+      },
+      cont: {
+        ...makeSubScoring(CONT_STATISTICS, cont.score, cont.title),
+        detail: cont.detail,
+      },
+
       resultHistory,
     };
+
     return NextResponse.json(res, { status: 200 });
   } catch (err) {
-    console.log(err);
     if (err instanceof ApiError) {
       return NextResponse.json({ msg: err.resMessage }, { status: err.status });
     }
