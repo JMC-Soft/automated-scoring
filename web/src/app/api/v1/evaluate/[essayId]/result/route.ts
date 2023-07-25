@@ -12,7 +12,7 @@ import {
   EXP_STATISTICS,
   ORG_STATISTICS,
   TOTAL_STATISTICS,
-} from '@/app/api/const/dataSet';
+} from '@/app/api/const/dataSet/expression';
 import makeSubScoring from '@/app/api/lib/makeSubScoring';
 import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 
@@ -39,6 +39,7 @@ export async function GET(
       );
     }
 
+    let countTotal = 0;
     // 사용자 정보로 ScoringResult 세개를 찾아서 반환
     let resultHistory = null;
     if (essayEntity.uid) {
@@ -46,10 +47,10 @@ export async function GET(
         uid: essayEntity.uid,
         orderBy: 'createdAt',
         orderType: 'desc',
-        N: 3,
       });
 
-      resultHistory = docs.map((doc) => {
+      countTotal = docs.length;
+      resultHistory = docs.slice(0, 3).map((doc) => {
         const { uid: essayUid, ...remainEssay } = doc.data() as EssayEntity;
         const res: EssayResponseDto = {
           ...remainEssay,
@@ -72,6 +73,7 @@ export async function GET(
       text,
       ...remainEssay,
       ...remainScoringResult,
+      countTotal,
 
       total: {
         ...makeSubScoring(TOTAL_STATISTICS, total.score, total.title),

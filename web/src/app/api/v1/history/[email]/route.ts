@@ -7,7 +7,8 @@ import {
   HistoryResponseDto,
   ScoringResultField,
 } from '@/app/api/lib/types';
-import { TOTAL_STATISTICS } from '@/app/api/const/dataSet';
+import { TOTAL_STATISTICS } from '@/app/api/const/dataSet/expression';
+import calculateGrade from '@/app/api/lib/scoring/calculateGrade';
 
 export async function GET(req: NextRequest) {
   try {
@@ -46,17 +47,28 @@ export async function GET(req: NextRequest) {
       const {
         uid: essayEntityUid,
         essayText,
+        scoringResult,
         ...remainEssay
       } = doc.data() as EssayEntity;
+
+      if (scoringResult === null) {
+        throw new ApiError(
+          'firebase 에서 result 결과가 없는 애를 필터링 못해줌',
+          500,
+        );
+      }
       const res: {
         topic: string;
         type: string;
         createdAt: string;
-        scoringResult: ScoringResultField | null;
+        scoringResult: ScoringResultField;
         essayId: string;
+        grade: 'A' | 'B' | 'C';
       } = {
         ...remainEssay,
         essayId: doc.id,
+        scoringResult,
+        grade: calculateGrade(scoringResult.total.score, 30),
       };
       return res;
     });
