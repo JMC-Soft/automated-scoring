@@ -2,8 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 import ApiError from '@/app/api/lib/class/ApiError';
 import findEssayByUidAndOrderBy from '@/app/api/repository/essay/findEssayByUidAndOrderBy';
-import { EssayEntity, EssayResponseDto } from '@/app/api/lib/types';
+import {
+  EssayEntity,
+  HistoryResponseDto,
+  ScoringResultField,
+} from '@/app/api/lib/types';
 import findUserByEmail from '@/app/api/repository/user/findUserByEmail';
+import { TOTAL_STATISTICS } from '@/app/api/const/dataSet';
 
 export async function GET(
   req: NextRequest,
@@ -48,16 +53,86 @@ export async function GET(
       orderType: 'desc',
     });
 
-    const history: EssayResponseDto[] = docs.map((doc) => {
-      const { uid: essayEntityUid, ...remainEssay } = doc.data() as EssayEntity;
-      const res: EssayResponseDto = {
+    const history = docs.map((doc) => {
+      const {
+        uid: essayEntityUid,
+        essayText,
+        ...remainEssay
+      } = doc.data() as EssayEntity;
+      const res: {
+        topic: string;
+        type: string;
+        createdAt: string;
+        scoringResult: ScoringResultField | null;
+        essayId: string;
+      } = {
         ...remainEssay,
         essayId: doc.id,
       };
       return res;
     });
+    const {
+      totalAverageCharacters,
+      totalAverageSentences,
+      totalExpression,
+      totalPersuade,
+      totalInformation,
+    } = history.reduce(
+      (acc, cur) => {
+        const { scoringResult, type } = cur;
+        if (!scoringResult) return acc;
+        const { countCharacters, countSentences } = scoringResult;
 
-    return NextResponse.json(history, { status: 200 });
+        if (type === '자기표현') {
+          acc.totalExpression.score += scoringResult.total.score;
+          acc.totalExpression.length += 1;
+        } else if (type === '설득') {
+          acc.totalPersuade.score += scoringResult.total.score;
+          acc.totalPersuade.length += 1;
+        } else if (type === '정보전달') {
+          acc.totalInformation.score += scoringResult.total.score;
+          acc.totalInformation.length += 1;
+        }
+
+        return {
+          ...acc,
+          totalAverageCharacters: acc.totalAverageCharacters + countCharacters,
+          totalAverageSentences: acc.totalAverageSentences + countSentences,
+        };
+      },
+      {
+        totalAverageCharacters: 0,
+        totalAverageSentences: 0,
+        totalExpression: { length: 0, score: 0 },
+        totalPersuade: { length: 0, score: 0 },
+        totalInformation: { length: 0, score: 0 },
+      },
+    );
+
+    const res: HistoryResponseDto = {
+      countAverageCharacters: totalAverageCharacters / history.length,
+      countAverageSentences: totalAverageSentences / history.length,
+      countTotal: history.length,
+      expression: {
+        title: '자기표현',
+        average: TOTAL_STATISTICS.average,
+        score: totalExpression.score / totalExpression.length,
+      },
+      persuade: {
+        title: '설득',
+        average: TOTAL_STATISTICS.average,
+        score: totalPersuade.score / totalPersuade.length,
+      },
+      information: {
+        title: '정보전달',
+        average: TOTAL_STATISTICS.average,
+        score: totalInformation.score / totalInformation.length,
+      },
+
+      resultHistory: history,
+    };
+
+    return NextResponse.json(res, { status: 200 });
   } catch (err) {
     console.log(err);
     if (err instanceof ApiError) {
