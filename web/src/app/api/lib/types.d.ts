@@ -83,6 +83,7 @@ type ResultHistory = (Omit<EssayEntity, 'uid'> & { essayId: string })[] | null;
 export interface ScoringResponseDto {
   countCharacters: number; // 글자 수
   countSentences: number; // 문장수
+  countTotal: number; // 총 답안수
   text: string;
   topic: string;
   type: string;
