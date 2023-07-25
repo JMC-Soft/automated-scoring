@@ -3,7 +3,6 @@ import saveEssay from '@/app/api/repository/essay/saveEssay';
 import ApiError from '@/app/api/lib/class/ApiError';
 import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
 import makeCreatedAt from '@/app/api/lib/makeCreatedAt';
-import dummyScore from '@/app/api/const/dummyScore';
 import {
   EssayEntity,
   EssayRequestDto,
@@ -11,6 +10,7 @@ import {
   ScoringResultField,
 } from '@/app/api/lib/types';
 import COUNT_SENTENCES_REGEXP from '@/app/api/const/regExp';
+import fetchToScoringServer from '@/app/api/lib/scoring/fetchToScoringServer';
 
 export async function POST(req: NextRequest) {
   try {
@@ -64,12 +64,10 @@ export async function POST(req: NextRequest) {
 
     const { doc: essayDoc, essay } = await saveEssay(essayEntity);
 
-    // // essay를 scoring server에 보내 채점 결과 객체를 반환
-    // const replaceText = essayText.replaceAll('"', "'").replaceAll('\n', ' ');
-    // const scoredEssay: ScoredEssay = await fetchToScoringServer(
-    //   replaceText,
-    // );
-    const scoredEssay: ScoredEssay = dummyScore;
+    // essay를 scoring server에 보내 채점 결과 객체를 반환
+    const replaceText = essayText.replaceAll('"', "'").replaceAll('\n', ' ');
+    const scoredEssay: ScoredEssay = await fetchToScoringServer(replaceText);
+    // const scoredEssay: ScoredEssay = dummyScore;
 
     // ScoringResultField 에 들어갈 값 계산
     const { exp, org, cont } = scoredEssay;
