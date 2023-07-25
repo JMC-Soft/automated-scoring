@@ -98,6 +98,31 @@ export interface ScoringResponseDto {
   resultHistory: ResultHistory;
 }
 
+type ResultHistoryMinusEssayText = Omit<ResultHistory, 'essayText'>;
+
+export interface HistoryResponseDto {
+  countAverageCharacters: number;
+  countAverageSentences: number;
+  countTotal: number;
+  expression: {
+    title: string;
+    average: number;
+    score: number | null;
+  };
+  information: {
+    title: string;
+    average: number;
+    score: number | null;
+  };
+  persuade: {
+    title: string;
+    average: number;
+    score: number | null;
+  };
+
+  resultHistory: ResultHistoryMinusEssayText;
+}
+
 /**
  * DB에 저장할 Essay 및 채점 결과 interface
  */
