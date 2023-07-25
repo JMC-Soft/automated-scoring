@@ -39,6 +39,39 @@ pipelines_alternative = {name: pipeline("text-classification", model=models_alte
 
 
 
+detail_name =  {
+                "exp0" : "문법의 적절성",
+                "exp1" : "단어 사용의 적절성",
+                "exp2" : "문장 표현의 적절성",
+                "org0" : "문단 내 구조의 적절성",
+                "org1" : "문단 간 구조의 적절성",
+                "org2" : "구조의 일관성",
+                "org3" : "분량의 적절성",
+                "cont0": "주제의 명료성",
+                "cont1" : "근거의 적절성",
+                "cont3" : "프롬프트 독해력"    
+            }
+
+cata_dict = {"exp":"표현", "org":"구성", "cont": "표현"}
+
+def make_result(result_dic, average = 2.4):
+    resp = {}
+    for cata in cata_dict.keys():
+       resp[cata] = {"title":cata_dict[cata], "detail":[]} 
+       
+    for detail in result_dic.keys():
+        for cata in cata_dict.keys():
+            if cata in detail:
+                in_detail = {"title":detail_name[detail], "score":result_dic[detail], "average":average}
+                resp[cata]["detail"].append(in_detail)
+            else:
+                pass
+    
+    return  resp
+        
+            
+
+
 @app.route("/predict/essay", methods=["POST"])
 def essay():
     if request.method == "POST":
@@ -60,15 +93,7 @@ def essay():
             else:
                 results[key] += 1
 
-        resp = {"exp":[],"org":[],"cont":[]}
-        
-        for key in results.keys():
-            if "exp" in key:
-                resp["exp"].append(results[key])
-            elif "cont" in key:
-                resp["cont"].append(results[key])
-            else:
-                resp["org"].append(results[key])
+        resp = make_result(results)
 
 
         return jsonify(resp)
@@ -96,15 +121,7 @@ def explain():
             else:
                 results[key] += 1
 
-        resp = {"exp":[],"org":[],"cont":[]}
-        
-        for key in results.keys():
-            if "exp" in key:
-                resp["exp"].append(results[key])
-            elif "cont" in key:
-                resp["cont"].append(results[key])
-            else:
-                resp["org"].append(results[key])
+        resp = make_result(results)
 
 
         return jsonify(resp)
@@ -131,15 +148,7 @@ def alternative():
             else:
                 results[key] += 1
 
-        resp = {"exp":[],"org":[],"cont":[]}
-        
-        for key in results.keys():
-            if "exp" in key:
-                resp["exp"].append(results[key])
-            elif "cont" in key:
-                resp["cont"].append(results[key])
-            else:
-                resp["org"].append(results[key])
+        resp = make_result(results)
 
 
         return jsonify(resp)   
