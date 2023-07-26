@@ -1,8 +1,11 @@
 from flask import Flask, request, jsonify
 from optimum.onnxruntime import ORTModelForSequenceClassification
 from transformers import ElectraTokenizer, pipeline
+from kiwipiepy import Kiwi
+from collections import Counter
 
 app = Flask(__name__)
+kiwi = Kiwi()
 
 model_names = ["cont0", "cont1",  "cont3","exp0", "exp1", "exp2", "org0", "org1", "org2", "org3"]
 label_dict = {"LABEL_0":0,"LABEL_1":1,"LABEL_2":2,"LABEL_3":3}
