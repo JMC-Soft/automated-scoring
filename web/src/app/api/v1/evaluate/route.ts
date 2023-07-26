@@ -11,8 +11,7 @@ import {
   WordCloudEntity,
 } from '@/app/api/lib/types';
 import COUNT_SENTENCES_REGEXP from '@/app/api/const/regExp';
-// import fetchToScoringServer from '@/app/api/lib/scoring/fetchToScoringServer';
-import dummyScore from '@/app/api/const/dummyScore';
+import fetchToScoringServer from '@/app/api/lib/scoring/fetchToScoringServer';
 import findWordCloudByUid from '@/app/api/repository/wordCloud/findWordCloudByUid';
 import saveWordCloud from '@/app/api/repository/wordCloud/saveWordCloud';
 
@@ -94,13 +93,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // // scoring server에 보내 채점 결과 객체를 반환
-    // const replaceText = essayText.replaceAll('"', "'").replaceAll('\n', ' ');
-    // const scoredEssay: ScoredEssay = await fetchToScoringServer(
-    //   replaceText,
-    //   fetchServer,
-    // );
-    const scoredEssay: ScoredEssay = dummyScore;
+    // scoring server에 보내 채점 결과 객체를 반환
+    const replaceText = essayText.replaceAll('"', "'").replaceAll('\n', ' ');
+    const scoredEssay: ScoredEssay = await fetchToScoringServer(
+      replaceText,
+      fetchServer,
+    );
+    // const scoredEssay: ScoredEssay = dummyScore;
 
     // ScoringResultField 에 들어갈 값 계산
     const { exp, org, cont, wordCloud: analyzedWordCloud } = scoredEssay;
