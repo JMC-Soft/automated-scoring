@@ -46,16 +46,26 @@ export interface SubStatistics extends Statistics {
   subAverage: number[];
 }
 
+export interface StatisticsObject {
+  DATA_TOTAL_NUMBER: number;
+  TOTAL_STATISTICS: TotalStatistics;
+  EXP_STATISTICS: SubStatistics;
+  ORG_STATISTICS: SubStatistics;
+  CONT_STATISTICS: SubStatistics;
+}
+
 /**
  * 통신에 필요한 Essay 및 채점결과 interface
  */
 export interface EssayRequestDto {
   email: string;
+  id: number;
   essayText: string;
   topic: string;
   type: string;
 }
 export interface EssayResponseDto {
+  id: number;
   essayText: string;
   topic: string;
   type: string;
@@ -153,6 +163,7 @@ export interface ScoringResultField {
 }
 
 export interface EssayEntity {
+  id: number;
   essayText: string;
   topic: string;
   type: string;

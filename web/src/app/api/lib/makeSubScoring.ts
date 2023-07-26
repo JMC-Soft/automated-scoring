@@ -2,9 +2,13 @@ import { Statistics } from '@/app/api/lib/types';
 import calculateGrade from '@/app/api/lib/scoring/calculateGrade';
 import reduceObject from '@/app/api/lib/utils/reduceObject';
 import scorePercentageCallback from '@/app/api/lib/callback/scorePercentageCallback';
-import { HIGH_DATA_TOTAL_NUMBER } from '@/app/api/const/dataSet/expression';
 
-const makeSubScoring = (STATISTICS: Statistics, sum: number, title: string) => {
+const makeSubScoring = (
+  DATA_TOTAL_NUMBER: number,
+  STATISTICS: Statistics,
+  sum: number,
+  title: string,
+) => {
   const { data, standardDeviation, ...remainStatistics } = STATISTICS;
 
   return {
@@ -13,7 +17,7 @@ const makeSubScoring = (STATISTICS: Statistics, sum: number, title: string) => {
     title,
     percentage: Math.round(
       (reduceObject(STATISTICS.data, scorePercentageCallback(sum), 0) /
-        HIGH_DATA_TOTAL_NUMBER) *
+        DATA_TOTAL_NUMBER) *
         100,
     ),
     ...remainStatistics,
