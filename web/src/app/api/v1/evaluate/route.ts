@@ -10,6 +10,7 @@ import {
   ScoringResultField,
 } from '@/app/api/lib/types';
 import COUNT_SENTENCES_REGEXP from '@/app/api/const/regExp';
+// import dummyScore from '@/app/api/const/dummyScore';
 import fetchToScoringServer from '@/app/api/lib/scoring/fetchToScoringServer';
 
 export async function POST(req: NextRequest) {

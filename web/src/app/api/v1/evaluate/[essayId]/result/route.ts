@@ -51,14 +51,19 @@ export async function GET(
       });
 
       countTotal = docs.length;
-      resultHistory = docs.slice(0, 3).map((doc) => {
-        const { uid: essayUid, ...remainEssay } = doc.data() as EssayEntity;
-        const res: EssayResponseDto = {
-          ...remainEssay,
-          essayId: doc.id,
-        };
-        return res;
-      });
+      const history = docs
+        .filter((doc) => doc.data().scoringResult !== null)
+        .slice(0, 3)
+        .map((doc) => {
+          const { uid: essayUid, ...remainEssay } = doc.data() as EssayEntity;
+          const res: EssayResponseDto = {
+            ...remainEssay,
+            essayId: doc.id,
+          };
+          return res;
+        });
+
+      resultHistory = history.slice(0, 3);
     }
 
     // essayEntity 중에서 필요한 것만 추출.
@@ -94,6 +99,8 @@ export async function GET(
 
       resultHistory,
     };
+
+    console.log(res);
 
     return NextResponse.json(res, { status: 200 });
   } catch (err) {

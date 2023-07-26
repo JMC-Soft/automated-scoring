@@ -16,8 +16,6 @@ const findEssayByUidAndOrderBy = async ({
     const query = db
       .collection('Essay')
       .where('uid', '==', uid)
-      .where('scoringResult', '!=', null)
-      .orderBy('scoringResult', orderType)
       .orderBy(orderBy, orderType);
 
     const doc = N ? query.limit(N) : query;

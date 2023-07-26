@@ -43,35 +43,38 @@ export async function GET(req: NextRequest) {
       orderType: 'desc',
     });
 
-    const history = docs.map((doc) => {
-      const {
-        uid: essayEntityUid,
-        essayText,
-        scoringResult,
-        ...remainEssay
-      } = doc.data() as EssayEntity;
+    const history = docs
+      .filter((doc) => doc.data().scoringResult !== null)
+      .map((doc) => {
+        const {
+          uid: essayEntityUid,
+          essayText,
+          scoringResult,
+          ...remainEssay
+        } = doc.data() as EssayEntity;
 
-      if (scoringResult === null) {
-        throw new ApiError(
-          'firebase 에서 result 결과가 없는 애를 필터링 못해줌',
-          500,
-        );
-      }
-      const res: {
-        topic: string;
-        type: string;
-        createdAt: string;
-        scoringResult: ScoringResultField;
-        essayId: string;
-        grade: 'A' | 'B' | 'C';
-      } = {
-        ...remainEssay,
-        essayId: doc.id,
-        scoringResult,
-        grade: calculateGrade(scoringResult.total.score, 30),
-      };
-      return res;
-    });
+        if (scoringResult === null) {
+          throw new ApiError(
+            'firebase 에서 result 결과가 없는 애를 필터링 못해줌',
+            500,
+          );
+        }
+        const res: {
+          topic: string;
+          type: string;
+          createdAt: string;
+          scoringResult: ScoringResultField;
+          essayId: string;
+          grade: 'A' | 'B' | 'C';
+        } = {
+          ...remainEssay,
+          essayId: doc.id,
+          scoringResult,
+          grade: calculateGrade(scoringResult.total.score, 30),
+        };
+        return res;
+      });
+
     const {
       totalAverageCharacters,
       totalAverageSentences,
