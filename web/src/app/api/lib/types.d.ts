@@ -132,7 +132,18 @@ export interface HistoryResponseDto {
   };
 
   resultHistory: ResultHistoryMinusEssayText;
+  wordCloud: {
+    1: { text: string; value: number }[];
+    2: { text: string; value: number }[];
+    3: { text: string; value: number }[];
+  } | null;
 }
+
+export type WordCloud = {
+  1: { text: string; value: number }[];
+  2: { text: string; value: number }[];
+  3: { text: string; value: number }[];
+};
 
 /**
  * DB에 저장할 Essay 및 채점 결과 interface
@@ -150,6 +161,9 @@ export interface ScoredEssay {
   cont: {
     title: string;
     detail: { title: string; score: number; average: number }[];
+  };
+  wordCloud: {
+    [key: string]: number;
   };
 }
 
@@ -171,4 +185,22 @@ export interface EssayEntity {
   createdAt: string;
 
   scoringResult: ScoringResultField | null;
+}
+
+/**
+ * WordCloud interface
+ */
+
+export interface WordCloudEntity {
+  uid: string;
+  [key: number]: { [key: string]: number };
+  // '1': {
+  //   [key: string]: number;
+  // };
+  // '2': {
+  //   [key: string]: number;
+  // };
+  // '3': {
+  //   [key: string]: number;
+  // };
 }
