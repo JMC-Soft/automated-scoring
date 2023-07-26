@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     const res = NextResponse.json({ email, nickname }, { status: 200 });
     res.cookies.set('idToken', idToken, {
       httpOnly: true,
-      secure: true,
+      // secure: true,
     });
 
     return res;
