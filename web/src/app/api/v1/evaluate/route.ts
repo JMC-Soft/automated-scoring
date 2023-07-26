@@ -8,9 +8,13 @@ import {
   EssayRequestDto,
   ScoredEssay,
   ScoringResultField,
+  WordCloudEntity,
 } from '@/app/api/lib/types';
 import COUNT_SENTENCES_REGEXP from '@/app/api/const/regExp';
-import fetchToScoringServer from '@/app/api/lib/scoring/fetchToScoringServer';
+// import fetchToScoringServer from '@/app/api/lib/scoring/fetchToScoringServer';
+import dummyScore from '@/app/api/const/dummyScore';
+import findWordCloudByUid from '@/app/api/repository/wordCloud/findWordCloudByUid';
+import saveWordCloud from '@/app/api/repository/wordCloud/saveWordCloud';
 
 export async function POST(req: NextRequest) {
   try {
@@ -90,16 +94,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // scoring server에 보내 채점 결과 객체를 반환
-    const replaceText = essayText.replaceAll('"', "'").replaceAll('\n', ' ');
-    const scoredEssay: ScoredEssay = await fetchToScoringServer(
-      replaceText,
-      fetchServer,
-    );
-    // const scoredEssay: ScoredEssay = dummyScore;
+    // // scoring server에 보내 채점 결과 객체를 반환
+    // const replaceText = essayText.replaceAll('"', "'").replaceAll('\n', ' ');
+    // const scoredEssay: ScoredEssay = await fetchToScoringServer(
+    //   replaceText,
+    //   fetchServer,
+    // );
+    const scoredEssay: ScoredEssay = dummyScore;
 
     // ScoringResultField 에 들어갈 값 계산
-    const { exp, org, cont } = scoredEssay;
+    const { exp, org, cont, wordCloud: analyzedWordCloud } = scoredEssay;
     const expSum = exp.detail.reduce((acc, cur) => acc + cur.score, 0);
     const orgSum = org.detail.reduce((acc, cur) => acc + cur.score, 0);
     const contSum = cont.detail.reduce((acc, cur) => acc + cur.score, 0);
@@ -117,6 +121,30 @@ export async function POST(req: NextRequest) {
 
     essay.scoringResult = sr;
     await saveEssay(essay, essayDoc.id);
+
+    // 로그인이 되어있는 경우 wordCloud 를 저장한다.
+    if (essay.uid) {
+      const doc = await findWordCloudByUid(essay.uid);
+      const data = doc?.[0].data() as WordCloudEntity;
+
+      // topicId에 해당하는 기존에 저장된 wordCloud 를 불러온다.
+      const preSavedWordCloud: { [key: string]: number } = data ? data[id] : {};
+
+      // 분석된 wordCloud와 기존에 저장된 wordCloud를 합친다.
+      Object.keys(analyzedWordCloud).forEach((key) => {
+        if (!preSavedWordCloud[key]) {
+          preSavedWordCloud[key] = 0;
+        }
+        preSavedWordCloud[key] += analyzedWordCloud[key];
+      });
+
+      // 새로 생성한 wordCloud를 저장한다.
+      const newWordCloud: WordCloudEntity = {
+        ...data,
+        [id]: preSavedWordCloud,
+      };
+      await saveWordCloud(newWordCloud, doc?.[0].id);
+    }
 
     return NextResponse.json(essayDoc.id, { status: 200 });
   } catch (err) {

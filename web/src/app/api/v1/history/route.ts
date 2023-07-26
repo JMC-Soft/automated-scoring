@@ -6,9 +6,12 @@ import {
   EssayEntity,
   HistoryResponseDto,
   ScoringResultField,
+  WordCloud,
+  WordCloudEntity,
 } from '@/app/api/lib/types';
 import calculateGrade from '@/app/api/lib/scoring/calculateGrade';
 import { BIOGRAPHY, FACILITY, REVIEW } from '@/app/api/const/dataset';
+import findWordCloudByUid from '@/app/api/repository/wordCloud/findWordCloudByUid';
 
 export async function GET(req: NextRequest) {
   try {
@@ -113,9 +116,30 @@ export async function GET(req: NextRequest) {
       },
     );
 
+    // wordCloud 가져오기
+    const cloudData = await findWordCloudByUid(uid);
+
+    let wordCloud = null;
+    if (cloudData) {
+      const tmpCloud = cloudData[0].data() as WordCloudEntity;
+      const { uid: wordUid, ...rest } = tmpCloud;
+
+      wordCloud = Object.entries(rest).reduce((acc, [id, wordData]) => {
+        Object.entries(wordData).forEach(([word, count]) => {
+          if (!acc[id as '1' | '2' | '3']) {
+            acc[id as '1' | '2' | '3'] = [];
+          }
+          acc[id as '1' | '2' | '3'].push({ text: word, value: count });
+        });
+        return acc;
+      }, {} as WordCloud);
+    }
+
     const res: HistoryResponseDto = {
-      countAverageCharacters: totalAverageCharacters / history.length,
-      countAverageSentences: totalAverageSentences / history.length,
+      countAverageCharacters:
+        Math.round((totalAverageCharacters / history.length) * 10) / 10,
+      countAverageSentences:
+        Math.round((totalAverageSentences / history.length) * 10) / 10,
       countTotal: history.length,
       expression: {
         title: '자기표현',
@@ -134,6 +158,7 @@ export async function GET(req: NextRequest) {
       },
 
       resultHistory: history,
+      wordCloud,
     };
 
     return NextResponse.json(res, { status: 200 });

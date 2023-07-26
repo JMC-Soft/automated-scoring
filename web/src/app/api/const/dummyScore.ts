@@ -52,6 +52,16 @@ const dummyScore = {
       },
     ],
   },
+  wordCloud: {
+    준경: 10,
+    큐티: 9,
+    귀욤: 5,
+    뽀짝: 7,
+    귀여움: 8,
+    한씨: 2,
+    혼나야됨: 2,
+    기집: 1,
+  },
 };
 
 export default dummyScore;
