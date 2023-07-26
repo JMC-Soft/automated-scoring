@@ -2,7 +2,7 @@ const dummyScore = {
   exp: {
     title: '표현',
     detail: [
-      { title: '문법의 적절성', score: 3, average: 2.4 },
+      { title: '문법의 적절성', score: 2, average: 2.4 },
       {
         title: '단어 사용의 적절성',
         score: 3,
@@ -39,7 +39,7 @@ const dummyScore = {
   cont: {
     title: '내용',
     detail: [
-      { title: '주제의 명료성', score: 3, average: 2.4 },
+      { title: '주제의 명료성', score: 2, average: 2.4 },
       {
         title: '근거의 적절성',
         score: 3,
