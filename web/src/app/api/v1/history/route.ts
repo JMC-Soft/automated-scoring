@@ -7,8 +7,8 @@ import {
   HistoryResponseDto,
   ScoringResultField,
 } from '@/app/api/lib/types';
-import { TOTAL_STATISTICS } from '@/app/api/const/dataSet/expression';
 import calculateGrade from '@/app/api/lib/scoring/calculateGrade';
+import { BIOGRAPHY, FACILITY, REVIEW } from '@/app/api/const/dataset';
 
 export async function GET(req: NextRequest) {
   try {
@@ -119,17 +119,17 @@ export async function GET(req: NextRequest) {
       countTotal: history.length,
       expression: {
         title: '자기표현',
-        average: TOTAL_STATISTICS.average,
+        average: BIOGRAPHY.TOTAL_STATISTICS.average,
         score: totalExpression.score / totalExpression.length,
       },
       persuade: {
         title: '설득',
-        average: TOTAL_STATISTICS.average,
+        average: FACILITY.TOTAL_STATISTICS.average,
         score: totalPersuade.score / totalPersuade.length,
       },
       information: {
         title: '정보전달',
-        average: TOTAL_STATISTICS.average,
+        average: REVIEW.TOTAL_STATISTICS.average,
         score: totalInformation.score / totalInformation.length,
       },
 

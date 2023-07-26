@@ -10,12 +10,12 @@ import {
   ScoringResultField,
 } from '@/app/api/lib/types';
 import COUNT_SENTENCES_REGEXP from '@/app/api/const/regExp';
-// import dummyScore from '@/app/api/const/dummyScore';
 import fetchToScoringServer from '@/app/api/lib/scoring/fetchToScoringServer';
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, essayText, topic, type }: EssayRequestDto = await req.json();
+    const { email, essayText, topic, type, id }: EssayRequestDto =
+      await req.json();
     let uid = null;
     const scoringResult = null;
 
@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
       // 사용자가 로그인되어있는데 토큰이 유효하지 않은 경우
       if (!decodedToken) {
         await saveEssay({
+          id,
           essayText,
           topic,
           type,
@@ -37,6 +38,7 @@ export async function POST(req: NextRequest) {
       if (decodedToken.email !== email) {
         // 사용자의 이메일 정보와 토큰의 이메일 정보가 다른 경우
         await saveEssay({
+          id,
           essayText,
           topic,
           type,
@@ -55,6 +57,7 @@ export async function POST(req: NextRequest) {
     }
 
     const essayEntity: EssayEntity = {
+      id,
       essayText,
       topic,
       type,
@@ -65,9 +68,34 @@ export async function POST(req: NextRequest) {
 
     const { doc: essayDoc, essay } = await saveEssay(essayEntity);
 
-    // essay를 scoring server에 보내 채점 결과 객체를 반환
+    // topicId에 맞는 서버를 세팅
+    if (!id) {
+      throw new ApiError('topicId가 지정되지 않음.', 500, '서버 오류입니다.');
+    }
+    let fetchServer = '';
+    if (id === 1) {
+      fetchServer = process.env.FLASK_SERVER_1 ?? '';
+    }
+    if (id === 2) {
+      fetchServer = process.env.FLASK_SERVER_2 ?? '';
+    }
+    if (id === 3) {
+      fetchServer = process.env.FLASK_SERVER_3 ?? '';
+    }
+    if (!fetchServer) {
+      throw new ApiError(
+        'flask 서버의 주소가 제대로 설정되지 않음.',
+        500,
+        '서버 오류입니다.',
+      );
+    }
+
+    // scoring server에 보내 채점 결과 객체를 반환
     const replaceText = essayText.replaceAll('"', "'").replaceAll('\n', ' ');
-    const scoredEssay: ScoredEssay = await fetchToScoringServer(replaceText);
+    const scoredEssay: ScoredEssay = await fetchToScoringServer(
+      replaceText,
+      fetchServer,
+    );
     // const scoredEssay: ScoredEssay = dummyScore;
 
     // ScoringResultField 에 들어갈 값 계산
@@ -80,8 +108,7 @@ export async function POST(req: NextRequest) {
     // EssayEntity에 scoringResult를 추가하여 저장
     const sr: ScoringResultField = {
       countCharacters: essay.essayText.trim().length,
-      countSentences:
-        essay.essayText.match(COUNT_SENTENCES_REGEXP)?.length ?? 0,
+      countSentences: essay.essayText.split(COUNT_SENTENCES_REGEXP).length,
       total: { title: '종합', score: totalSum },
       exp: { ...exp, score: expSum },
       org: { ...org, score: orgSum },

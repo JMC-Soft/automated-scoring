@@ -10,12 +10,7 @@ import findEssayByUidAndOrderBy from '@/app/api/repository/essay/findEssayByUidA
 
 import makeSubScoring from '@/app/api/lib/makeSubScoring';
 import getDecodedToken from '@/app/api/lib/auth/getDecodedToken';
-import {
-  CONT_STATISTICS,
-  EXP_STATISTICS,
-  ORG_STATISTICS,
-  TOTAL_STATISTICS,
-} from '@/app/api/const/dataSet/expression';
+import { BIOGRAPHY, FACILITY, REVIEW } from '@/app/api/const/dataset';
 
 export async function GET(
   req: NextRequest,
@@ -51,7 +46,7 @@ export async function GET(
       });
 
       countTotal = docs.length;
-      const history = docs
+      resultHistory = docs
         .filter((doc) => doc.data().scoringResult !== null)
         .slice(0, 3)
         .map((doc) => {
@@ -62,8 +57,6 @@ export async function GET(
           };
           return res;
         });
-
-      resultHistory = history.slice(0, 3);
     }
 
     // essayEntity 중에서 필요한 것만 추출.
@@ -75,6 +68,25 @@ export async function GET(
     // scoringResult 를 재조합하여 반환.
     const { total, exp, org, cont, ...remainScoringResult } = scoringResult;
 
+    // topicId에 맞게 STATISTICS 가져오기
+    let topic = {} as any;
+    if (essayEntity.id === 1) {
+      topic = BIOGRAPHY;
+    }
+    if (essayEntity.id === 2) {
+      topic = FACILITY;
+    }
+    if (essayEntity.id === 3) {
+      topic = REVIEW;
+    }
+    const {
+      DATA_TOTAL_NUMBER,
+      TOTAL_STATISTICS,
+      EXP_STATISTICS,
+      ORG_STATISTICS,
+      CONT_STATISTICS,
+    } = topic;
+
     const res: ScoringResponseDto = {
       text,
       ...remainEssay,
@@ -82,25 +94,43 @@ export async function GET(
       countTotal,
 
       total: {
-        ...makeSubScoring(TOTAL_STATISTICS, total.score, total.title),
+        ...makeSubScoring(
+          DATA_TOTAL_NUMBER,
+          TOTAL_STATISTICS,
+          total.score,
+          total.title,
+        ),
       },
       exp: {
-        ...makeSubScoring(EXP_STATISTICS, exp.score, exp.title),
+        ...makeSubScoring(
+          DATA_TOTAL_NUMBER,
+          EXP_STATISTICS,
+          exp.score,
+          exp.title,
+        ),
         detail: exp.detail,
       },
       org: {
-        ...makeSubScoring(ORG_STATISTICS, org.score, org.title),
+        ...makeSubScoring(
+          DATA_TOTAL_NUMBER,
+          ORG_STATISTICS,
+          org.score,
+          org.title,
+        ),
         detail: org.detail,
       },
       cont: {
-        ...makeSubScoring(CONT_STATISTICS, cont.score, cont.title),
+        ...makeSubScoring(
+          DATA_TOTAL_NUMBER,
+          CONT_STATISTICS,
+          cont.score,
+          cont.title,
+        ),
         detail: cont.detail,
       },
 
       resultHistory,
     };
-
-    console.log(res);
 
     return NextResponse.json(res, { status: 200 });
   } catch (err) {
