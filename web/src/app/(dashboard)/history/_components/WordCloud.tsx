@@ -3,13 +3,14 @@
 import React, { useCallback, useState } from 'react';
 import { Word } from 'react-d3-cloud/lib/WordCloud';
 import clsx from 'clsx';
-import D3WordCloud from 'react-d3-cloud';
+import dynamic from 'next/dynamic';
 import type { WordCloud as WordCloudType } from '@/lib/types';
 import TOPICS from '@/lib/constants/topic';
 
 function WordCloud({ data }: { data: WordCloudType }) {
+  const D3WordCloud = dynamic(() => import('react-d3-cloud'), { ssr: false });
   const [activeTypeId, setActiveTypeId] = useState<keyof WordCloudType>(1);
-  const [wordCloudData, setWordCloudData] = useState(data[1]);
+  const [wordCloudData, setWordCloudData] = useState(data[1] ?? []);
 
   const fontSize = useCallback((word: Word) => Math.log2(word.value) * 15, []);
   const onClick = (id: keyof WordCloudType) => () => {
