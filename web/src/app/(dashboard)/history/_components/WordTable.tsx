@@ -58,7 +58,7 @@ function WordTable({ className, data }: Props) {
         </thead>
         <tbody className="w-full">
           {wordCloudData.map((v, i) => (
-            <tr className="border-b">
+            <tr key={v.text} className="border-b">
               <td className="w-2/12 border-r">{i + 1}</td>
               <td className="w-4/12 border-r">{v.text}</td>
               <td className="w-2/12 border-r">{v.value}</td>

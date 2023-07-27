@@ -3,11 +3,13 @@
 import React from 'react';
 import {
   CategoryScale,
+  registerables,
   Chart as ChartJS,
   ChartData,
   ChartOptions,
   LinearScale,
   LineElement,
+  LineController,
   PointElement,
   Title,
   Tooltip,
@@ -24,10 +26,12 @@ import pretendard from '@/lib/constants/fonts';
 import { HistoryEssay } from '@/lib/types';
 
 ChartJS.register(
+  ...registerables,
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
+  LineController,
   Title,
   Tooltip,
   Legend,
