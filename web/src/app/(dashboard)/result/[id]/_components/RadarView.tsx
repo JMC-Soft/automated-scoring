@@ -12,11 +12,9 @@ import {
   Filler,
   Legend,
 } from 'chart.js';
-import { Detail } from '@/lib/types';
+import { SubStatistic } from '@/lib/types';
 import hexToRGBA from '@/lib/utils/colors';
 import COLORS from '@/lib/constants/colors';
-import DEFAULT_OPTIONS from '@/lib/constants/chart';
-import pretendard from '@/lib/constants/fonts';
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Legend);
 
@@ -34,57 +32,23 @@ export const CATEGORY_LIST = {
 };
 
 type Props = {
-  myDataList: Detail[];
-  averageDataList: number[];
+  dataList: SubStatistic[];
 };
 
-function RadarView({ myDataList, averageDataList }: Props) {
-  // const [width, setWidth] = useState(0);
-  // const [height, setHeight] = useState(0);
-  // const [cache, setCache] = useState<CanvasGradient | null>(null);
-  // const createConicGradient = (context: ScriptableContext<'radar'>) => {
-  //   const { chartArea } = context.chart;
-  //   if (!chartArea) {
-  //     // This case happens on initial chart load
-  //     return undefined;
-  //   }
-  //
-  //   const chartWidth = chartArea.right - chartArea.left;
-  //   const chartHeight = chartArea.bottom - chartArea.top;
-  //   if (width !== chartWidth || height !== chartHeight) {
-  //     setCache(null);
-  //   }
-  //
-  //   let gradient: null | CanvasGradient = cache;
-  //   if (!gradient) {
-  //     setWidth(chartWidth);
-  //     setHeight(chartHeight);
-  //     const centerX = (chartArea.left + chartArea.right) / 2;
-  //     const centerY = (chartArea.top + chartArea.bottom) / 2;
-  //     const { ctx } = context.chart;
-  //     gradient = ctx.createConicGradient((Math.PI * -1) / 2, centerX, centerY);
-  //     gradient.addColorStop(0, hexToRGBA(COLORS.accent[500], 0.1)); // blue
-  //     gradient.addColorStop(0.3, hexToRGBA(COLORS.accent[500], 0.1)); // orange
-  //     gradient.addColorStop(0.301, hexToRGBA(COLORS.success[500], 0.1)); // turqoise
-  //     gradient.addColorStop(0.7, hexToRGBA(COLORS.success[500], 0.1)); // green
-  //     gradient.addColorStop(0.701, hexToRGBA(COLORS.primary[500], 0.1)); // blue
-  //     gradient.addColorStop(1, hexToRGBA(COLORS.primary[500], 0.1)); // blue
-  //     setCache(gradient);
-  //   }
-  //
-  //   return gradient;
-  // };
+function RadarView({ dataList }: Props) {
+  if (dataList.filter((value) => value).length === 0) {
+    return (
+      <article className="col-start-4 col-end-5 row-start-2 row-end-4 bg-white p-8" />
+    );
+  }
 
   const data: ChartData<'radar'> = {
-    labels: myDataList.map(
-      (value) => CATEGORY_LIST[value.title as keyof typeof CATEGORY_LIST],
-    ),
+    labels: dataList.map((value) => value.detail.map((v) => v.title)).flat(),
     datasets: [
       {
         label: '내 점수',
-        data: myDataList.map((value) => value.score),
+        data: dataList.map((value) => value.detail.map((v) => v.score)).flat(),
         backgroundColor: hexToRGBA(COLORS.secondary[500], 0.2),
-        // backgroundColor: createConicGradient,
         borderColor: hexToRGBA(COLORS.secondary[500], 1),
         pointBackgroundColor: COLORS.secondary[500],
         pointBorderColor: COLORS.secondary[500],
@@ -95,9 +59,8 @@ function RadarView({ myDataList, averageDataList }: Props) {
       },
       {
         label: '전체 평균',
-        data: averageDataList,
+        data: dataList.map((value) => value.subAverage).flat(),
         backgroundColor: hexToRGBA(COLORS.warning[500], 0.15),
-        // backgroundColor: createConicGradient,
         borderColor: hexToRGBA(COLORS.warning[500], 1),
         pointBackgroundColor: COLORS.warning[500],
         pointBorderColor: COLORS.warning[500],
@@ -110,7 +73,8 @@ function RadarView({ myDataList, averageDataList }: Props) {
   };
 
   const options: ChartOptions<'radar'> = {
-    ...DEFAULT_OPTIONS,
+    maintainAspectRatio: false,
+    responsive: true,
     plugins: {
       tooltip: {
         callbacks: {
@@ -133,10 +97,15 @@ function RadarView({ myDataList, averageDataList }: Props) {
             if (idx >= 3 && idx < 7) return hexToRGBA(COLORS.success[500], 1);
             return hexToRGBA(COLORS.secondary[500], 1);
           },
-          font: {
-            size: 14,
-            weight: '700',
-            family: pretendard.style.fontFamily,
+          font(context) {
+            const { width } = context.chart;
+            const size = Math.round(width / 38);
+
+            return {
+              weight: 'bold',
+              size,
+              family: 'pretendard',
+            };
           },
         },
         // 간격
@@ -149,21 +118,12 @@ function RadarView({ myDataList, averageDataList }: Props) {
           color: hexToRGBA(COLORS.primary[500], 0.2),
           lineWidth: 1,
         },
-        // 수직 선
-        // angleLines: {
-        //   color: (context) => {
-        //     const idx = context.index;
-        //     if (idx >= 0 && idx < 3) return COLORS.accent[500];
-        //     if (idx >= 3 && idx < 7) return COLORS.success[500];
-        //     return COLORS.primary[500];
-        //   },
-        // },
       },
     },
   };
 
   return (
-    <article className="col-start-4 col-end-5 row-start-2 row-end-4 bg-white p-8">
+    <article className="col-start-4 col-end-5 row-start-2 row-end-4 h-auto w-auto overflow-auto bg-white p-8 scrollbar-hide">
       <Radar data={data} options={options} />
     </article>
   );

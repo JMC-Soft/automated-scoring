@@ -2,10 +2,10 @@ import React from 'react';
 import RecentGradeHistory from '@/app/(dashboard)/history/_components/RecentGradeHistory';
 import LineChart from '@/components/ui/Chart/LineChart';
 import HistoryView from '@/app/(dashboard)/_components/HistoryView';
-import RadarChart from '@/components/ui/Chart/RadarChart';
 import WordTable from '@/app/(dashboard)/history/_components/WordTable';
 import fetchHistory from '@/lib/utils/api/history/fetchHistory';
 import WordCloud from '@/app/(dashboard)/history/_components/WordCloud';
+import CategoryRadar from '@/app/(dashboard)/history/_components/CategoryRadar';
 
 async function Page() {
   const data = await fetchHistory();
@@ -34,26 +34,21 @@ async function Page() {
             <WordCloud data={wordCloud} />
           </div>
           <RecentGradeHistory dataList={resultHistory.slice(0, 10)} />
-          <div className="flex w-full flex-1 flex-col justify-center gap-y-1 bg-white px-12">
+          <div className="flex w-full flex-1 flex-col justify-center gap-y-1 bg-white px-4 xl:px-12">
             <span className="text-3xl font-bold">{countTotal}</span>
             <h3 className="text-lg">전체 응시 횟수</h3>
           </div>
-          <div className="flex w-full flex-1 flex-col justify-center gap-y-1 bg-background-500 px-12">
+          <div className="flex w-full flex-1 flex-col justify-center gap-y-1 bg-background-500 px-4 xl:px-12">
             <span className="text-3xl font-bold">{countAverageSentences}</span>
             <h3 className="text-lg">에세이별 평균 문장 수</h3>
           </div>
-          <div className="flex w-full flex-1 flex-col justify-center gap-y-1 px-12">
+          <div className="flex w-full flex-1 flex-col justify-center gap-y-1 px-4 xl:px-12">
             <span className="text-3xl font-bold">{countAverageCharacters}</span>
             <h3 className="text-lg">에세이별 평균 글자 수</h3>
           </div>
         </div>
 
-        <div className="col-start-2 col-end-4 row-start-1 bg-white p-4">
-          <LineChart
-            dataList={resultHistory.slice(0, 10).reverse()}
-            className="h-full w-full"
-          />
-        </div>
+        <LineChart dataList={resultHistory.slice(0, 10).reverse()} />
         <HistoryView
           title="점수 이력"
           className="col-start-4 row-start-1 row-end-3"
@@ -66,17 +61,7 @@ async function Page() {
           className="col-start-2 col-end-3 row-start-2 row-end-3"
         />
 
-        <div className="col-start-3 col-end-4 row-start-2 row-end-3 flex flex-col items-center gap-y-2 bg-white py-4">
-          <h2 className="text-xl font-semibold">유형별 종합 결과</h2>
-          <div className="w-full flex-1">
-            <RadarChart
-              className="h-full w-full"
-              labels={radarData.map((v) => v.title)}
-              totalDataList={radarData.map((v) => v.average)}
-              dataList={radarData.map((v) => v.score ?? 0)}
-            />
-          </div>
-        </div>
+        <CategoryRadar radarData={radarData} />
       </div>
     </div>
   );

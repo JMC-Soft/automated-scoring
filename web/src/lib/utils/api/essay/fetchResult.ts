@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { API_BASE_URL } from '@/lib/constants/constants';
 
@@ -9,9 +8,7 @@ export default async function fetchResult(
 ): Promise<ResultResponse> {
   const res = await fetch(`${API_BASE_URL}/evaluate/${essayId}/result`, {
     method: 'GET',
-    headers: {
-      cookie: cookies().toString(),
-    },
+    cache: 'force-cache',
   });
 
   if (!res.ok) {

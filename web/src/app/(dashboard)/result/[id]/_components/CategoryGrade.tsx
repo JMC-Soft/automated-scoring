@@ -3,7 +3,6 @@
 import React from 'react';
 import { ChartData, ChartOptions, Plugin } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import DEFAULT_OPTIONS from '@/lib/constants/chart';
 import COLORS, { GRADE_COLOR_MAP } from '@/lib/constants/colors';
 import textCenterPlugin from '@/lib/utils/chart/plugin/textCenterPlugin';
 import { Grade } from '@/lib/types';
@@ -25,19 +24,26 @@ function CategoryGrade({ grade, score, max, title }: Props) {
       },
     ],
   };
+
   const options: ChartOptions<'doughnut'> = {
-    ...DEFAULT_OPTIONS,
+    responsive: true,
+    maintainAspectRatio: false,
     rotation: -180,
-    cutout: 35,
+    cutout: '70%',
     plugins: {
       title: {
         display: true,
         position: 'bottom',
         text: title,
-        font: {
-          size: 20,
-          weight: 'bold',
-          family: 'pretendard',
+        font(context) {
+          const { width } = context.chart;
+          const size = Math.round(width / 12);
+
+          return {
+            weight: 'bold',
+            size,
+            family: 'pretendard',
+          };
         },
       },
     },
@@ -48,12 +54,7 @@ function CategoryGrade({ grade, score, max, title }: Props) {
   ];
 
   return (
-    <Doughnut
-      className="h-full w-full"
-      data={data}
-      options={options}
-      plugins={plugins}
-    />
+    <Doughnut width="100%" data={data} options={options} plugins={plugins} />
   );
 }
 

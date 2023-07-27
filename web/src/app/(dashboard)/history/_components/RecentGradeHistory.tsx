@@ -5,8 +5,8 @@ import { HistoryEssay } from '@/lib/types';
 function RecentGradeHistory({ dataList }: { dataList: HistoryEssay[] }) {
   return (
     <div className="flex flex-col gap-y-1 bg-background-500 py-3">
-      <h2 className="px-8 text-lg">최근 제출 결과</h2>
-      <div className="grid flex-1 grid-cols-5 gap-2 px-8">
+      <h2 className="px-2 text-lg xl:px-8">최근 제출 결과</h2>
+      <div className="grid flex-1 grid-cols-5 gap-2 px-2 xl:px-8">
         {dataList.map((data) => {
           const grade = data.grade ?? 'B';
           const [, month, day] = data.createdAt.split(' ')[0].split('-');

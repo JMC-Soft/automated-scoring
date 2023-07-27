@@ -31,7 +31,7 @@ function HistoryView({
     >
       <h2 className="text-xl">{title}</h2>
       {data ? (
-        <div className="grid w-full flex-1 grid-rows-3">
+        <div className="flex w-full flex-1 flex-col justify-start gap-y-2">
           {data.map((value, idx) => {
             const { topic, type, scoringResult, essayId, createdAt } = value;
             const date = new Date(createdAt.split(' ')[0]);
@@ -42,7 +42,7 @@ function HistoryView({
               <Link
                 href={`/result/${essayId}`}
                 key={essayId}
-                className="grid-cols-recent-history grid-rows-recent-history grid w-full flex-1 cursor-pointer gap-x-4 gap-y-1 px-6 py-1 hover:bg-background-500"
+                className="grid-cols-recent-history grid-rows-recent-history grid w-full flex-1 grow-0 cursor-pointer gap-x-2 gap-y-1 px-3 hover:bg-background-500 xl:gap-x-4 xl:px-6"
               >
                 <div className="self-center justify-self-center text-sm font-semibold text-gray-500">
                   {countTotal - idx} 회차
