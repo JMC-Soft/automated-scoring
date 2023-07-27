@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import CategoryGrade from '@/app/result/[id]/_components/CategoryGrade';
+import CategoryGrade from '@/app/(dashboard)/result/[id]/_components/CategoryGrade';
 import { Statistic } from '@/lib/types';
 
 function CategoryList({ dataList }: { dataList: Statistic[] }) {

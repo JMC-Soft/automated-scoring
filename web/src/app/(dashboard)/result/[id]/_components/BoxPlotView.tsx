@@ -16,7 +16,7 @@ import {
 import hexToRGBA from '@/lib/utils/colors';
 import COLORS from '@/lib/constants/colors';
 import { Statistic } from '@/lib/types';
-import { DEFAULT_OPTIONS } from '@/lib/constants/chart';
+import DEFAULT_OPTIONS from '@/lib/constants/chart';
 
 ChartJS.register(LinearScale, BoxPlotController, CategoryScale, BoxAndWiskers);
 

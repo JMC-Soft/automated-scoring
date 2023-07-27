@@ -11,7 +11,7 @@ import {
   Tooltip,
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { DEFAULT_OPTIONS } from '@/lib/constants/chart';
+import DEFAULT_OPTIONS from '@/lib/constants/chart';
 import COLORS from '@/lib/constants/colors';
 import pretendard from '@/lib/constants/fonts';
 import textCenterPlugin from '@/lib/utils/chart/plugin/textCenterPlugin';

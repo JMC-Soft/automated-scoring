@@ -16,6 +16,7 @@ export interface SignUpRequest {
 export interface EvaluateRequest {
   topic: TopicTitle;
   type: EssayType;
+  id: number;
   essayText: string;
   email: string | null;
 }

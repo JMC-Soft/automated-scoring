@@ -18,35 +18,37 @@ export default function Home() {
               right: '5%',
               width: '25vw',
               height: 'fit-content',
+              objectPosition: 'top',
             }}
             src={RobotImage}
             alt="로봇"
           />
-          <span className="w-fit border-b-4 border-primary-500 pb-4 pr-2 text-5xl font-black text-primary-500">
-            한국어 에세이 자동 채점
+          <span className="w-fit pb-4 pr-2 text-3xl font-black text-primary-500">
+            한국어 에세이 자동 채점 프로그램 - PASTA{' '}
+            <span className=" text-xl font-bold text-secondary-500">
+              ( <span className="text-3xl text-primary-500">P</span>ersonalized{' '}
+              <span className="text-3xl text-primary-500">A</span>utomated{' '}
+              <span className="text-3xl text-primary-500">S</span>coring and{' '}
+              <span className="text-3xl text-primary-500">T</span>utoring{' '}
+              <span className="text-3xl text-primary-500">A</span>ssistant )
+            </span>
           </span>
-          <span className="mt-6 text-3xl font-bold text-secondary-500">
-            E-DA
-          </span>
-          <span className=" text-xl font-bold text-secondary-500">
-            Edu Deeplearning Autoscoring
-          </span>
-          <p className="mt-6 text-lg leading-loose">
-            E-DA는 한국어 에세이 자동 채점 프로그램으로, 학습자의 에세이 답안을
-            입력하면 AI 채점 시스템이 인간 채점자와 유사한 채점 결과를
-            제공합니다. <br /> 다양한 지표를 통해 결과를 분석하고 학습자의
-            답안을 자동으로 평가하고, 학습자의 현재 수준을 파악할 수 있습니다.
-            (수정 예정)
+
+          <p className="mt-6 text-2xl leading-loose">
+            <b>PASTA</b>는 학습자의 에세이 글을 자동으로 채점하는 인공지능
+            채점시스템으로서
+            <br />
+            학습자의 글을 입체적으로 분석하여 다양한 분석 결과를 제공합니다.
           </p>
           <StartButton />
           <Image
             src={ResultPageImage}
             style={{
-              margin: '2rem auto',
+              margin: '5rem auto',
               boxShadow: '0 0 8px 0 rgba(0, 0, 0, 0.2)',
               borderRadius: '1rem',
               border: '2px solid #eaeaea',
-              width: '80%',
+              width: '100%',
             }}
             alt="결과 화면 미리보기"
           />

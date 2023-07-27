@@ -9,7 +9,19 @@ pip install virtualenv
 virtualenv .venv
 
 # Install requirements and run python app in the virtual environment
-. .venv/Scripts/activate && pip install -r requirements.txt && python app.py &
+. .venv/Scripts/activate && pip install -r requirements.txt
+
+cd essay
+python app.py &
+cd ../
+
+#cd explain
+#python app.py &
+#cd ../
+#
+#cd alternative
+#python app.py &
+#cd ../
 
 # Change directory to web from root directory
 cd ../web

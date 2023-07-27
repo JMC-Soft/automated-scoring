@@ -1,0 +1,21 @@
+import React from 'react';
+import clsx from 'clsx';
+
+function TypeTag({ type }: { type: string }) {
+  return (
+    <div
+      className={clsx(
+        'flex h-fit items-center justify-center self-start rounded px-1.5 py-1 text-xs font-bold shadow',
+        {
+          'bg-accent-500 text-white': type === '자기표현',
+          'bg-primary-500 text-white': type === '설득',
+          'bg-success-500 text-white': type === '정보전달',
+        },
+      )}
+    >
+      {type}
+    </div>
+  );
+}
+
+export default TypeTag;
