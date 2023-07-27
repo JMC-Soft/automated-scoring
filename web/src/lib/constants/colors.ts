@@ -1,4 +1,4 @@
-const COLORS = {
+export const COLORS = {
   primary: {
     50: '#E6F2FF' /* Lightest Blue */,
     100: '#BFDFFF',
@@ -119,6 +119,12 @@ const COLORS = {
     800: '#662900',
     900: '#331400' /* Darkest Orange */,
   },
+};
+
+export const GRADE_COLOR_MAP = {
+  A: COLORS.secondary[500],
+  B: COLORS.primary[500],
+  C: COLORS.warning[500],
 };
 
 export default COLORS;

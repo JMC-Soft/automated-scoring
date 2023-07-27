@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import {
   ChartData,
@@ -8,11 +10,12 @@ import {
 import { Radar } from 'react-chartjs-2';
 import hexToRGBA from '@/lib/utils/colors';
 import COLORS from '@/lib/constants/colors';
+import pretendard from '@/lib/constants/fonts';
 
 type Props<T> = {
   labels: T[];
   totalDataList: number[];
-  dataList: number[];
+  dataList: (number | null)[];
   className?: string;
 };
 
@@ -24,34 +27,36 @@ function RadarChart<T>({
   dataList,
   className,
 }: Props<T>) {
+  const datasets = [
+    {
+      label: '내 점수',
+      data: dataList,
+      backgroundColor: hexToRGBA(COLORS.primary[500], 0.2),
+      borderColor: COLORS.primary[500],
+      pointBackgroundColor: COLORS.primary[500],
+      pointBorderColor: COLORS.primary[500],
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: COLORS.secondary[500],
+      borderWidth: 2,
+      pointRadius: 3,
+    },
+    {
+      label: '전체 평균',
+      data: totalDataList,
+      backgroundColor: hexToRGBA(COLORS.accent[500], 0.2),
+      borderColor: COLORS.accent[500],
+      pointBackgroundColor: COLORS.accent[500],
+      pointBorderColor: COLORS.accent[500],
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: COLORS.accent[500],
+      borderWidth: 2,
+      pointRadius: 3,
+    },
+  ];
+
   const data: ChartData<'radar'> = {
     labels,
-    datasets: [
-      {
-        label: '내 점수',
-        data: dataList,
-        backgroundColor: hexToRGBA(COLORS.primary[500], 0.2),
-        borderColor: COLORS.primary[500],
-        pointBackgroundColor: COLORS.primary[500],
-        pointBorderColor: COLORS.primary[500],
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: COLORS.secondary[500],
-        borderWidth: 2,
-        pointRadius: 3,
-      },
-      {
-        label: '전체 평균',
-        data: totalDataList,
-        backgroundColor: hexToRGBA(COLORS.accent[500], 0.2),
-        borderColor: COLORS.accent[500],
-        pointBackgroundColor: COLORS.accent[500],
-        pointBorderColor: COLORS.accent[500],
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: COLORS.accent[500],
-        borderWidth: 2,
-        pointRadius: 3,
-      },
-    ],
+    datasets,
   };
 
   const options: ChartOptions<'radar'> = {
@@ -70,19 +75,18 @@ function RadarChart<T>({
     },
     scales: {
       r: {
-        min: 0,
-        max: 3,
+        min: 10,
+        max: 30,
         pointLabels: {
           font: {
-            size: 14,
-            weight: '500',
-            family: 'pretendard',
+            size: 12,
+            weight: '600',
+            family: pretendard.style.fontFamily,
           },
         },
         // 간격
         ticks: {
-          stepSize: 1,
-          display: false,
+          stepSize: 5,
         },
         // 배경 선
         grid: {

@@ -1,20 +1,22 @@
 'use client';
 
-import React, { ChangeEvent, useEffect, useRef } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import SelectTopic from '@/app/writing/_components/SelectTopic';
 import useStore from '@/lib/hooks/useStore';
 import useEssayStore from '@/store/essayStore';
 import fetchEvaluateEssay from '@/lib/utils/api/essay/fetchEvaluateEssay';
 import useAuthStore from '@/store/authStore';
+import Button from '@/components/ui/Button';
+import Loader from '@/components/ui/Loader';
 
 function IpadNote() {
+  const [isPromptOpen, setIsPromptOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const essayText = useStore(useEssayStore, (state) => state.essayText);
-  const [title, type] = useStore(useEssayStore, (state) => [
-    state.title,
-    state.type,
-  ]);
+  const topic = useStore(useEssayStore, (state) => state.topic);
   const user = useStore(useAuthStore, (state) => state.user);
   const setEssayText = useEssayStore((state) => state.setEssayText);
   const router = useRouter();
@@ -45,7 +47,7 @@ function IpadNote() {
       return;
     }
 
-    if (!title || !type) {
+    if (!topic) {
       alert('주제를 선택해주세요.');
       return;
     }
@@ -55,10 +57,12 @@ function IpadNote() {
     }
 
     try {
+      setIsLoading(true);
       const essayID = await fetchEvaluateEssay({
         essayText,
-        topic: title,
-        type,
+        topic: topic.title,
+        type: topic.type,
+        id: topic.id,
         email: user?.email ?? null,
       });
       router.push(`/result/${essayID}`);
@@ -68,19 +72,51 @@ function IpadNote() {
         alert(e.message);
       }
     }
+
+    setIsLoading(false);
+  };
+
+  const onTogglePrompt = () => {
+    setIsPromptOpen((prev) => !prev);
   };
 
   return (
     <div
-      className="flex h-full max-h-full w-full flex-col overflow-hidden overflow-y-scroll scrollbar-hide"
+      className="relative flex h-[88%] max-h-[88%] w-[91.4%] flex-col overflow-hidden overflow-y-scroll rounded-2xl bg-white px-6 py-2 scrollbar-hide"
       ref={sectionRef}
     >
+      {isLoading && (
+        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-30">
+          <div className="flex w-2/3 flex-col items-center justify-around gap-y-4 bg-white px-8 py-4">
+            <span className="text-xl font-bold">채점중입니다.</span>
+            <Loader />
+            <span>채점이 완료되면 자동으로 결과 페이지로 이동합니다.</span>
+          </div>
+        </div>
+      )}
       <div className="flex items-center">
-        <span className="text-xl font-semibold">주제 :</span>
+        <span className="text-xl font-semibold">글쓰기 주제 :</span>
         <SelectTopic />
+        <QuestionMarkCircleIcon
+          className="ml-2 h-6 cursor-pointer stroke-2 text-primary-500"
+          onClick={onTogglePrompt}
+        />
+        {isPromptOpen && (
+          <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-30">
+            <div className="flex w-2/3 flex-col items-center justify-around gap-y-4 bg-white px-8 py-4">
+              <span className="text-xl font-bold">주제에 대한 설명</span>
+              <span className="whitespace-pre-wrap border py-3 pl-3 pr-1 font-semibold">
+                {topic?.prompt ?? '설명이 없습니다.'}
+              </span>
+              <Button size="small" onClick={onTogglePrompt}>
+                닫기
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
       <textarea
-        className="w-full flex-1 resize-none text-lg font-semibold outline-none"
+        className="w-full flex-1 resize-none bg-transparent text-lg font-semibold outline-none"
         ref={textAreaRef}
         defaultValue={essayText}
         onChange={handleTextChange}

@@ -12,6 +12,7 @@ export default async function fetchSignIn({
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email, password }),
+    credentials: 'include',
   });
 
   if (!response.ok) {

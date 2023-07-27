@@ -71,6 +71,7 @@ function SignUp() {
         <input
           className="w-full border p-4"
           type="nickname"
+          placeholder="닉네임"
           {...register('nickname', {
             required: { value: true, message: '닉네임을 입력해주세요.' },
           })}
@@ -86,6 +87,7 @@ function SignUp() {
           <input
             className="w-full border p-4"
             type="email"
+            placeholder="이메일"
             {...register('email', {
               required: { value: true, message: '이메일을 입력해주세요.' },
               validate: (value) => {
@@ -116,6 +118,8 @@ function SignUp() {
         <input
           className="w-full border p-4"
           type="password"
+          placeholder="비밀번호
+          "
           {...register('password', {
             required: { value: true, message: '비밀번호를 입력해주세요.' },
             validate: (value) => {

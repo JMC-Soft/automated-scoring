@@ -99,6 +99,7 @@ export async function POST(req: NextRequest) {
       replaceText,
       fetchServer,
     );
+
     // const scoredEssay: ScoredEssay = dummyScore;
 
     // ScoringResultField 에 들어갈 값 계산
@@ -124,10 +125,12 @@ export async function POST(req: NextRequest) {
     // 로그인이 되어있는 경우 wordCloud 를 저장한다.
     if (essay.uid) {
       const doc = await findWordCloudByUid(essay.uid);
-      const data = doc?.[0].data() as WordCloudEntity;
+      const data = doc[0]?.data() as WordCloudEntity;
 
       // topicId에 해당하는 기존에 저장된 wordCloud 를 불러온다.
-      const preSavedWordCloud: { [key: string]: number } = data ? data[id] : {};
+      const preSavedWordCloud: { [key: string]: number } = data?.[id]
+        ? data[id]
+        : {};
 
       // 분석된 wordCloud와 기존에 저장된 wordCloud를 합친다.
       Object.keys(analyzedWordCloud).forEach((key) => {
@@ -140,9 +143,10 @@ export async function POST(req: NextRequest) {
       // 새로 생성한 wordCloud를 저장한다.
       const newWordCloud: WordCloudEntity = {
         ...data,
+        uid: essay.uid,
         [id]: preSavedWordCloud,
       };
-      await saveWordCloud(newWordCloud, doc?.[0].id);
+      await saveWordCloud(newWordCloud, doc[0]?.id);
     }
 
     return NextResponse.json(essayDoc.id, { status: 200 });

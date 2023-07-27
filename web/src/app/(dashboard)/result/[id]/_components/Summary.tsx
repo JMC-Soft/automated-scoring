@@ -12,11 +12,13 @@ function Summary({
   createdAt: string;
 }) {
   return (
-    <article className="col-start-1 col-end-3 row-start-2 row-end-3 flex flex-col items-center bg-white px-4">
-      <h2 className="py-2 text-xl font-semibold">답안 요약</h2>
-      <span className="">에세이 주제</span>
-      <span className="font-bold text-primary-500">&quot;{topic}&quot;</span>
-      <div className="grid w-full grid-cols-[repeat(2,auto)] gap-y-1 px-4 py-3 font-semibold">
+    <article className="col-start-1 col-end-3 row-start-2 row-end-3 flex flex-col items-center justify-between bg-white px-4 py-2">
+      <h2 className="text-lg font-semibold">답안 요약</h2>
+      <span>에세이 주제</span>
+      <span className="text-center text-sm font-semibold text-primary-500">
+        &quot;{topic}&quot;
+      </span>
+      <div className="grid w-4/5 grid-cols-[repeat(2,auto)] gap-y-1 font-semibold">
         <span>글자 수 :</span>
         <span>{countCharacters}자</span>
         <span>문장 수 :</span>

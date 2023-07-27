@@ -7,10 +7,6 @@ const findWordCloudByUid = async (uid: string) => {
     const result = await doc.get();
     const res = result.docs;
 
-    if (!res) {
-      return null;
-    }
-
     return res;
   } catch (err) {
     throw ApiError.handleError(err);

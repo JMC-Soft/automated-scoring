@@ -3,8 +3,8 @@
 import React from 'react';
 import { ChartData, ChartOptions, Plugin } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { DEFAULT_OPTIONS, GRADE_COLOR_MAP } from '@/lib/constants/chart';
-import COLORS from '@/lib/constants/colors';
+import DEFAULT_OPTIONS from '@/lib/constants/chart';
+import COLORS, { GRADE_COLOR_MAP } from '@/lib/constants/colors';
 import textCenterPlugin from '@/lib/utils/chart/plugin/textCenterPlugin';
 import { Grade } from '@/lib/types';
 

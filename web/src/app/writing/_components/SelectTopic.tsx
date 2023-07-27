@@ -6,27 +6,20 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import useEssayStore from '@/store/essayStore';
 import useStore from '@/lib/hooks/useStore';
 import { Topic } from '@/lib/types';
-
-const topics: Topic[] = [
-  { title: '나의 위인전', type: '글짓기' },
-  { title: '혐오시설 건설문제에 대한 본인의 생각', type: '대안 제시' },
-  { title: '영화감상문', type: '설명문' },
-];
+import TOPICS from '@/lib/constants/topic';
 
 function SelectTopic() {
-  const topicTitle = useStore(useEssayStore, (state) => state.title);
+  const topicTitle = useStore(useEssayStore, (state) => state.topic?.title);
   const setTopic = useEssayStore((state) => state.setTopic);
 
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
-  const handleSelect =
-    ({ title, type }: Topic) =>
-    () => {
-      setTopic({ title, type });
-      setIsOpen(false);
-    };
+  const handleSelect = (topic: Topic) => () => {
+    setTopic(topic);
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -35,10 +28,10 @@ function SelectTopic() {
           'bottom-0 left-0 right-0 top-0 bg-gray-700/10': isOpen,
         })}
       />
-      <div className="group relative flex w-2/3 cursor-pointer flex-col text-lg">
+      <div className="group relative flex w-3/4 cursor-pointer flex-col text-lg">
         <div
           role="presentation"
-          className="flex h-14 cursor-pointer items-center bg-white px-6 transition-all group-hover:text-xl group-hover:font-extrabold group-hover:text-primary-500"
+          className="flex h-14 cursor-pointer items-center px-6 transition-all group-hover:text-xl group-hover:font-extrabold group-hover:text-primary-500"
           onClick={toggleDropdown}
         >
           {topicTitle || '에세이 주제를 선택해주세요.'}
@@ -59,7 +52,7 @@ function SelectTopic() {
             },
           )}
         >
-          {topics.map((value) => (
+          {TOPICS.map((value) => (
             <li
               className="flex h-14 w-full items-center bg-white px-6 shadow-xl transition-all duration-300 hover:w-11/12 hover:bg-background-500 hover:pl-10 hover:text-primary-500"
               role="presentation"

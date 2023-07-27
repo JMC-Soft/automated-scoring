@@ -6,6 +6,7 @@ export default async function fetchEvaluateEssay({
   topic,
   type,
   essayText,
+  id,
   email,
 }: EvaluateRequest): Promise<EvaluateResponse> {
   const response = await fetch(`${API_BASE_URL}/evaluate`, {
@@ -17,6 +18,7 @@ export default async function fetchEvaluateEssay({
       email,
       topic,
       type,
+      id,
       essayText,
     }),
   });
@@ -25,7 +27,7 @@ export default async function fetchEvaluateEssay({
     throw new Error('에세이 평가에 실패했습니다.\n다시 시도해 주세요.');
   }
 
-  const essayId = (await response.text()) as EvaluateResponse;
+  const essayId = await response.json();
 
   return essayId;
 }

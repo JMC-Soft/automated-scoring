@@ -21,6 +21,7 @@ import { Chart } from 'react-chartjs-2';
 import COLORS from '@/lib/constants/colors';
 import hexToRGBA from '@/lib/utils/colors';
 import pretendard from '@/lib/constants/fonts';
+import { HistoryEssay } from '@/lib/types';
 
 ChartJS.register(
   CategoryScale,
@@ -35,49 +36,43 @@ ChartJS.register(
 );
 
 type Props = {
+  dataList: HistoryEssay[];
   className?: string;
 };
 
-export function DoughnutChart({ className }: Props) {
-  const labels = ['월', '화', '수', '목', '금', '토', '일', '금', '토', '일'];
+export function LineChart({ className, dataList }: Props) {
+  const labels = dataList.map((v) => v.createdAt.split(' ')[0]);
 
   const data: ChartData = {
     labels,
     datasets: [
       {
-        label: '표현',
-        data: Array(10)
-          .fill(0)
-          .map(() => Math.floor(Math.random() * 3 + 6)),
-        backgroundColor: COLORS.accent[500],
-        barPercentage: 0.7,
+        label: '내용',
+        data: dataList.map((v) => v.scoringResult.cont.score),
+        backgroundColor: hexToRGBA(COLORS.accent[500], 0.85),
         type: 'bar',
+        barPercentage: 0.75,
       },
       {
         label: '구성',
-        data: Array(10)
-          .fill(0)
-          .map(() => Math.floor(Math.random() * 3 + 9)),
-        backgroundColor: COLORS.success[500],
-        barPercentage: 0.7,
+        data: dataList.map((v) => v.scoringResult.org.score),
+        backgroundColor: hexToRGBA(COLORS.success[500], 0.85),
+        barPercentage: 0.75,
         type: 'bar',
       },
       {
-        label: '내용',
-        data: Array(10)
-          .fill(0)
-          .map(() => Math.floor(Math.random() * 3 + 6)),
-        backgroundColor: COLORS.secondary[500],
+        label: '표현',
+        data: dataList.map((v) => v.scoringResult.exp.score),
+        backgroundColor: hexToRGBA(COLORS.secondary[500], 0.85),
+        barPercentage: 0.75,
         type: 'bar',
-        barPercentage: 0.7,
       },
+
       {
         label: '종합',
-        data: Array(10)
-          .fill(0)
-          .map(() => Math.floor(Math.random() * 10 + 20)),
-        borderColor: COLORS.primary[500],
-        backgroundColor: hexToRGBA(COLORS.primary[500], 0.2),
+        data: dataList.map((v) => v.scoringResult.total.score),
+        borderColor: COLORS.secondary[500],
+        backgroundColor: hexToRGBA(COLORS.secondary[500], 0.7),
         type: 'line',
         yAxisID: 'y1',
       },
@@ -132,8 +127,8 @@ export function DoughnutChart({ className }: Props) {
                 fillStyle: (dataset.backgroundColor ??
                   COLORS.primary[500]) as string,
                 strokeStyle: (dataset.borderColor ??
-                  COLORS.primary[500]) as string,
-                lineWidth: 1,
+                  dataset.backgroundColor) as string,
+                lineWidth: 2,
                 pointStyle: pointStyle[i],
               };
             });
@@ -187,4 +182,4 @@ export function DoughnutChart({ className }: Props) {
   );
 }
 
-export default React.memo(DoughnutChart);
+export default React.memo(LineChart);

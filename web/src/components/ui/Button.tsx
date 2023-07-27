@@ -11,8 +11,15 @@ type ButtonProps = {
   className?: string;
   onClick?: () => void;
   size?: 'small' | 'medium' | 'large';
-  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    | 'transparent';
   round?: boolean;
+  shadow?: boolean;
 };
 
 function Button({
@@ -21,23 +28,35 @@ function Button({
   className,
   onClick = () => {},
   size = 'medium',
-  variant = 'primary', // set default to 'primary'
+  variant = 'primary',
   round = false,
+  shadow = true,
 }: ButtonProps) {
   return (
     <button
       type={type}
       className={clsx(
-        'cursor-pointer touch-manipulation select-none whitespace-nowrap text-white shadow-lg transition-all duration-300 hover:bg-primary-600 hover:opacity-100 hover:shadow-2xl',
+        'cursor-pointer touch-manipulation select-none whitespace-nowrap tracking-wider transition-all duration-300 hover:opacity-100',
         className,
         { 'px-4 py-1 text-sm': size === 'small' },
         { 'px-6 py-2': size === 'medium' },
         { 'px-8 py-3 text-lg': size === 'large' },
-        { 'bg-primary-500 hover:shadow-lg': variant === 'primary' },
-        { 'bg-secondary-500 hover:shadow-lg': variant === 'secondary' },
+        {
+          'bg-primary-500 hover:bg-primary-600 hover:shadow-lg':
+            variant === 'primary',
+        },
+        {
+          'bg-secondary-500 hover:shadow-lg': variant === 'secondary',
+        },
         { 'bg-success-500 hover:shadow-lg': variant === 'success' },
         { 'bg-warning-500 hover:shadow-lg': variant === 'warning' },
         { 'bg-danger-500 hover:shadow-lg': variant === 'danger' },
+        {
+          'bg-transparent font-semibold hover:bg-background-500':
+            variant === 'transparent',
+        },
+        { 'text-white': variant !== 'transparent' },
+        { 'shadow-lg': shadow },
         { rounded: round },
       )}
       onClick={onClick}
