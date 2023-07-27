@@ -17,7 +17,7 @@ function WordTable({ className, data }: Props) {
 
   const onClick = (id: keyof WordCloudType) => () => {
     setActiveTypeId(id);
-    setWordCloudData(sortData(data[id]) ?? []);
+    setWordCloudData(sortData(data[id] ?? []));
   };
 
   return (

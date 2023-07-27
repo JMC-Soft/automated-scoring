@@ -2,12 +2,10 @@
 
 import React, { useCallback, useState } from 'react';
 import { Word } from 'react-d3-cloud/lib/WordCloud';
-import dynamic from 'next/dynamic';
 import clsx from 'clsx';
+import D3WordCloud from 'react-d3-cloud';
 import type { WordCloud as WordCloudType } from '@/lib/types';
 import TOPICS from '@/lib/constants/topic';
-
-const NoSSR = dynamic(() => import('react-d3-cloud'), { ssr: false });
 
 function WordCloud({ data }: { data: WordCloudType }) {
   const [activeTypeId, setActiveTypeId] = useState<keyof WordCloudType>(1);
@@ -40,7 +38,7 @@ function WordCloud({ data }: { data: WordCloudType }) {
           </button>
         ))}
       </ul>
-      <NoSSR
+      <D3WordCloud
         data={wordCloudData}
         width={400}
         height={300}

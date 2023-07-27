@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { Chart } from 'react-chartjs-2';
 import {
   ChartData,
   ChartOptions,
@@ -13,6 +12,7 @@ import {
   BoxAndWiskers,
   BoxPlotController,
 } from '@sgratzl/chartjs-chart-boxplot';
+import { Chart } from 'react-chartjs-2';
 import hexToRGBA from '@/lib/utils/colors';
 import COLORS from '@/lib/constants/colors';
 import { Statistic } from '@/lib/types';
@@ -25,6 +25,10 @@ type Props = {
 };
 
 export function BoxPlotView({ dataList }: Props) {
+  if (dataList.filter((value) => value).length === 0) {
+    return <article className="bg-white px-3 py-2" />;
+  }
+
   const data: ChartData<'boxplot'> = {
     labels: dataList.map((value) => value.title),
     datasets: [
@@ -67,7 +71,7 @@ export function BoxPlotView({ dataList }: Props) {
   };
 
   return (
-    <article className="bg-white px-3 py-2">
+    <article className="overflow-auto bg-white px-3 py-2 scrollbar-hide">
       <Chart type="boxplot" data={data} options={options} />
     </article>
   );

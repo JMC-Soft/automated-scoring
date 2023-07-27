@@ -37,10 +37,9 @@ ChartJS.register(
 
 type Props = {
   dataList: HistoryEssay[];
-  className?: string;
 };
 
-export function LineChart({ className, dataList }: Props) {
+export function LineChart({ dataList }: Props) {
   const labels = dataList.map((v) => v.createdAt.split(' ')[0]);
 
   const data: ChartData = {
@@ -176,7 +175,7 @@ export function LineChart({ className, dataList }: Props) {
   };
 
   return (
-    <div className={className}>
+    <div className="col-start-2 col-end-4 row-start-1 h-full w-full overflow-auto bg-white p-4 scrollbar-hide">
       <Chart type="line" data={data} options={options} />
     </div>
   );

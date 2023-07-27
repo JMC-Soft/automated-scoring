@@ -8,17 +8,16 @@ import {
   ChartOptions,
   Plugin,
   Title,
+  SubTitle,
   Tooltip,
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import DEFAULT_OPTIONS from '@/lib/constants/chart';
 import COLORS from '@/lib/constants/colors';
 import pretendard from '@/lib/constants/fonts';
-import textCenterPlugin from '@/lib/utils/chart/plugin/textCenterPlugin';
 
-ChartJS.register(Title, Tooltip, ArcElement);
+ChartJS.register(Title, Tooltip, ArcElement, SubTitle);
 
-function OverallPercentage({ percentage }: { percentage: number }) {
+function OverallPercentage({ percentage = 0 }: { percentage: number }) {
   const data: ChartData<'doughnut'> = {
     datasets: [
       {
@@ -30,9 +29,10 @@ function OverallPercentage({ percentage }: { percentage: number }) {
   };
 
   const options: ChartOptions<'doughnut'> = {
-    ...DEFAULT_OPTIONS,
+    responsive: true,
+    maintainAspectRatio: false,
     rotation: -90,
-    cutout: 50,
+    cutout: '70%',
     circumference: 180,
     plugins: {
       title: {
@@ -48,20 +48,36 @@ function OverallPercentage({ percentage }: { percentage: number }) {
     },
   };
 
-  const plugins: Plugin<'doughnut'>[] = [
-    textCenterPlugin({ title: `${percentage}%` }),
-  ];
+  const textCenterPlugin: Plugin<'doughnut'> = {
+    id: 'textCenter',
+    beforeDatasetDraw: (chart) => {
+      const { ctx, data: chartData, width } = chart;
+      const size = Math.round(width / 5);
+
+      const text = chartData.datasets[0].data[0];
+      ctx.save();
+      ctx.font = `bold ${size}px pretendard`;
+      ctx.fillStyle = '#000033';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(
+        `${text}%`,
+        chart.getDatasetMeta(0).data[0].x,
+        chart.getDatasetMeta(0).data[0].y,
+      );
+    },
+  };
 
   return (
-    <article className="col-start-1 col-end-2 flex flex-col items-center bg-white px-6 py-2">
+    <article className="relative col-start-1 col-end-2 flex h-auto w-auto flex-col items-center overflow-auto bg-white px-6 py-2 scrollbar-hide">
       <Doughnut
-        className="h-full w-full"
+        width="100%"
         data={data}
         options={options}
-        plugins={plugins}
+        plugins={[textCenterPlugin]}
       />
     </article>
   );
 }
 
-export default OverallPercentage;
+export default React.memo(OverallPercentage);

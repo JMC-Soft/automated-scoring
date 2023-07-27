@@ -16,7 +16,7 @@ export default function Home() {
             style={{
               position: 'absolute',
               right: '5%',
-              width: '25vw',
+              width: '15vw',
               height: 'fit-content',
               objectPosition: 'top',
             }}
