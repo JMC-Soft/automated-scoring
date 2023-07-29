@@ -6,19 +6,29 @@ import makeCreatedAt from '@/app/api/lib/makeCreatedAt';
 import {
   EssayEntity,
   EssayRequestDto,
-  ScoredEssay,
+  ScoredEssaySub,
+  ScoredSub,
   ScoringResultField,
   WordCloudEntity,
 } from '@/app/api/lib/types';
 import COUNT_SENTENCES_REGEXP from '@/app/api/const/regExp';
-import fetchToScoringServer from '@/app/api/lib/scoring/fetchToScoringServer';
 import findWordCloudByUid from '@/app/api/repository/wordCloud/findWordCloudByUid';
 import saveWordCloud from '@/app/api/repository/wordCloud/saveWordCloud';
+import fetchToScoringServer from '@/app/api/lib/scoring/fetchToScoringServer';
+import fetchToWordCloudServer from '@/app/api/lib/wordCloud/fetchToWordCloudServer';
+import TOPIC_ID_SERVER_MAP from '@/app/api/const/topicIdServerMap';
+import TOPIC_ID_MAP from '@/app/api/const/topicIdMap';
 
 export async function POST(req: NextRequest) {
   try {
     const { email, essayText, topic, type, id }: EssayRequestDto =
       await req.json();
+
+    // topicId가 유효한지 확인
+    if (!Object.keys(TOPIC_ID_SERVER_MAP).includes(id.toString())) {
+      throw new ApiError('유효하지 않은 topic Id가 들어옴.', 500);
+    }
+
     let uid = null;
     const scoringResult = null;
 
@@ -71,39 +81,47 @@ export async function POST(req: NextRequest) {
 
     const { doc: essayDoc, essay } = await saveEssay(essayEntity);
 
-    // topicId에 맞는 서버를 세팅
-    if (!id) {
-      throw new ApiError('topicId가 지정되지 않음.', 500, '서버 오류입니다.');
-    }
-    let fetchServer = '';
-    if (id === 1) {
-      fetchServer = process.env.FLASK_SERVER_1 ?? '';
-    }
-    if (id === 2) {
-      fetchServer = process.env.FLASK_SERVER_2 ?? '';
-    }
-    if (id === 3) {
-      fetchServer = process.env.FLASK_SERVER_3 ?? '';
-    }
-    if (!fetchServer) {
-      throw new ApiError(
-        'flask 서버의 주소가 제대로 설정되지 않음.',
-        500,
-        '서버 오류입니다.',
-      );
-    }
+    // 채점 결과 객체 내부에 들어갈 ScoredEssaySub 객체 생성
+    const exp: ScoredEssaySub = {
+      title: '표현',
+      detail: [],
+    };
+    const org: ScoredEssaySub = {
+      title: '구성',
+      detail: [],
+    };
+    const cont: ScoredEssaySub = {
+      title: '내용',
+      detail: [],
+    };
 
     // scoring server에 보내 채점 결과 객체를 반환
     const replaceText = essayText.replaceAll('"', "'").replaceAll('\n', ' ');
-    const scoredEssay: ScoredEssay = await fetchToScoringServer(
+    const fetchResult: ScoredSub[] = await fetchToScoringServer(
       replaceText,
-      fetchServer,
+      id as keyof typeof TOPIC_ID_SERVER_MAP,
     );
 
-    // const scoredEssay: ScoredEssay = dummyScore;
+    // 반환된 결과값 ScoredEssaySub 재조합
+    fetchResult.forEach((item) => {
+      if (TOPIC_ID_MAP.exp.includes(item.title)) {
+        exp.detail.push(item);
+      }
+      if (TOPIC_ID_MAP.org.includes(item.title)) {
+        org.detail.push(item);
+      }
+      if (TOPIC_ID_MAP.cont.includes(item.title)) {
+        cont.detail.push(item);
+      }
+    });
 
-    // ScoringResultField 에 들어갈 값 계산
-    const { exp, org, cont, wordCloud: analyzedWordCloud } = scoredEssay;
+    // wordCloud
+    const analyzedWordCloud = await fetchToWordCloudServer(replaceText);
+
+    // //테스트용
+    // const scoredEssay: ScoredEssay = dummyScore;
+    // const { exp, org, cont, wordCloud: analyzedWordCloud } = scoredEssay;
+
     const expSum = exp.detail.reduce((acc, cur) => acc + cur.score, 0);
     const orgSum = org.detail.reduce((acc, cur) => acc + cur.score, 0);
     const contSum = cont.detail.reduce((acc, cur) => acc + cur.score, 0);

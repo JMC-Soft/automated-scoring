@@ -1,17 +1,30 @@
 import ApiError from '@/app/api/lib/class/ApiError';
+import TOPIC_ID_SERVER_MAP from '@/app/api/const/topicIdServerMap';
 
-const fetchToScoringServer = async (essayText: string, server: string) => {
+const fetchToScoringServer = async (
+  essayText: string,
+  id: keyof typeof TOPIC_ID_SERVER_MAP,
+) => {
   // 주제에 맞는 서버에 essayText를 보내 채점 결과를 받아옴
   try {
-    const result = await fetch(server, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ essayText }),
-    });
+    const URL_MAP = TOPIC_ID_SERVER_MAP[id];
 
-    return await result.json();
+    const fetchResult = await Promise.all(
+      Object.values(URL_MAP).map(async (url) => {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ essayText }),
+        });
+
+        const result = await res.json();
+        return result;
+      }),
+    );
+
+    return fetchResult;
   } catch (err) {
     throw ApiError.handleError(err);
   }
