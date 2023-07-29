@@ -6,12 +6,10 @@ const dummyScore = {
       {
         title: '단어 사용의 적절성',
         score: 3,
-        average: 2.4,
       },
       {
         title: '문장 표현의 적절성',
         score: 3,
-        average: 2.4,
       },
     ],
   },
@@ -22,17 +20,14 @@ const dummyScore = {
       {
         title: '문단 간 구조의 적절성',
         score: 2,
-        average: 2.4,
       },
       {
         title: '구조의 일관성',
         score: 2,
-        average: 2.4,
       },
       {
         title: '분량의 적절성',
         score: 2,
-        average: 2.4,
       },
     ],
   },
@@ -43,12 +38,10 @@ const dummyScore = {
       {
         title: '근거의 적절성',
         score: 3,
-        average: 2.4,
       },
       {
         title: '프롬프트 독해력',
         score: 3,
-        average: 2.4,
       },
     ],
   },

@@ -148,20 +148,20 @@ export type WordCloud = {
 /**
  * DB에 저장할 Essay 및 채점 결과 interface
  */
+export interface ScoredSub {
+  title: string;
+  score: number;
+}
+
+export interface ScoredEssaySub {
+  title: string;
+  detail: ScoredSub[];
+}
 
 export interface ScoredEssay {
-  exp: {
-    title: string;
-    detail: { title: string; score: number; average: number }[];
-  };
-  org: {
-    title: string;
-    detail: { title: string; score: number; average: number }[];
-  };
-  cont: {
-    title: string;
-    detail: { title: string; score: number; average: number }[];
-  };
+  exp: ScoredEssaySub;
+  org: ScoredEssaySub;
+  cont: ScoredEssaySub;
   wordCloud: {
     [key: string]: number;
   };
