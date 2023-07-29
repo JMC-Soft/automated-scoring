@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
+import { useRouter } from 'next/navigation';
 import RecentGradeHistory from '@/app/(dashboard)/history/_components/RecentGradeHistory';
 import LineChart from '@/components/ui/Chart/LineChart';
 import HistoryView from '@/app/(dashboard)/_components/HistoryView';
@@ -13,15 +14,27 @@ import { HistoryResponse } from '@/lib/types/response';
 
 function Page() {
   const [data, setData] = useState<HistoryResponse>({} as HistoryResponse);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetchHistory();
+      let result = {} as HistoryResponse;
+      try {
+        result = await fetchHistory();
+      } catch (error) {
+        if (error instanceof Error) {
+          if (error.message === 'token is invalid') {
+            alert('로그인이 필요합니다.');
+            router.push('/signin');
+            return;
+          }
+        }
+      }
       setData(result);
     };
 
     fetchData();
-  }, []);
+  }, [router]);
 
   const {
     countAverageCharacters,

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import OverallPercentage from '@/app/(dashboard)/result/[id]/_components/OverallPercentage';
 import Progress from '@/app/(dashboard)/result/[id]/_components/Progress';
 import BoxPlotView from '@/app/(dashboard)/result/[id]/_components/BoxPlotView';
@@ -15,15 +16,27 @@ import { ResultResponse } from '@/lib/types/response';
 
 function Page({ params }: { params: { id: string } }) {
   const [data, setData] = useState({} as ResultResponse);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetchResult(params.id);
+      let result = {} as ResultResponse;
+      try {
+        result = await fetchResult(params.id);
+      } catch (error) {
+        if (error instanceof Error) {
+          if (error.message === 'token is invalid') {
+            alert('로그인이 필요합니다.');
+            router.push('/signin');
+            return;
+          }
+        }
+      }
       setData(result);
     };
 
     fetchData();
-  }, [params.id]);
+  }, [params.id, router]);
 
   const {
     exp,
