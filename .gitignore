@@ -38,3 +38,5 @@ next-env.d.ts
 # ai-server
 .venv
 onnx*
+python/model
+python/original_data/**/*.zip
