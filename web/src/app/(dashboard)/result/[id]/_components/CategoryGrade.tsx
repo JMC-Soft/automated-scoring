@@ -36,8 +36,8 @@ function CategoryGrade({ grade, score, max, title }: Props) {
         position: 'bottom',
         text: title,
         font(context) {
-          const { width } = context.chart;
-          const size = Math.round(width / 12);
+          const { height } = context.chart;
+          const size = Math.round(height / 10);
 
           return {
             weight: 'bold',
@@ -53,9 +53,7 @@ function CategoryGrade({ grade, score, max, title }: Props) {
     textCenterPlugin({ title: grade, color: GRADE_COLOR_MAP[grade] }),
   ];
 
-  return (
-    <Doughnut width="100%" data={data} options={options} plugins={plugins} />
-  );
+  return <Doughnut data={data} options={options} plugins={plugins} />;
 }
 
 export default CategoryGrade;

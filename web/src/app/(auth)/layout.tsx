@@ -20,7 +20,7 @@ function Layout({ children }: Props) {
 
   return (
     <div className="flex h-[calc(100vh-4rem)] w-full items-center justify-center bg-background-500">
-      <div className="flex w-2/5 flex-col border bg-white px-20 py-10 shadow">
+      <div className="flex w-4/5 flex-col border bg-white px-20 py-10 shadow laptop:w-3/5 desktopWide:w-2/5">
         {children}
       </div>
     </div>

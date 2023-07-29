@@ -1,8 +1,9 @@
 import React from 'react';
+import clsx from 'clsx';
 
-function ReviewNote({ text }: { text: string }) {
+function ReviewNote({ text, className }: { text: string; className: string }) {
   return (
-    <article className="col-start-1 col-end-3 row-start-3 row-end-4 bg-white p-1.5">
+    <article className={clsx('bg-white p-1.5', className)}>
       <div className="flex h-full max-h-full w-full flex-col items-center border shadow-lg scrollbar-hide">
         <h2 className="py-2 text-xl font-semibold">제출 답안</h2>
         <textarea

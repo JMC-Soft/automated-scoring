@@ -5,20 +5,27 @@ import { Statistic, SubStatistic } from '@/lib/types';
 function DetailsView({
   dataList,
   total,
+  className,
 }: {
   dataList: SubStatistic[];
   total: Statistic;
+  className: string;
 }) {
   return (
-    <article className="col-start-3 col-end-4 row-start-2 row-end-4 flex flex-col items-center gap-y-3 bg-white px-4 py-3 xl:px-8 xl:py-5">
-      <h3 className="text-lg font-semibold xl:text-xl">채점 영역별 점수</h3>
+    <article
+      className={clsx(
+        'flex flex-col items-center gap-y-6 bg-white px-6 py-6',
+        className,
+      )}
+    >
+      <h3 className="text-xl font-semibold">채점 영역별 점수</h3>
       {dataList.filter((value) => value).length > 0 && (
         <table className="w-full flex-1 whitespace-nowrap">
           <thead>
             <tr className="bg-primary-50">
               <th colSpan={2}>채점 영역</th>
-              <th className="h-6 border-l border-white px-1 xl:h-9">점수</th>
-              <th className="h-6 border-l border-white px-1 xl:h-9">총점</th>
+              <th className="border-l border-white px-1">점수</th>
+              <th className="border-l border-white px-1">총점</th>
             </tr>
           </thead>
 
@@ -41,7 +48,7 @@ function DetailsView({
                       {category.title} 영역
                     </td>
                   )}
-                  <td className="h-6 whitespace-nowrap border-r border-white xl:h-9">
+                  <td className="whitespace-nowrap border-r border-white">
                     {value.title}
                   </td>
                   <td className="border-r border-white">
@@ -64,14 +71,14 @@ function DetailsView({
               )),
             )}
             <tr className="border-b border-white bg-gray-300/30">
-              <td className="h-6 whitespace-nowrap border-r border-white text-center xl:h-9">
+              <td className="whitespace-nowrap border-r border-white text-center">
                 종합
               </td>
               <td className="border-r border-white" />
               <td className="border-r border-white" />
-              <td className="whitespace-nowrap text-center xl:text-lg">
+              <td className="whitespace-nowrap text-center">
                 {total.score}
-                <span className="text-gray-400"> / {total.max}</span>
+                <span className="text-base text-gray-400"> / {total.max}</span>
               </td>
             </tr>
           </tbody>

@@ -95,6 +95,7 @@ function Page() {
               'cursor-default bg-secondary-700/70': signInStatus === 'pending',
               'cursor-pointer bg-secondary-700': signInStatus !== 'pending',
             })}
+            value="로그인"
             type="submit"
             disabled={signInStatus === 'pending'}
           />

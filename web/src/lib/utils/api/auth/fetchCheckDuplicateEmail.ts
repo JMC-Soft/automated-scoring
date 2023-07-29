@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/lib/constants/constants';
+import { API_BASE_URL } from '@/lib/constants/api';
 
 export default async function fetchCheckDuplicateEmail(
   email: string,

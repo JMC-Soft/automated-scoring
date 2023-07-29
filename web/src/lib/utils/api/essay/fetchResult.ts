@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
-import { API_BASE_URL } from '@/lib/constants/constants';
 
 import { ResultResponse } from '@/lib/types/response';
+import { API_BASE_URL } from '@/lib/constants/api';
 
 export default async function fetchResult(
   essayId: string,
@@ -12,9 +12,11 @@ export default async function fetchResult(
   });
 
   if (!res.ok) {
-    redirect('/');
+    if (res.status === 401) {
+      alert('로그인이 필요합니다.');
+    }
+    redirect('/signin');
   }
-
   const data = await res.json();
 
   return data;

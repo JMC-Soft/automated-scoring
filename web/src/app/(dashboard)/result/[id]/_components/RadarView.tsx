@@ -12,6 +12,7 @@ import {
   Filler,
   Legend,
 } from 'chart.js';
+import clsx from 'clsx';
 import { SubStatistic } from '@/lib/types';
 import hexToRGBA from '@/lib/utils/colors';
 import COLORS from '@/lib/constants/colors';
@@ -33,21 +34,24 @@ export const CATEGORY_LIST = {
 
 type Props = {
   dataList: SubStatistic[];
+  className: string;
 };
 
-function RadarView({ dataList }: Props) {
-  if (dataList.filter((value) => value).length === 0) {
-    return (
-      <article className="col-start-4 col-end-5 row-start-2 row-end-4 bg-white p-8" />
-    );
-  }
+function RadarView({ dataList, className }: Props) {
+  const hasData = dataList.filter((value) => value).length > 0;
 
   const data: ChartData<'radar'> = {
-    labels: dataList.map((value) => value.detail.map((v) => v.title)).flat(),
+    labels: dataList
+      .map((value) =>
+        value?.detail.map(
+          (v) => CATEGORY_LIST[v.title as keyof typeof CATEGORY_LIST],
+        ),
+      )
+      .flat(),
     datasets: [
       {
         label: '내 점수',
-        data: dataList.map((value) => value.detail.map((v) => v.score)).flat(),
+        data: dataList.map((value) => value?.detail.map((v) => v.score)).flat(),
         backgroundColor: hexToRGBA(COLORS.secondary[500], 0.2),
         borderColor: hexToRGBA(COLORS.secondary[500], 1),
         pointBackgroundColor: COLORS.secondary[500],
@@ -59,7 +63,7 @@ function RadarView({ dataList }: Props) {
       },
       {
         label: '전체 평균',
-        data: dataList.map((value) => value.subAverage).flat(),
+        data: dataList.map((value) => value?.subAverage).flat(),
         backgroundColor: hexToRGBA(COLORS.warning[500], 0.15),
         borderColor: hexToRGBA(COLORS.warning[500], 1),
         pointBackgroundColor: COLORS.warning[500],
@@ -98,8 +102,11 @@ function RadarView({ dataList }: Props) {
             return hexToRGBA(COLORS.secondary[500], 1);
           },
           font(context) {
-            const { width } = context.chart;
-            const size = Math.round(width / 38);
+            const { width, height } = context.chart;
+            const size = Math.min(
+              Math.round(height / 28),
+              Math.round(width / 32),
+            );
 
             return {
               weight: 'bold',
@@ -123,8 +130,13 @@ function RadarView({ dataList }: Props) {
   };
 
   return (
-    <article className="col-start-4 col-end-5 row-start-2 row-end-4 h-auto w-auto overflow-auto bg-white p-8 scrollbar-hide">
-      <Radar data={data} options={options} />
+    <article
+      className={clsx(
+        'h-auto w-auto overflow-auto bg-white p-8 scrollbar-hide',
+        className,
+      )}
+    >
+      {hasData && <Radar data={data} options={options} />}
     </article>
   );
 }
