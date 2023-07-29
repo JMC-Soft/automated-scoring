@@ -1,6 +1,5 @@
-import { cookies } from 'next/headers';
 import { HistoryResponse } from '@/lib/types/response';
-import { API_BASE_URL } from '@/lib/constants/api';
+import API_BASE_URL from '@/lib/constants/api';
 
 export default async function fetchHistory(): Promise<HistoryResponse> {
   const res = await fetch(`${API_BASE_URL}/history`, {

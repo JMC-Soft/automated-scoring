@@ -1,6 +1,6 @@
 import { EvaluateResponse } from '@/lib/types/response';
 import { EvaluateRequest } from '@/lib/types/request';
-import { API_BASE_URL } from '@/lib/constants/api';
+import API_BASE_URL from '@/lib/constants/api';
 
 export default async function fetchEvaluateEssay({
   topic,

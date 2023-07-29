@@ -1,6 +1,6 @@
 import { SignUpRequest } from '@/lib/types/request';
 import { SignUpResponse } from '@/lib/types/response';
-import { API_BASE_URL } from '@/lib/constants/api';
+import API_BASE_URL from '@/lib/constants/api';
 
 export default async function fetchSignUp({
   nickname,
