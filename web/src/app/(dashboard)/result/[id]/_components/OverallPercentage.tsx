@@ -17,7 +17,7 @@ import pretendard from '@/lib/constants/fonts';
 
 ChartJS.register(Title, Tooltip, ArcElement, SubTitle);
 
-function OverallPercentage({ percentage = 0 }: { percentage: number }) {
+function OverallPercentage({ percentage }: { percentage: number }) {
   const data: ChartData<'doughnut'> = {
     datasets: [
       {
@@ -39,10 +39,15 @@ function OverallPercentage({ percentage = 0 }: { percentage: number }) {
         display: true,
         text: '전체\n백분위',
         position: 'top',
-        font: {
-          size: 18,
-          weight: 'bold',
-          family: pretendard.style.fontFamily,
+        font(context) {
+          const { height } = context.chart;
+          const size = Math.round(height / 12);
+
+          return {
+            weight: 'bold',
+            size,
+            family: pretendard.style.fontFamily,
+          };
         },
       },
     },
@@ -51,8 +56,8 @@ function OverallPercentage({ percentage = 0 }: { percentage: number }) {
   const textCenterPlugin: Plugin<'doughnut'> = {
     id: 'textCenter',
     beforeDatasetDraw: (chart) => {
-      const { ctx, data: chartData, width } = chart;
-      const size = Math.round(width / 5);
+      const { ctx, data: chartData, height } = chart;
+      const size = Math.round(height / 8);
 
       const text = chartData.datasets[0].data[0];
       ctx.save();
@@ -63,21 +68,18 @@ function OverallPercentage({ percentage = 0 }: { percentage: number }) {
       ctx.fillText(
         `${text}%`,
         chart.getDatasetMeta(0).data[0].x,
-        chart.getDatasetMeta(0).data[0].y,
+        chart.getDatasetMeta(0).data[0].y - Math.round(height / 15),
       );
     },
   };
 
   return (
-    <article className="relative col-start-1 col-end-2 flex h-auto w-auto flex-col items-center overflow-auto bg-white px-6 py-2 scrollbar-hide">
-      <Doughnut
-        width="100%"
-        data={data}
-        options={options}
-        plugins={[textCenterPlugin]}
-      />
+    <article className="h-full w-full overflow-auto bg-white px-6 py-4 scrollbar-hide">
+      {percentage && (
+        <Doughnut data={data} options={options} plugins={[textCenterPlugin]} />
+      )}
     </article>
   );
 }
 
-export default React.memo(OverallPercentage);
+export default OverallPercentage;

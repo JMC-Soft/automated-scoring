@@ -25,13 +25,13 @@ function HistoryView({
   return (
     <article
       className={clsx(
-        'flex flex-col items-center gap-y-2 overflow-y-scroll bg-white py-2',
+        'flex h-0 min-h-full flex-col items-center gap-y-4 overflow-y-scroll bg-white py-4',
         className,
       )}
     >
-      <h2 className="text-xl">{title}</h2>
+      <h2 className="text-xl font-semibold">{title}</h2>
       {data ? (
-        <div className="flex w-full flex-1 flex-col justify-start gap-y-2">
+        <div className={clsx('flex w-full flex-1 flex-col justify-start')}>
           {data.map((value, idx) => {
             const { topic, type, scoringResult, essayId, createdAt } = value;
             const date = new Date(createdAt.split(' ')[0]);
@@ -42,7 +42,7 @@ function HistoryView({
               <Link
                 href={`/result/${essayId}`}
                 key={essayId}
-                className="grid-cols-recent-history grid-rows-recent-history grid w-full flex-1 grow-0 cursor-pointer gap-x-2 gap-y-1 px-3 hover:bg-background-500 xl:gap-x-4 xl:px-6"
+                className="grid-cols-recent-history grid-rows-recent-history grid h-1/3 max-h-48 w-full grow-0 cursor-pointer gap-x-8 gap-y-1 px-8 py-4 hover:bg-background-500 desktopWide:py-2"
               >
                 <div className="self-center justify-self-center text-sm font-semibold text-gray-500">
                   {countTotal - idx} 회차

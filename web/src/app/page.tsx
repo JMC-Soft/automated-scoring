@@ -15,15 +15,15 @@ export default function Home() {
           <Image
             style={{
               position: 'absolute',
-              right: '5%',
-              width: '15vw',
+              right: '0',
+              width: '12vw',
               height: 'fit-content',
               objectPosition: 'top',
             }}
             src={RobotImage}
             alt="로봇"
           />
-          <span className="w-fit pb-4 pr-2 text-3xl font-black text-primary-500">
+          <span className="flex w-11/12 flex-wrap pb-4 pr-2 text-3xl font-black text-primary-500">
             한국어 에세이 자동 채점 프로그램 - PASTA{' '}
             <span className=" text-xl font-bold text-secondary-500">
               ( <span className="text-3xl text-primary-500">P</span>ersonalized{' '}

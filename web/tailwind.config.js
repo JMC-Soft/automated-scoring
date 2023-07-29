@@ -9,6 +9,15 @@ module.exports = {
     fontFamily: {
       sans: ['var(--font-pretendard)'],
     },
+    screens: {
+      mobile: '320px',
+      tablet: '640px',
+      tabletLandscape: '768px',
+      laptop: '1024px',
+      desktop: '1280px',
+      desktopWide: '1440px',
+      desktopUltraWide: '1920px',
+    },
 
     extend: {
       colors: {

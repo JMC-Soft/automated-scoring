@@ -103,10 +103,15 @@ function IpadNote() {
         />
         {isPromptOpen && (
           <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-30">
-            <div className="flex w-2/3 flex-col items-center justify-around gap-y-4 bg-white px-8 py-4">
+            <div className="flex w-5/6 flex-col items-center justify-around gap-y-4 bg-white px-8 py-4 laptop:w-3/4">
               <span className="text-xl font-bold">주제에 대한 설명</span>
               <span className="whitespace-pre-wrap border py-3 pl-3 pr-1 font-semibold">
-                {topic?.prompt ?? '설명이 없습니다.'}
+                {topic?.prompt.map((prompt) => (
+                  <div className="flex">
+                    <div>ㆍ</div>
+                    <span className="flex-1">{prompt}</span>
+                  </div>
+                )) ?? '설명이 없습니다.'}
               </span>
               <Button size="small" onClick={onTogglePrompt}>
                 닫기

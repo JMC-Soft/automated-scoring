@@ -12,8 +12,8 @@ const textCenterPlugin = ({
   return {
     id: 'textCenter',
     afterDatasetsDraw: (chart) => {
-      const { ctx, width } = chart;
-      const size = Math.round(width / 12);
+      const { ctx, height } = chart;
+      const size = Math.round(height / 10);
 
       ctx.save();
       ctx.font = `bold ${size}px pretendard`;

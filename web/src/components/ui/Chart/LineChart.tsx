@@ -20,6 +20,7 @@ import {
   PointStyle,
 } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
+import clsx from 'clsx';
 import COLORS from '@/lib/constants/colors';
 import hexToRGBA from '@/lib/utils/colors';
 import pretendard from '@/lib/constants/fonts';
@@ -41,31 +42,32 @@ ChartJS.register(
 
 type Props = {
   dataList: HistoryEssay[];
+  className: string;
 };
 
-export function LineChart({ dataList }: Props) {
-  const labels = dataList.map((v) => v.createdAt.split(' ')[0]);
+export function LineChart({ dataList, className }: Props) {
+  const labels = dataList?.map((v) => v.createdAt.split(' ')[0]);
 
   const data: ChartData = {
     labels,
     datasets: [
       {
         label: '내용',
-        data: dataList.map((v) => v.scoringResult.cont.score),
+        data: dataList?.map((v) => v.scoringResult.cont.score),
         backgroundColor: hexToRGBA(COLORS.accent[500], 0.85),
         type: 'bar',
         barPercentage: 0.75,
       },
       {
         label: '구성',
-        data: dataList.map((v) => v.scoringResult.org.score),
+        data: dataList?.map((v) => v.scoringResult.org.score),
         backgroundColor: hexToRGBA(COLORS.success[500], 0.85),
         barPercentage: 0.75,
         type: 'bar',
       },
       {
         label: '표현',
-        data: dataList.map((v) => v.scoringResult.exp.score),
+        data: dataList?.map((v) => v.scoringResult.exp.score),
         backgroundColor: hexToRGBA(COLORS.secondary[500], 0.85),
         barPercentage: 0.75,
         type: 'bar',
@@ -73,7 +75,7 @@ export function LineChart({ dataList }: Props) {
 
       {
         label: '종합',
-        data: dataList.map((v) => v.scoringResult.total.score),
+        data: dataList?.map((v) => v.scoringResult.total.score),
         borderColor: COLORS.secondary[500],
         backgroundColor: hexToRGBA(COLORS.secondary[500], 0.7),
         type: 'line',
@@ -179,7 +181,12 @@ export function LineChart({ dataList }: Props) {
   };
 
   return (
-    <div className="col-start-2 col-end-4 row-start-1 h-full w-full overflow-auto bg-white p-4 scrollbar-hide">
+    <div
+      className={clsx(
+        'h-full w-full overflow-auto bg-white p-4 scrollbar-hide',
+        className,
+      )}
+    >
       <Chart type="line" data={data} options={options} />
     </div>
   );

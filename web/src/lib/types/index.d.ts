@@ -100,7 +100,7 @@ export type Topic = {
   id: number;
   title: TopicTitle;
   type: EssayType;
-  prompt: string;
+  prompt: string[];
 };
 
 export type TopicTitle =

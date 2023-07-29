@@ -1,4 +1,4 @@
-import { EMAIL_REG_EXP } from '@/lib/constants/constants';
+import EMAIL_REG_EXP from '@/lib/constants/regExp';
 
 const isEmail = (email: string) => {
   return EMAIL_REG_EXP.test(email);
