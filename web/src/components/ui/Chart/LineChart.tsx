@@ -46,28 +46,30 @@ type Props = {
 };
 
 export function LineChart({ dataList, className }: Props) {
-  const labels = dataList?.map((v) => v.createdAt.split(' ')[0]);
+  const hasData = dataList.length > 0;
+
+  const labels = dataList.map((v) => v?.createdAt.split(' ')[0] ?? '');
 
   const data: ChartData = {
     labels,
     datasets: [
       {
         label: '내용',
-        data: dataList?.map((v) => v.scoringResult.cont.score),
+        data: dataList.map((v) => v?.scoringResult.cont.score ?? 0),
         backgroundColor: hexToRGBA(COLORS.accent[500], 0.85),
         type: 'bar',
         barPercentage: 0.75,
       },
       {
         label: '구성',
-        data: dataList?.map((v) => v.scoringResult.org.score),
+        data: dataList?.map((v) => v?.scoringResult.org.score ?? 0),
         backgroundColor: hexToRGBA(COLORS.success[500], 0.85),
         barPercentage: 0.75,
         type: 'bar',
       },
       {
         label: '표현',
-        data: dataList?.map((v) => v.scoringResult.exp.score),
+        data: dataList?.map((v) => v?.scoringResult.exp.score ?? 0),
         backgroundColor: hexToRGBA(COLORS.secondary[500], 0.85),
         barPercentage: 0.75,
         type: 'bar',
@@ -75,7 +77,7 @@ export function LineChart({ dataList, className }: Props) {
 
       {
         label: '종합',
-        data: dataList?.map((v) => v.scoringResult.total.score),
+        data: dataList?.map((v) => v?.scoringResult.total.score ?? 0),
         borderColor: COLORS.secondary[500],
         backgroundColor: hexToRGBA(COLORS.secondary[500], 0.7),
         type: 'line',
@@ -182,14 +184,11 @@ export function LineChart({ dataList, className }: Props) {
 
   return (
     <div
-      className={clsx(
-        'h-full w-full overflow-auto bg-white p-4 scrollbar-hide',
-        className,
-      )}
+      className={clsx('overflow-auto bg-white p-4 scrollbar-hide', className)}
     >
-      <Chart type="line" data={data} options={options} />
+      {hasData && <Chart type="line" data={data} options={options} />}
     </div>
   );
 }
 
-export default React.memo(LineChart);
+export default LineChart;

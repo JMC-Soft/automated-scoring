@@ -40,7 +40,7 @@ function CategoryRadar({
       },
       {
         label: '전체 평균',
-        data: radarData.map((v) => v?.average),
+        data: radarData.map((v) => v?.average ?? 10),
         backgroundColor: hexToRGBA(COLORS.accent[500], 0.2),
         borderColor: COLORS.accent[500],
         pointBackgroundColor: COLORS.accent[500],
@@ -71,8 +71,8 @@ function CategoryRadar({
           font(context: ScriptableContext<'radar'>) {
             const { width, height } = context.chart;
             const size = Math.min(
-              Math.round(height / 24),
-              Math.round(width / 24),
+              Math.round(height / 28),
+              Math.round(width / 28),
             );
 
             return {
@@ -83,11 +83,11 @@ function CategoryRadar({
           },
           boxHeight(context: ScriptableContext<'radar'>) {
             const { width, height } = context.chart;
-            return Math.min(Math.round(height / 24), Math.round(width / 24));
+            return Math.min(Math.round(height / 28), Math.round(width / 28));
           },
           boxWidth(context: ScriptableContext<'radar'>) {
             const { width, height } = context.chart;
-            return Math.min(Math.round(height / 8), Math.round(width / 6));
+            return Math.min(Math.round(height / 7), Math.round(width / 7));
           },
         } as any,
       },

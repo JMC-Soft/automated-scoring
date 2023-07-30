@@ -3,9 +3,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Word } from 'react-d3-cloud/lib/WordCloud';
 import clsx from 'clsx';
-import D3WordCloud from 'react-d3-cloud';
+import dynamic from 'next/dynamic';
 import type { WordCloud as WordCloudType } from '@/lib/types';
 import TOPICS from '@/lib/constants/topic';
+
+const D3WordCloud = dynamic(() => import('react-d3-cloud'), { ssr: false });
 
 function WordCloud({ data }: { data: WordCloudType }) {
   const [activeTypeId, setActiveTypeId] = useState<keyof WordCloudType>(1);
@@ -13,15 +15,24 @@ function WordCloud({ data }: { data: WordCloudType }) {
     { text: string; value: number }[]
   >([]);
 
-  const fontSize = useCallback((word: Word) => Math.log2(word.value) * 15, []);
-  const onClick = (id: keyof WordCloudType) => () => {
-    setActiveTypeId(id);
-  };
+  const fontSize = useCallback((word: Word) => Math.log2(word.value) * 10, []);
+
+  const onClick = useCallback(
+    (id: keyof WordCloudType) => () => {
+      if (!data) return;
+      setActiveTypeId(id);
+      setWordCloudData(data[id] ?? []);
+    },
+    [data],
+  );
 
   useEffect(() => {
     if (!data) return;
-    setWordCloudData(data[activeTypeId] ?? []);
-  }, [data, activeTypeId]);
+
+    setTimeout(() => {
+      setWordCloudData(data[1] ?? []);
+    }, 1000);
+  }, [data]);
 
   return (
     <div className="relative">
@@ -56,4 +67,4 @@ function WordCloud({ data }: { data: WordCloudType }) {
   );
 }
 
-export default WordCloud;
+export default React.memo(WordCloud);
