@@ -17,7 +17,7 @@ import saveWordCloud from '@/app/api/repository/wordCloud/saveWordCloud';
 import fetchToScoringServer from '@/app/api/lib/scoring/fetchToScoringServer';
 import fetchToWordCloudServer from '@/app/api/lib/wordCloud/fetchToWordCloudServer';
 import TOPIC_ID_SERVER_MAP from '@/app/api/const/topicIdServerMap';
-import TOPIC_ID_MAP from '@/app/api/const/topicIdMap';
+import DETAIL_MAP from '@/app/api/const/detailMap';
 
 export async function POST(req: NextRequest) {
   try {
@@ -104,13 +104,13 @@ export async function POST(req: NextRequest) {
 
     // 반환된 결과값 ScoredEssaySub 재조합
     fetchResult.forEach((item) => {
-      if (TOPIC_ID_MAP.exp.includes(item.title)) {
+      if (DETAIL_MAP.exp.includes(item.title)) {
         exp.detail.push(item);
       }
-      if (TOPIC_ID_MAP.org.includes(item.title)) {
+      if (DETAIL_MAP.org.includes(item.title)) {
         org.detail.push(item);
       }
-      if (TOPIC_ID_MAP.cont.includes(item.title)) {
+      if (DETAIL_MAP.cont.includes(item.title)) {
         cont.detail.push(item);
       }
     });
