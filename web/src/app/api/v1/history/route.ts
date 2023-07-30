@@ -12,6 +12,7 @@ import {
 import calculateGrade from '@/app/api/lib/scoring/calculateGrade';
 import { BIOGRAPHY, FACILITY, REVIEW } from '@/app/api/const/dataset';
 import findWordCloudByUid from '@/app/api/repository/wordCloud/findWordCloudByUid';
+import TOPIC_ID_MAP from '@/app/api/const/topicIdMap';
 
 export async function GET(req: NextRequest) {
   try {
@@ -63,6 +64,7 @@ export async function GET(req: NextRequest) {
           );
         }
         const res: {
+          id: number;
           topic: string;
           type: string;
           createdAt: string;
@@ -86,17 +88,17 @@ export async function GET(req: NextRequest) {
       totalInformation,
     } = history.reduce(
       (acc, cur) => {
-        const { scoringResult, type } = cur;
+        const { scoringResult, id } = cur;
         if (!scoringResult) return acc;
         const { countCharacters, countSentences } = scoringResult;
 
-        if (type === '자기표현') {
+        if (id === 1) {
           acc.totalExpression.score += scoringResult.total.score;
           acc.totalExpression.length += 1;
-        } else if (type === '설득') {
+        } else if (id === 2) {
           acc.totalPersuade.score += scoringResult.total.score;
           acc.totalPersuade.length += 1;
-        } else if (type === '정보전달') {
+        } else if (id === 3) {
           acc.totalInformation.score += scoringResult.total.score;
           acc.totalInformation.length += 1;
         }
@@ -142,17 +144,17 @@ export async function GET(req: NextRequest) {
         Math.round((totalAverageSentences / history.length) * 10) / 10,
       countTotal: history.length,
       expression: {
-        title: '자기표현',
+        title: TOPIC_ID_MAP[1],
         average: BIOGRAPHY.TOTAL_STATISTICS.average,
         score: totalExpression.score / totalExpression.length,
       },
       persuade: {
-        title: '설득',
+        title: TOPIC_ID_MAP[2],
         average: FACILITY.TOTAL_STATISTICS.average,
         score: totalPersuade.score / totalPersuade.length,
       },
       information: {
-        title: '정보전달',
+        title: TOPIC_ID_MAP[3],
         average: REVIEW.TOTAL_STATISTICS.average,
         score: totalInformation.score / totalInformation.length,
       },
