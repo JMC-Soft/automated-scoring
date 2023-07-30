@@ -20,6 +20,7 @@ const fetchToScoringServer = async (
         });
 
         const result = await res.json();
+        console.log(result, url);
         return result;
       }),
     );

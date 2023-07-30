@@ -3,34 +3,22 @@
 import React from 'react';
 import { Radar } from 'react-chartjs-2';
 import {
+  Chart as ChartJS,
   ChartData,
   ChartOptions,
-  Chart as ChartJS,
-  RadialLinearScale,
-  PointElement,
-  LineElement,
   Filler,
   Legend,
+  LineElement,
+  PointElement,
+  RadialLinearScale,
 } from 'chart.js';
 import clsx from 'clsx';
 import { SubStatistic } from '@/lib/types';
 import hexToRGBA from '@/lib/utils/colors';
 import COLORS from '@/lib/constants/colors';
+import { CATEGORY_LIST } from '@/lib/constants/topic';
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Legend);
-
-export const CATEGORY_LIST = {
-  '주제의 명료성': '주제 명료성',
-  '근거의 적절성': '근거 적절성',
-  '프롬프트 독해력': '독해력',
-  '문단 내 구조의 적절성': '문단 내 구조',
-  '문단 간 구조의 적절성': '문단 간 구조',
-  '구조의 일관성': '구조 일관성',
-  '분량의 적절성': '분량 적절성',
-  '문법의 적절성': '문법',
-  '단어 사용의 적절성': '단어 사용',
-  '문장 표현의 적절성': '문장 표현',
-};
 
 type Props = {
   dataList: SubStatistic[];
