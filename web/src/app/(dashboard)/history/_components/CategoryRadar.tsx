@@ -24,7 +24,7 @@ function CategoryRadar({
   className: string;
 }) {
   const data: ChartData<'radar'> = {
-    labels: radarData.map((v) => v?.title),
+    labels: radarData.map((v) => v?.title.replace('_', '/').split(' ')),
     datasets: [
       {
         label: '내 점수',
@@ -100,8 +100,8 @@ function CategoryRadar({
           font(context) {
             const { width, height } = context.chart;
             const size = Math.min(
-              Math.round(height / 22),
-              Math.round(width / 22),
+              Math.round(height / 28),
+              Math.round(width / 28),
             );
 
             return {

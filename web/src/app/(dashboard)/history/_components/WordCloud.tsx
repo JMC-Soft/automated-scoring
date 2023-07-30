@@ -34,6 +34,12 @@ function WordCloud({ data }: { data: WordCloudType }) {
     }, 1000);
   }, [data]);
 
+  const TOPIC_MAP = {
+    1: '나의 위인전',
+    2: '본인의 성격',
+    3: '영화 감상문',
+  };
+
   return (
     <div className="relative">
       <ul className="absolute left-1/2 top-1 flex -translate-x-1/2 gap-x-0.5">
@@ -51,7 +57,7 @@ function WordCloud({ data }: { data: WordCloudType }) {
               },
             )}
           >
-            {topic.type}
+            {TOPIC_MAP[topic.id as keyof typeof TOPIC_MAP]}
           </button>
         ))}
       </ul>

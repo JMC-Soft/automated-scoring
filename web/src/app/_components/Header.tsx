@@ -66,12 +66,6 @@ export default function Header() {
                 <div className="absolute left-0 top-16 w-52 bg-white text-left shadow-lg">
                   <ul className="flex flex-col">
                     <Link
-                      href="/profile"
-                      className="block px-4 py-4 hover:bg-gray-100"
-                    >
-                      마이페이지
-                    </Link>
-                    <Link
                       href="/history"
                       className="block px-4 py-4 hover:bg-gray-100"
                     >

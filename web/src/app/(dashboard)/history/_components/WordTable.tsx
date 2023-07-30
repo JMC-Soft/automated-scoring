@@ -25,6 +25,12 @@ function WordTable({ className, data }: Props) {
     setWordCloudData(sortData(data[activeTypeId] ?? []));
   }, [data, activeTypeId]);
 
+  const TOPIC_MAP = {
+    1: '나의 위인전',
+    2: '본인의 성격',
+    3: '영화 감상문',
+  };
+
   return (
     <div
       className={clsx(
@@ -47,7 +53,7 @@ function WordTable({ className, data }: Props) {
               },
             )}
           >
-            {topic.type}
+            {TOPIC_MAP[topic.id as keyof typeof TOPIC_MAP]}
           </button>
         ))}
       </ul>
