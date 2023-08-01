@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { HistoryEssay } from '@/lib/types';
 import calcDayDiff from '@/lib/utils/calcDayDiff';
 import TypeTag from '@/components/TypeTag';
+import TOPICS from '@/lib/constants/topic';
 
 type Props = {
   data: HistoryEssay[];
@@ -33,10 +34,13 @@ function HistoryView({
       {data ? (
         <div className={clsx('flex w-full flex-1 flex-col justify-start')}>
           {data.map((value, idx) => {
-            const { topic, type, scoringResult, essayId, createdAt } = value;
+            const { topic, scoringResult, essayId, createdAt } = value;
             const date = new Date(createdAt.split(' ')[0]);
 
             const dayDiff = calcDayDiff(current, date);
+
+            const { subject } =
+              TOPICS[TOPICS.findIndex((t) => t.title === topic)];
 
             return (
               <Link
@@ -51,7 +55,7 @@ function HistoryView({
                 <span className="self-end text-sm text-gray-400 ">
                   {dayDiff === 0 ? '오늘' : `${dayDiff}일 전`}
                 </span>
-                <TypeTag type={type} />
+                <TypeTag title={subject} />
                 <div className="col-span-2 flex flex-col justify-evenly">
                   <div>
                     <span className="font-bold">종합 :</span>{' '}

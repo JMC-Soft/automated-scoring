@@ -3,7 +3,8 @@ import { Topic } from '@/lib/types';
 const TOPICS: Topic[] = [
   {
     id: 1,
-    title: '나의 위인전을 쓰시오.',
+    title: '본인에게 의미있는 인물에 대한 위인전을 쓰시오.',
+    subject: '나의 위인전',
     type: '자기표현',
     prompt: [
       '요즘은 책을 통해서뿐만 아니라 유튜브, 강의와 같이 다양한 매체를 통해 자신만의 롤모델을 찾을 수 있습니다.',
@@ -16,6 +17,7 @@ const TOPICS: Topic[] = [
   {
     id: 2,
     title: '본인의 성격과 장/단점에 대해 쓰시오.',
+    subject: '본인의 성격',
     type: '정보전달',
     prompt: [
       '우리는 모두 다른 성격을 가지고 살아갑니다.',
@@ -34,6 +36,7 @@ const TOPICS: Topic[] = [
   {
     id: 3,
     title: '본인이 최근 인상깊게 본 영화 혹은 책에 대해 감상문을 쓰시오.',
+    subject: '감상문',
     type: '정보전달',
     prompt: [
       '영화에는 로맨스, 액션, 스릴러 등 정말 많은 장르가 있습니다.',

@@ -28,7 +28,7 @@ function WordTable({ className, data }: Props) {
   const TOPIC_MAP = {
     1: '나의 위인전',
     2: '본인의 성격',
-    3: '영화 감상문',
+    3: '감상문',
   };
 
   return (

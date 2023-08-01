@@ -50,8 +50,6 @@ function Page() {
     setRadarData([data.information, data.persuade, data.expression]);
   }, [data]);
 
-  console.dir(radarData);
-
   return (
     <div className="grid-rows-history grid-cols-history relative grid h-full  gap-8 bg-background-500 p-6 [&>*]:shadow-lg">
       <Summary
@@ -65,10 +63,11 @@ function Page() {
       <LineChart
         className="col-span-2 row-span-1 desktop:col-start-2 desktop:row-start-1"
         dataList={resultHistory?.slice(0, 10).reverse() ?? []}
+        countTotal={countTotal}
       />
       <HistoryView
         className="col-span-2 row-start-4 desktop:col-start-4 desktop:row-start-1 desktop:row-end-3"
-        title="점수 이력"
+        title="응시 이력"
         data={resultHistory}
         countTotal={countTotal}
         isLink={false}

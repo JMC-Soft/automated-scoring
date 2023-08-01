@@ -43,12 +43,15 @@ ChartJS.register(
 type Props = {
   dataList: HistoryEssay[];
   className: string;
+  countTotal: number;
 };
 
-export function LineChart({ dataList, className }: Props) {
+export function LineChart({ dataList, className, countTotal }: Props) {
   const hasData = dataList.length > 0;
 
-  const labels = dataList.map((v) => v?.createdAt.split(' ')[0] ?? '');
+  const labels = dataList.map(
+    (v, i) => `${countTotal - (dataList.length - 1) + i ?? 0}회차`,
+  );
 
   const data: ChartData = {
     labels,
@@ -146,7 +149,10 @@ export function LineChart({ dataList, className }: Props) {
     scales: {
       y: {
         min: 0,
-        max: 15,
+        max: 18,
+        ticks: {
+          stepSize: 3,
+        },
         position: 'left',
         type: 'linear',
         grid: {

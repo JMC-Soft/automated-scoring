@@ -69,7 +69,7 @@ export default function Header() {
                       href="/history"
                       className="block px-4 py-4 hover:bg-gray-100"
                     >
-                      채점 이력
+                      응시 이력
                     </Link>
                   </ul>
                 </div>

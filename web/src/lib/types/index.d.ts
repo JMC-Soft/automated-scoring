@@ -101,14 +101,16 @@ export type Topic = {
   title: TopicTitle;
   type: EssayType;
   prompt: string[];
+  subject: EssaySubject;
 };
 
 export type TopicTitle =
-  | '나의 위인전을 쓰시오.'
+  | '본인에게 의미있는 인물에 대한 위인전을 쓰시오.'
   | '본인의 성격과 장/단점에 대해 쓰시오.'
   | '본인이 최근 인상깊게 본 영화 혹은 책에 대해 감상문을 쓰시오.';
 
 export type EssayType = '자기표현' | '설득' | '정보전달';
+export type EssaySubject = '나의 위인전' | '본인의 성격' | '감상문';
 
 export type Status = 'idle' | 'pending' | 'success' | 'error';
 
