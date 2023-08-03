@@ -7,7 +7,6 @@ import {
   EssayEntity,
   EssayRequestDto,
   ScoredEssaySub,
-  ScoredSub,
   ScoringResultField,
   WordCloudEntity,
 } from '@/app/api/lib/types';
@@ -15,7 +14,6 @@ import COUNT_SENTENCES_REGEXP from '@/app/api/const/regExp';
 import findWordCloudByUid from '@/app/api/repository/wordCloud/findWordCloudByUid';
 import saveWordCloud from '@/app/api/repository/wordCloud/saveWordCloud';
 import fetchToScoringServer from '@/app/api/lib/scoring/fetchToScoringServer';
-import fetchToWordCloudServer from '@/app/api/lib/wordCloud/fetchToWordCloudServer';
 import TOPIC_ID_SERVER_MAP from '@/app/api/const/topicIdServerMap';
 import DETAIL_MAP from '@/app/api/const/detailMap';
 
@@ -97,13 +95,18 @@ export async function POST(req: NextRequest) {
 
     // scoring server에 보내 채점 결과 객체를 반환
     const replaceText = essayText.replaceAll('"', "'").replaceAll('\n', ' ');
-    const fetchResult: ScoredSub[] = await fetchToScoringServer(
+    const fetchResult: any[] = await fetchToScoringServer(
       replaceText,
       id as keyof typeof TOPIC_ID_SERVER_MAP,
     );
 
+    // 아 이게 말이 되나 코드가...
+    //  fetchResult의 마지막 요소는 wordCloud 데이터이므로 제외
+    const fetchData = fetchResult.slice(0, -1);
+    const analyzedWordCloud = fetchResult[fetchResult.length - 1];
+
     // 반환된 결과값 ScoredEssaySub 재조합
-    fetchResult.forEach((item) => {
+    fetchData.forEach((item) => {
       if (DETAIL_MAP.exp.includes(item.title)) {
         exp.detail.push(item);
       }
@@ -114,13 +117,6 @@ export async function POST(req: NextRequest) {
         cont.detail.push(item);
       }
     });
-
-    // wordCloud
-    const analyzedWordCloud = await fetchToWordCloudServer(replaceText);
-
-    // //테스트용
-    // const scoredEssay: ScoredEssay = dummyScore;
-    // const { exp, org, cont, wordCloud: analyzedWordCloud } = scoredEssay;
 
     const expSum = exp.detail.reduce((acc, cur) => acc + cur.score, 0);
     const orgSum = org.detail.reduce((acc, cur) => acc + cur.score, 0);
