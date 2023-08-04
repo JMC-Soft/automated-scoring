@@ -28,6 +28,10 @@ function Page() {
           }
         }
       }
+      if (!result?.resultHistory) {
+        alert('아직 응시 이력이 없습니다.');
+        router.push('/');
+      }
       setData(result);
     };
 
