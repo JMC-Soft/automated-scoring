@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { ChevronUpIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import useAuthStore from '@/store/authStore';
-import EBALogo from '$/images/logos/logo/logo(H)_text_tag(KR)_2.svg';
+import EBALogo from '$/images/logos/logo/pasta_logo_horizon.png';
 import Button from '@/components/ui/Button';
 import fetchSignOut from '@/lib/utils/api/auth/fetchSignOut';
 import useOutsideClick from '@/lib/hooks/useOnClickOutside';
@@ -40,7 +40,7 @@ export default function Header() {
             src={EBALogo}
             alt="인하대학교 로고"
             style={{
-              height: '60%',
+              height: '75%',
               width: 'fit-content',
               objectFit: 'contain',
             }}
